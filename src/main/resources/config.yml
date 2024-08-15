@@ -1,0 +1,5 @@
+# Change this to your liking
+plugin prefix: 'SkyBlock'
+plugin suffix: ' &8> &f'
+#  This message will be shown when the player runs a command without having the needed permissions
+no permission message: '&cDu hast kein Recht dazu!'

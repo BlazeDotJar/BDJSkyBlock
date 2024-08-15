@@ -1,0 +1,26 @@
+  Changelog of BDJSkyBlock Project.
+
+  Format: [Major].[Minor].[Change]_[BUG#]
+
+  Rules:
+    1. Bug ID must stay, even if it's fixed. If there is a new bug, you must increase the '_ID' by one! Never decrease!
+
+  Preset:
+    New Bug:
+      - BUG: _INDEX
+          -> Description
+    Bug Fixed:
+      - Fixed BUG: _INDEX
+          -> Initially found in version: VERSION
+          -> Bug description: "DESCRIPTION"
+          -> FIX: Description of the fix
+
+    ------------------------------------------------------------------------
+  15.08.2024 - 18:40
+  Version: 0.1.0_0
+  Changes:
+    - First Upload
+    - Added SB-Command
+        -> Command Help with hoverable and clickable messages
+    - Added config.yml
+        -> change plugin prefix, suffix and noPermissionMessages value without reloading the server

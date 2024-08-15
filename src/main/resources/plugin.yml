@@ -15,5 +15,8 @@ permissions:
     description: 'Give this permission to all admins.'
     children:
       bdj.sb: true
+      bdj.sb.rl: true
   bdj.sb:
     description: 'Help command'
+  bdj.sb.rl:
+    description: 'Reload settings'
