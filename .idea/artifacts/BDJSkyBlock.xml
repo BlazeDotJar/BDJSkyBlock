@@ -1,0 +1,9 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="BDJSkyBlock">
+    <output-path>$PROJECT_DIR$/../../../../Minecraft Server/Spigot/1.21.1/plugins</output-path>
+    <root id="archive" name="BDJSkyBlock.jar">
+      <element id="module-output" name="BDJSkyBlock" />
+      <element id="file-copy" path="$PROJECT_DIR$/src/main/resources/plugin.yml" />
+    </root>
+  </artifact>
+</component>

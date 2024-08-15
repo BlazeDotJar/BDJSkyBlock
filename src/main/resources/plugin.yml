@@ -1,0 +1,19 @@
+name: BDJSkyBlock
+author: BlazeDotJar
+version: 0.0.1_0
+api-version: 1.21
+main: de.bdj.sb.SB
+commands:
+  sb:
+    description: 'Help command'
+permissions:
+  bdj.sb.*:
+    description: 'Give this permission only to developers'
+    children:
+      bdj.sb.admin: true
+  bdj .sb.admin:
+    description: 'Give this permission to all admins.'
+    children:
+      bdj.sb: true
+  bdj.sb:
+    description: 'Help command'
