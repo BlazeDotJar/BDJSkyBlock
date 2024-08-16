@@ -17,6 +17,7 @@ public class Perms {
     public static String getPermission(String command) {
         if(command.equalsIgnoreCase("sb")) return "bdjsb.sb";
         else if(command.equalsIgnoreCase("sb rl")) return "bdjsb.sb.rl";
+        else if(command.equalsIgnoreCase("sb swl")) return "bdjsb.sb.swl";
 
         return "no permissions found for cmd " + command;
     }

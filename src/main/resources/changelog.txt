@@ -15,7 +15,20 @@
           -> Bug description: "DESCRIPTION"
           -> FIX: Description of the fix
 
-    ------------------------------------------------------------------------
+------------------------------------------------------------------------
+  16.08.2024 - 14:00
+  Version: 0.2.0_0
+  Changes:
+    - Added Command /sb swl
+        -> to confirm: /sb swl confirm
+        -> to deny: /sb swl deny
+    - Added Command /sb twl
+    - Added some developer tools(only for BlazeDotJar)
+        -> list all islands in a given range: /sbdev li <0-10>
+        -> list all loaded player profiles: /sbdev lp
+    - Added config waitlobby.yml
+    - Added Island_Index_File.yml
+------------------------------------------------------------------------
   15.08.2024 - 18:40
   Version: 0.1.0_0
   Changes:

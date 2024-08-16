@@ -6,6 +6,8 @@ main: de.bdj.sb.SB
 commands:
   sb:
     description: 'Help command'
+  sbdev:
+    description: 'BlazeDotJar analysis command'
 permissions:
   bdj.sb.*:
     description: 'Give this permission only to developers'
@@ -16,7 +18,10 @@ permissions:
     children:
       bdj.sb: true
       bdj.sb.rl: true
+      bdj.sb.swl: true
   bdj.sb:
     description: 'Help command'
   bdj.sb.rl:
     description: 'Reload settings'
+  bdj.sb.swl:
+    description: 'Set waitlobby location'

@@ -13,12 +13,14 @@ public class Settings {
     public static String pluginSuffix = XColor.c1 + " §8> §f";
     public static String noPermMessage = "§cDu hast kein Recht dazu";
 
+    public static String confirmationSessionKey = "confirm_session";
+
     public Settings() {
         reload();
     }
 
     public static void reload() {
-        File file = new File("plugins/" + SB.getInstance().getDescription().getName() + "/config.yml");
+        File file = new File("plugins/" + SB.name() + "/config.yml");
         if(!file.exists()) SB.getInstance().saveResource("config.yml", false);
         FileConfiguration cfg = YamlConfiguration.loadConfiguration(file);
 

@@ -22,6 +22,17 @@ public class Chat {
             sender.sendMessage((withPrefix ? Settings.pluginPrefix + Settings.pluginSuffix : "") + msg);
         }
     }
+    public static void error(CommandSender sender, String... msgs) {
+        error(sender, true, msgs);
+    }
+
+    public static void error(CommandSender sender, boolean withPrefix, String... msgs) {
+        if(msgs.length == 0) return;
+
+        for(String msg : msgs) {
+            sender.sendMessage((withPrefix ? Settings.pluginPrefix + Settings.pluginSuffix : "") + "§c" + msg);
+        }
+    }
 
     @SuppressWarnings("deprecation")
     public static boolean sendSuggestCommandMessage(Player target, String msg, String hovermsg, String copy, boolean bold, boolean italic) {
@@ -60,7 +71,8 @@ public class Chat {
         msg = prepareString(msg);
         hovermsg = prepareString(hovermsg);
         // fromLegacy() is needed to use hexadecimal ChatColor ------V
-        TextComponent message = new TextComponent(TextComponent.fromLegacy("§7➲ " + msg));
+        //TextComponent message = new TextComponent(TextComponent.fromLegacy("§7➲ " + msg));
+        TextComponent message = new TextComponent(TextComponent.fromLegacy(msg));
 
         message.setItalic(italic);
         message.setBold(bold);
