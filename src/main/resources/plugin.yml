@@ -24,6 +24,9 @@ permissions:
       bdj.sb.rl: true
       bdj.sb.swl: true
       bdj.sb.twl: true
+      bdj.sb.claimed: true
+      bdj.sb.islands: true
+      bdj.sb.tp: true
   bdj.sb:
     description: 'Help command'
   bdj.sb.rl:
@@ -34,12 +37,23 @@ permissions:
     description: 'teleport to waitlobby location'
   bdj.sb.claimed:
     description: 'List all claimed islands in a given range'
+  bdj.sb.islands:
+    description: 'List all islands in a given range'
+  bdj.sb.tp:
+    description: 'Teleort to an island'
   #--Gameplay permissions-----------------------------------------------------
   bdj.is.*:
     description: 'Give this permission to all players'
     children:
       bdj.is: true
+      bdj.is.help: true
+      bdj.is.delete: true
+      bdj.is.member: true
   bdj.is:
     description: 'Create an island or teleport to is'
+  bdj.is.help:
+    description: 'Show command help'
   bdj.is.delete:
     description: 'Delete your island'
+  bdj.is.member:
+    description: 'Accept Member Invitation'

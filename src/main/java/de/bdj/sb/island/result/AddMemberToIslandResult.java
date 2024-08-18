@@ -1,0 +1,8 @@
+package de.bdj.sb.island.result;
+
+public enum AddMemberToIslandResult {
+    SUCCESS_MEMBER_ADDED,
+    CANCELLED_PLAYER_IS_ALREADY_MEMBER,
+    CANCELLED_YOU_DO_NOT_HAVE_ISLAND,
+    CANCELLED_TARGET_PLAYER_ALREADY_HAS_ISLAND;
+}

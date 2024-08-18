@@ -5,7 +5,6 @@ import de.bdj.sb.Settings;
 import de.bdj.sb.session.ConfirmSession;
 import de.bdj.sb.session.PlayerCreateIslandSession;
 import de.bdj.sb.session.TempSession;
-import de.bdj.sb.utlility.TimeStamp;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
@@ -22,6 +21,7 @@ public class PlayerProfile {
     private String lastJoin = "";
     private HashMap<String, TempSession> tempSessions = new HashMap<String, TempSession>();
     //private IslandCreateSessions ics;
+    private int islandIsCurrentIn;
 
     public PlayerProfile(UUID uuid) {
         this.uuid = uuid;
@@ -35,6 +35,7 @@ public class PlayerProfile {
 
         int iid = cfg.getInt("Island ID");
         this.islandId = iid;
+        this.lastJoin = cfg.getString("Last Seen");
     }
 
     public void save() {
@@ -106,5 +107,17 @@ public class PlayerProfile {
 
     public boolean hasIsland() {
         return (islandId > 0);
+    }
+
+    public void setIslandIsCurrentIn(int value) {
+        islandIsCurrentIn = value;
+    }
+
+    /**
+     * Returns the island id of the island, the player is currently staying in.
+     * @return Island ID at players current location
+     */
+    public int getIslandIsCurrentIn() {
+        return islandIsCurrentIn;
     }
 }

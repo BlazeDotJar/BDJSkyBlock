@@ -2,27 +2,66 @@ package de.bdj.sb.island;
 
 import de.bdj.sb.SB;
 import de.bdj.sb.Settings;
+import de.bdj.sb.profile.ProfileManager;
 import de.bdj.sb.utlility.Chat;
-import de.bdj.sb.utlility.TimeStamp;
 import de.bdj.sb.utlility.XColor;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class IslandManager {
 
-    private static HashMap<Integer, IslandProfile> profiles = new HashMap<Integer, IslandProfile>();
+    private static ConcurrentHashMap<Integer, IslandProfile> profiles = new ConcurrentHashMap<Integer, IslandProfile>();
     private static int amountClaimed = 0;
     public static int islandY = 100;
     public static int maxClaimedListAmount = 50;
+    public static int amountGenerated = 0;
+    public static int islandDiameter = 400;
+    public static int spaceBetweenIsland = 25;
+
+    private static SlowIslandProfileLoader sipl;
 
     public static void reloadFiles() {
+        if(sipl != null) sipl.cancel();
         SB.getInstance().saveResource("island_index_file.yml", false);
+
+        File file = new File("plugins/" + SB.name() + "/" + Settings.islandIndexFileName);
+        FileConfiguration cfg = YamlConfiguration.loadConfiguration(file);
+        amountGenerated = cfg.getInt("Islands.Amount Generated");
+
+        for(Player p : Bukkit.getOnlinePlayers()) {
+            loadPlayerIslandFile(ProfileManager.getProfile(p.getUniqueId()).getIslandId());
+        }
+
+        sipl = new SlowIslandProfileLoader();
+
+    }
+    public static void reloadFile(int islandId) {
+        if(sipl != null) sipl.cancel();
+        SB.getInstance().saveResource("island_index_file.yml", false);
+
+        File file = new File("plugins/" + SB.name() + "/" + Settings.islandIndexFileName);
+        FileConfiguration cfg = YamlConfiguration.loadConfiguration(file);
+
+        IslandProfile ip = getIslandDataFromIndexFile(islandId);
+        profiles.remove(islandId);
+        profiles.put(islandId, ip);
+        Chat.sendOperatorMessage("Reloaded IslandProfile#"+islandId+" from file");
+    }
+
+    public static void loadPlayerIslandFile(int islandId) {
+        if(islandId < 1) return;
+
+        profiles.put(islandId, getIslandDataFromIndexFile(islandId));
     }
 
     public static IslandProfile getIslandDataFromIndexFile(int islandId) {
@@ -33,7 +72,6 @@ public class IslandManager {
         String islandPath = "Islands.ID-"+islandId;
         String owner = cfg.getString(islandPath + ".Owner UUID");
         if(owner == null) {
-            Chat.sendOperatorMessage("DEBUG -> IslandManager.getIslandDataFromIndexFile -> IslandID = " + islandId + " Does not exist!");
             return null;
         }
         int x = cfg.getInt(islandPath +  ".LocX");
@@ -65,7 +103,7 @@ public class IslandManager {
             String islandPath = "Islands.ID-"+islandId;
             String owner = cfg.getString(islandPath + ".Owner UUID");
             if(owner == null) {
-                Chat.sendOperatorMessage("DEBUG -> IslandManager.getIslandDataFromIndexFile -> IslandID = " + islandId + " Does not exist!");
+                //Könnte eventuell gelöscht werden (dieser ganze if block)
                 continue;
             }
             int x = cfg.getInt(islandPath +  ".LocX");
@@ -90,7 +128,6 @@ public class IslandManager {
     }
 
     public static boolean removeOwner(int islandId) {
-        Chat.sendOperatorMessage("IslandManager.java : try to delete island #" + islandId);
         IslandProfile ip = getIslandDataFromIndexFile(islandId);
         File file = new File("plugins/" + SB.name() + "/islands/" + ip.getOwnerUuid().toString() + ".yml");
         FileConfiguration cfg = YamlConfiguration.loadConfiguration(file);
@@ -173,6 +210,97 @@ public class IslandManager {
                         XColor.c2 + "Muss bereinigt werden: §f" + (islands.get(i).get("need clearing").equals("true") ? "§cJa\nNutze §c/sb helpadmin islandclear" : "§aNein"), false, false);
             }
         } else Chat.info(p, "Es gibt keine belegte Insel im Bereich von " + startId + " und " + endId);
+    }
+
+    public static IslandProfile getIslandLocationIsIn(Location l) {
+        for(int id : profiles.keySet()) {
+            IslandProfile ip = profiles.get(id);
+            if(ip.getArea().isIn(l)) return ip;
+        }
+        return null;
+    }
+
+    public static ConcurrentHashMap<Integer, IslandProfile> getProfiles() {
+        return profiles;
+    }
+
+    public static boolean addMemberToIsland(int islandId, UUID uuid) {
+        if(!profiles.containsKey(islandId)) return false;
+
+        IslandProfile ip = profiles.get(islandId);
+        ip.addMember(uuid.toString());
+
+        File file = new File("plugins/" + SB.name() + "/islands/" + ip.getOwnerUuid().toString() + ".yml");
+        FileConfiguration cfg = YamlConfiguration.loadConfiguration(file);
+        cfg.set("Members", ip.getMembers());
+        try {
+            cfg.save(file);
+            ProfileManager.getProfile(uuid).setIslandId(islandId);
+            ProfileManager.getProfile(uuid).save();
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public static boolean removeMemberFromIsland(int islandId, UUID uuid) {
+        if(!profiles.containsKey(islandId)) return false;
+
+        IslandProfile ip = profiles.get(islandId);
+        ip.removeMember(uuid.toString());
+
+        File file = new File("plugins/" + SB.name() + "/islands/" + ip.getOwnerUuid().toString() + ".yml");
+        FileConfiguration cfg = YamlConfiguration.loadConfiguration(file);
+        cfg.set("Members", ip.getMembers());
+        try {
+            cfg.save(file);
+            ProfileManager.getProfile(uuid).setIslandId(0);
+            ProfileManager.getProfile(uuid).save();
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public static class SlowIslandProfileLoader {
+
+        private BukkitRunnable loader;
+        private int lastLoadedId = 0;
+        private int loadPerSecond = 500;
+
+        public SlowIslandProfileLoader() {
+            long started = System.currentTimeMillis();
+            loader = new BukkitRunnable() {
+                @Override
+                public void run() {
+                    if(lastLoadedId + loadPerSecond <= amountGenerated) {
+                        //Load the amount of loadPerSecond of profiles at once
+                        HashMap<Integer, IslandProfile> is = getIslandsInIslandIdRange(lastLoadedId, lastLoadedId + loadPerSecond);
+                        for(int id : is.keySet()) {
+                            profiles.put(id, is.get(id));
+                        }
+                       //SB.log("Loaded Profiles from " + lastLoadedId + " to " + (lastLoadedId + loadPerSecond));
+                        lastLoadedId += loadPerSecond;
+                    } else if(lastLoadedId <= amountGenerated){
+                        //Load the last single profiles
+                        IslandProfile ip = getIslandDataFromIndexFile(lastLoadedId);
+                        profiles.put(lastLoadedId, ip);
+                        lastLoadedId++;
+                    } else {
+                        cancel();
+                        long ended = System.currentTimeMillis();
+                        Chat.sendOperatorMessage("Finished loading all " + amountGenerated + " IslandProfiles!", "Took " + ((ended - started) / 1000) + " Seconds");
+                    }
+                }
+            };
+            loader.runTaskTimer(SB.getInstance(), 0L, 10L);
+        }
+
+        public void cancel() {
+            if(loader != null && !loader.isCancelled()) loader.cancel();
+        }
 
     }
 

@@ -8,8 +8,6 @@ import de.bdj.sb.profile.PlayerProfile;
 import de.bdj.sb.profile.ProfileManager;
 import de.bdj.sb.session.PlayerCreateIslandSession;
 import de.bdj.sb.utlility.Chat;
-import de.bdj.sb.utlility.TimeStamp;
-import de.bdj.sb.utlility.XColor;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -19,7 +17,6 @@ import org.bukkit.entity.Player;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.Objects;
 import java.util.UUID;
 
 public class IslandCreator {

@@ -5,6 +5,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 public class EventListener implements Listener {
@@ -26,6 +27,11 @@ public class EventListener implements Listener {
     @EventHandler
     public void asyncChat(AsyncPlayerChatEvent e) {
         AsyncChatListener.onAsyncChat(e);
+    }
+
+    @EventHandler
+    public void onMove(PlayerMoveEvent e) {
+        PlayerMoveListener.onMove(e);
     }
 
 

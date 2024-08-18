@@ -15,14 +15,17 @@ public class Perms {
     }
 
     public static String getPermission(String command) {
-        if(command.equalsIgnoreCase("sb")) return "bdjsb.sb";
-        else if(command.equalsIgnoreCase("sb rl")) return "bdjsb.sb.rl";
-        else if(command.equalsIgnoreCase("sb swl")) return "bdjsb.sb.swl";
-        else if(command.equalsIgnoreCase("sb twl")) return "bdjsb.sb.twl";
-        else if(command.equalsIgnoreCase("sb claimed")) return "bdjsb.sb.claimed";
-        else if(command.equalsIgnoreCase("sb islands")) return "bdjsb.sb.islands";
-        else if(command.equalsIgnoreCase("is")) return "bdjsb.is";
-        else if(command.equalsIgnoreCase("is delete")) return "bdjsb.is.delete";
+        if(command.equalsIgnoreCase("sb")) return "bdj.sb";
+        else if(command.equalsIgnoreCase("sb rl")) return "bdj.sb.rl";
+        else if(command.equalsIgnoreCase("sb swl")) return "bdj.sb.swl";
+        else if(command.equalsIgnoreCase("sb twl")) return "bdj.sb.twl";
+        else if(command.equalsIgnoreCase("sb claimed")) return "bdj.sb.claimed";
+        else if(command.equalsIgnoreCase("sb islands")) return "bdj.sb.islands";
+        else if(command.equalsIgnoreCase("sb tp")) return "bdj.sb.tp";
+        else if(command.equalsIgnoreCase("is")) return "bdj.is";
+        else if(command.equalsIgnoreCase("is help")) return "bdj.is.help";
+        else if(command.equalsIgnoreCase("is delete")) return "bdj.is.delete";
+        else if(command.equalsIgnoreCase("is member")) return "bdj.is.member";
 
         return "no permissions found for cmd " + command;
     }

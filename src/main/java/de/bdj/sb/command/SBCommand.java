@@ -66,6 +66,12 @@ public class SBCommand implements CommandExecutor, TabCompleter {
                                 Chat.info(p, "Da die Anzahl an belegten Inseln höher als 50 beträgt, muss du einen Bereich angeben.", "Beispiel: Wenn du die Inseln 10 - 30 sehen möchtest, nutze §f/sb claimed 10-30");
                             }
 
+                        } else if(args[0].equalsIgnoreCase("islands") && Perms.hasPermission(p, Perms.getPermission("sb islands"))) {
+                            int min = Code.randomInteger(1, 30);
+                            int max = Code.randomInteger(min+1, min + 30);
+                            Chat.info(p, "Gebe einen Bereich an, den du gerne anzeigen möchtest.", "Beispiel: §f/sb islands " + min + "-" + max);
+                        } else if(args[0].equalsIgnoreCase("tp") && Perms.hasPermission(p, Perms.getPermission("sb tp"))) {
+                            Chat.info(p, "Gebe eine Insel Id an. Beispiel: §f/sb tp " + Code.randomInteger(1, IslandManager.amountGenerated));
                         }
                             break;
                     case 2:
@@ -81,7 +87,6 @@ public class SBCommand implements CommandExecutor, TabCompleter {
                                 Chat.info(p, XColor.c2 + "Vorgang: §fWartelobby Position neusetzen " + XColor.c2 + "wurde abgelehnt.");
                             }
                         } else if(args[0].equalsIgnoreCase("claimed") && Perms.hasPermission(p, Perms.getPermission("sb claimed"))) {
-                            int amountClaimedIslands = IslandManager.getAmountClaimedIslands();
                             try {
                                 String[] split = args[1].split("-");
                                 int start = Integer.parseInt(split[0]);
@@ -101,12 +106,18 @@ public class SBCommand implements CommandExecutor, TabCompleter {
                                 long startedAt = System.currentTimeMillis();
 
                                 HashMap<Integer, IslandProfile> islands = IslandManager.getIslandsInIslandIdRange(start, end);
+                                int amountClaimed = 0;
+                                for(int i : islands.keySet()) {
+                                    if(islands.get(i).isClaimed()) amountClaimed++;
+                                }
+
                                 if(islands.isEmpty()) {
-                                    Chat.error(p, "Es gibt keine Inseln in dem von dir angebenen Bereich §f" + start + "-" + end);
-                                } else {
+                                    Chat.error(p, "Es gibt keine Inseln in dem von dir angegebenen Bereich §f" + start + "-" + end);
+                                } else if(amountClaimed > 0) {
                                     Chat.info(p, "Insel " + start + " bis " + end + " aufgelistet(" + islands.size() + " Inseln):");
                                     for(int i : islands.keySet()) {
                                         IslandProfile ip = islands.get(i);
+                                        if(!ip.isClaimed()) continue;
                                         Chat.sendHoverableCommandHelpMessage(p, " - " + XColor.c1 + "Island " + i, XColor.c2 + "Claimed: §f" + (ip.isClaimed() ? "Ja" : "Nein") + "\n" +
                                                 XColor.c2 + "Owner UUID: §f" + (ip.getOwnerUuid() == null ? "none" : ip.getOwnerUuid().toString()) + "\n" +
                                                 XColor.c2 + "X-Coord: §f" + ip.getX() + "\n" +
@@ -117,6 +128,8 @@ public class SBCommand implements CommandExecutor, TabCompleter {
 
                                     long finishedAt = System.currentTimeMillis();
                                     Chat.info(p, "Diese Operation hat " + ((double)(finishedAt - startedAt) / 1000) + " Sekunden benötigt.");
+                                } else {
+                                    Chat.error(p, "In deinem angegebenen Bereich gibt es keine belegten Inseln.");
                                 }
                             } catch (Exception ex) {
                                 ex.printStackTrace();
@@ -125,17 +138,52 @@ public class SBCommand implements CommandExecutor, TabCompleter {
                                 Chat.error(p, "Du musst als Bereich 2 Ganzzahlen in folgenden Format angeben: §fVON-BIS", "Beispiel: /sb claimed " + min + "-" + max);
                                 Chat.error(p, "Deine Argumenete: args[1]=" + args[1]);
                             }
-                            /*
-                                                        if(amountClaimedIslands < 50) {
-                                IslandManager.listClaimedIslands(p, 1, 50);
-                            } else {
-
-                            }
-                             */
 
                         } else if(args[0].equalsIgnoreCase("islands") && Perms.hasPermission(p, Perms.getPermission("sb islands"))) {
-                            //TODO:
+                            String[] split = args[1].split("-");
+                            int start = Integer.parseInt(split[0]);
+                            int end = Integer.parseInt(split[1]);
 
+                            if(start > end) {
+                                int max = start;
+                                start = end;
+                                end = max;
+                            }
+
+                            if(end - start > IslandManager.maxClaimedListAmount) {
+                                Chat.warn(p, "Dein Bereich war zu groß und wurde auf " + IslandManager.maxClaimedListAmount + " eingeschränkt.");
+                                end = start + IslandManager.maxClaimedListAmount;
+                            }
+
+                            long startedAt = System.currentTimeMillis();
+
+                            HashMap<Integer, IslandProfile> islands = IslandManager.getIslandsInIslandIdRange(start, end);
+                            if(islands.isEmpty()) {
+                                Chat.error(p, "Es gibt keine Inseln in dem von dir angebenen Bereich §f" + start + "-" + end);
+                            } else {
+                                Chat.info(p, "Insel " + start + " bis " + end + " aufgelistet(" + islands.size() + " Inseln):");
+                                for(int i : islands.keySet()) {
+                                    IslandProfile ip = islands.get(i);
+                                    Chat.sendHoverableCommandHelpMessage(p, " - " + (ip.isClaimed() ? XColor.orange : XColor.green) + "Island " + i, XColor.c2 + "Claimed: §f" + (ip.isClaimed() ? "Ja" : "Nein") + "\n" +
+                                            XColor.c2 + "Owner UUID: §f" + (ip.getOwnerUuid() == null ? "none" : ip.getOwnerUuid().toString()) + "\n" +
+                                            XColor.c2 + "X-Coord: §f" + ip.getX() + "\n" +
+                                            XColor.c2 + "Y-Coord: §f" + IslandManager.islandY + "\n" +
+                                            XColor.c2 + "Z-Coord: §f" + ip.getZ() + "\n" +
+                                            XColor.c2 + "Muss bereinigt werden: §f" + (ip.needCleearing() ? "§cJa\nNutze §c/sb helpadmin islandclear" : "§aNein"), false, false);
+                                }
+
+                                long finishedAt = System.currentTimeMillis();
+                                Chat.info(p, "Diese Operation hat " + ((double)(finishedAt - startedAt) / 1000) + " Sekunden benötigt.");
+                            }
+                        } else if(args[0].equalsIgnoreCase("tp") && Perms.hasPermission(p, Perms.getPermission("sb tp"))) {
+                            try {
+                                int islandId = Integer.parseInt(args[1]);
+                                if(islandId > 2500) throw new Exception("Insel ID ist zu groß");
+                                if(islandId < 1) throw new Exception("Insel ID ist zu klein");
+                                p.teleport(IslandManager.getIslandDataFromIndexFile(islandId).getIslandLocation().add(0.5, 1, 0.5));
+                            }catch(Exception ex) {
+                                Chat.error(p, "Du muss als Insel Id eine Ganzzahl angeben, die kleiner ist als " + IslandManager.amountGenerated + " aber größer als 0");
+                            }
                         }
                         break;
                 }
@@ -154,7 +202,8 @@ public class SBCommand implements CommandExecutor, TabCompleter {
                 Chat.sendClickableMessage(p, XColor.c2 + " /sb twl §fZur Wartelobby", XColor.c3 + "Teleportiere dich zur Wartelobby." + (p.isOp() ? XColor.c4 + "\nPermission: §f" + Perms.getPermission("sb twl") : ""), "/sb twl", false, false);
                 Chat.sendSuggestCommandMessage(p, XColor.c2 + " /sb swl §fWartelobby setzen", XColor.c3 + "Setze die Location für die Wartelobby. Die Wartelobby wird von Spielern betreten,\ndie darauf warten dass ihre Insel fertig generiert wurde." + (p.isOp() ? XColor.c4 + "\nPermission: §f" + Perms.getPermission("sb swl") : ""), "/sb swl", false, false);
                 Chat.sendSuggestCommandMessage(p, XColor.c2 + " /sb claimed <Von-Bis> §fBelegte Inseln", XColor.c3 + "Liste dir alle belegten Inseln auf. Erkenne auch, ob eine Insel eine Bereinigung braucht." + (p.isOp() ? XColor.c4 + "\nPermission: §f" + Perms.getPermission("sb claimed") : ""), "/sb claimed", false, false);
-                Chat.sendSuggestCommandMessage(p, XColor.c2 + " /sb list <Von-Bis > §fInseln auflisten", XColor.c3 + "Liste dir alle Inseln in einem von dir angegebenen Island-ID Bereich auf. Gebe keinen Bereich an, um automatisch den Bereich 1-50 zu wählen." + (p.isOp() ? XColor.c4 + "\nPermission: §f" + Perms.getPermission("sb islands") : ""), "/sb islands", false, false);
+                Chat.sendSuggestCommandMessage(p, XColor.c2 + " /sb islands <Von-Bis> §fInseln auflisten", XColor.c3 + "Liste dir alle Inseln in einem von dir angegebenen Island-ID Bereich auf. Gebe keinen Bereich an, um automatisch den Bereich 1-50 zu wählen." + (p.isOp() ? XColor.c4 + "\nPermission: §f" + Perms.getPermission("sb islands") : ""), "/sb islands", false, false);
+                Chat.sendSuggestCommandMessage(p, XColor.c2 + " /sb tp <Island ID> §fInsel-Teleport", XColor.c3 + "Teleportiere dich zu einer beliebigen Insel. Die IslandId muss eine Ganzzahl sein." + (p.isOp() ? XColor.c4 + "\nPermission: §f" + Perms.getPermission("sb tp") : ""), "/sb tp", false, false);
                 Chat.info(p, "Weitere Befehle von BDJSkyBlock:");
                 Chat.info(p, "/is");
                 if(((Player) sender).getUniqueId().toString().equals("242dad39-544a-4c3a-8d61-17a38e004a6f")) Chat.info(p, "/sbdev");

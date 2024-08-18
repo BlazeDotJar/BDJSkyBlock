@@ -16,6 +16,14 @@
           -> FIX: Description of the fix
 
 ------------------------------------------------------------------------
+  18.08.2024 - 22:20
+  Version: 0.4.0_1
+  Changes:
+    - Added Command /is member
+        -> Add and remove members to/from your island
+        -> The target can choose between confirming or denying the invitation with /sb member confirm/deny
+    - Fixed some wrong functions with /sb claimed
+------------------------------------------------------------------------
   18.08.2024 - 14:30
   Version: 0.3.0_1
   Changes:

@@ -35,6 +35,7 @@ public class IslandPlacer {
     public void init() {
         //TODO: Start placing process
         IslandProfile ip = IslandManager.getIslandDataFromIndexFile(islandId);
+        if(ip != null && ip.getOwnerUuid() == null) ip.setOwnerUuid(uuid);
         Location l = new Location(Bukkit.getWorld("world"), ip.getX(), IslandManager.islandY, ip.getZ());
         l.add(-1, 0, -1).getBlock().setType(Material.BEDROCK);
         l.add(1, 0, 0).getBlock().setType(Material.BEDROCK);
@@ -46,7 +47,7 @@ public class IslandPlacer {
         l.add(1, 0, 0).getBlock().setType(Material.BEDROCK);
         l.add(1, 0, 0).getBlock().setType(Material.BEDROCK);
 
-        Chat.warn(p, "Die Island Erstellung ist noch in Arbeit. Die Insel ist also vorerst nur eine Bedrock Schicht. Diese Nachricht wurde aus der IslandPlacer.java gesendet");
+        //Run Schematic placer here
 
         p.teleport(new Location(Bukkit.getWorld("world"), ip.getX(), IslandManager.islandY, ip.getZ()).add(0.5, 3, 0.5));
 

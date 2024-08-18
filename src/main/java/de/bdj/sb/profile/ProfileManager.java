@@ -3,12 +3,12 @@ package de.bdj.sb.profile;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-import java.util.HashMap;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class ProfileManager {
 
-    private static HashMap<UUID, PlayerProfile> profiles = new HashMap<UUID, PlayerProfile>();
+    private static ConcurrentHashMap<UUID, PlayerProfile> profiles = new ConcurrentHashMap<UUID, PlayerProfile>();
 
     public static void registerProfile(UUID uuid) {
         if(profiles.containsKey(uuid)) return;
@@ -41,7 +41,7 @@ public class ProfileManager {
         return profiles.get(uuid);
     }
 
-    public static HashMap<UUID, PlayerProfile> getProfiles() {
+    public static ConcurrentHashMap<UUID, PlayerProfile> getProfiles() {
         return profiles;
     }
 

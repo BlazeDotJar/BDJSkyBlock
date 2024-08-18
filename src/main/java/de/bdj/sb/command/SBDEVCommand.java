@@ -18,6 +18,7 @@ import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class SBDEVCommand implements CommandExecutor, TabCompleter {
 
@@ -41,14 +42,16 @@ public class SBDEVCommand implements CommandExecutor, TabCompleter {
                         break;
                     case 1:
                         if(args[0].equalsIgnoreCase("listprofiles") || args[0].equalsIgnoreCase("lp")) {
-                            HashMap<UUID, PlayerProfile> profiles = ProfileManager.getProfiles();
+                            ConcurrentHashMap<UUID, PlayerProfile> profiles = ProfileManager.getProfiles();
                             Chat.info(p, "Geladene PlayerProfiles");
                             for(UUID uuid : profiles.keySet()) {
                                 PlayerProfile pro = profiles.get(uuid);
-                                Chat.sendHoverableCommandHelpMessage(p, " -> §e" + uuid.toString(),
+                                IslandProfile ip = IslandManager.getIslandDataFromIndexFile(pro.getIslandIsCurrentIn());
+                                Chat.sendClickableMessage(p, " -> §e" + uuid.toString(),
                                         XColor.c1 + "UUID: §f" + uuid.toString() + "\n" +
                                                 XColor.c1 + "Last Joined: §f" + pro.getLastJoin() + "\n" +
-                                        XColor.c1 + "Island ID: §f" + pro.getIslandId(), false, false);
+                                                XColor.c1 + "Currently in IslandID: §f" + pro.getIslandIsCurrentIn() + "\n" +
+                                        XColor.c1 + "Island ID: §f" + pro.getIslandId(), (ip == null ? "" : "/minecraft:tp " + ip.getX() + " " + IslandManager.islandY + " " + ip.getZ()), false, false);
                             }
                         } else if(args[0].equalsIgnoreCase("listisland") || args[0].equalsIgnoreCase("li")) {
                             Chat.info(p, "Gebe einen Bereich an Inseln an, den du gerne auslesen möchtest.", "Als Beispiel: /sbdev li 0-50", "Du würdest also die Inseln mit einer Id zwischen 0 und 50 auslesen.");
@@ -77,8 +80,26 @@ public class SBDEVCommand implements CommandExecutor, TabCompleter {
                                 Chat.info(p, "Die maximale Bereichspanne wird aufgrund der Chatlänge auf 90 reduziert. Der Bereich wurde korrigiert.");
                             }
                             Chat.info(p, "Hier sind alle Inseln von " + von + " bis " +  bis);
-                            for(int i = von; i != bis + 1; i++) {
+                            ConcurrentHashMap<Integer, IslandProfile> profiles = IslandManager.getProfiles();
+                            for(int i : profiles.keySet()) {
+                                if(i >= von && i <= bis) {
+                                    IslandProfile ip = profiles.get(i);
+                                    if(ip == null) continue;
+                                    Chat.sendClickableMessage(p, " -> ID-" + i,
+                                            XColor.c3 + "Island-Id: §f" + ip.getIslandId() + "\n" +
+                                                    XColor.c3 + "Owner UUID: §e" + (ip.getOwnerUuid() == null ? "nicht vorhanden" : ip.getOwnerUuid().toString()) + "\n" +
+                                                    XColor.c3 + "Is claimed: " + (ip.isClaimed() ? "§cBesetzt" : "§aFrei") + "\n" +
+                                                    XColor.c3 + "X: §f" + ip.getX() + "\n" +
+                                                    XColor.c3 + "Y: §f" + IslandManager.islandY + "\n" +
+                                                    XColor.c3 + "Z: §f" + ip.getZ() + "\n" +
+                                                    XColor.c3 + "Braucht Bereinigung: §f" + ip.needCleearing() + "\n" +
+                                                    "§bKlicke, um dich zu dieser Insel zu teleportieren!", "/minecraft:teleport " + p.getName() + " " + ip.getX() + " " + IslandManager.islandY + " " + ip.getZ(), false, false);
+                                } else if(i > bis) break;
+                            }
+                            /*
+                                                        for(int i = von; i != bis + 1; i++) {
                                 IslandProfile ip = IslandManager.getIslandDataFromIndexFile(i);
+                                if(ip == null) continue;
                                 Chat.sendClickableMessage(p, " -> ID-" + i,
                                         XColor.c3 + "Island-Id: §f" + ip.getIslandId() + "\n" +
                                                 XColor.c3 + "Owner UUID: §e" + (ip.getOwnerUuid() == null ? "nicht vorhanden" : ip.getOwnerUuid().toString()) + "\n" +
@@ -86,26 +107,50 @@ public class SBDEVCommand implements CommandExecutor, TabCompleter {
                                                 XColor.c3 + "X: §f" + ip.getX() + "\n" +
                                                 XColor.c3 + "Y: §f" + IslandManager.islandY + "\n" +
                                                 XColor.c3 + "Z: §f" + ip.getZ() + "\n" +
+                                                XColor.c3 + "Braucht Bereinigung: §f" + ip.needCleearing() + "\n" +
                                                 "§bKlicke, um dich zu dieser Insel zu teleportieren!", "/minecraft:teleport " + p.getName() + " " + ip.getX() + " " + IslandManager.islandY + " " + ip.getZ(), false, false);
                             }
+                             */
                         } else if(args[0].equalsIgnoreCase("walls") || args[0].equalsIgnoreCase("w")) {
                             int islandId = Integer.parseInt(args[1]);
                             IslandProfile ip = IslandManager.getIslandDataFromIndexFile(islandId);
                             Location l = ip.getIslandLocation();
                             l.getBlock().setType(Material.RED_WOOL);
-                            for(int i = 0; i != 200; i++) {
+                            for(int i = 0; i != IslandManager.islandDiameter; i++) {
                                 l.add(1, 0, 0);
                                 l.getBlock().setType(Material.RED_WOOL);
                             }
-                            for(int i = 0; i != 200; i++) {
+                            for(int i = 0; i != IslandManager.islandDiameter; i++) {
                                 l.add(0, 0, 1);
                                 l.getBlock().setType(Material.RED_WOOL);
                             }
-                            for(int i = 0; i != 200; i++) {
+                            for(int i = 0; i != IslandManager.islandDiameter; i++) {
                                 l.add(-1, 0, 0);
                                 l.getBlock().setType(Material.RED_WOOL);
                             }
-                            for(int i = 0; i != 200; i++) {
+                            for(int i = 0; i != IslandManager.islandDiameter; i++) {
+                                l.add(0, 0, -1);
+                                l.getBlock().setType(Material.RED_WOOL);
+                            }
+                            Chat.info(p, "Walls für Insel " + islandId + " erstellt!");
+                        } else if(args[0].equalsIgnoreCase("quarter") || args[0].equalsIgnoreCase("q")) {
+                            int islandId = Integer.parseInt(args[1]);
+                            IslandProfile ip = IslandManager.getIslandDataFromIndexFile(islandId);
+                            Location l = ip.getIslandLocation();
+                            l.getBlock().setType(Material.RED_WOOL);
+                            for(int i = 0; i != (IslandManager.islandDiameter / 2); i++) {
+                                l.add(1, 0, 0);
+                                l.getBlock().setType(Material.RED_WOOL);
+                            }
+                            for(int i = 0; i != (IslandManager.islandDiameter / 2); i++) {
+                                l.add(0, 0, 1);
+                                l.getBlock().setType(Material.RED_WOOL);
+                            }
+                            for(int i = 0; i != (IslandManager.islandDiameter / 2); i++) {
+                                l.add(-1, 0, 0);
+                                l.getBlock().setType(Material.RED_WOOL);
+                            }
+                            for(int i = 0; i != (IslandManager.islandDiameter / 2); i++) {
                                 l.add(0, 0, -1);
                                 l.getBlock().setType(Material.RED_WOOL);
                             }
@@ -125,6 +170,7 @@ public class SBDEVCommand implements CommandExecutor, TabCompleter {
                 Chat.sendSuggestCommandMessage(p, XColor.c2 + " /sbdev lp §fLoaded PlayerProfiles", XColor.c3 + "Zeige alle geladenen Spielerprofile an.", "/sbdev lp", false, false);
                 Chat.sendSuggestCommandMessage(p, XColor.c2 + " /sbdev li §fList IslandData", XColor.c3 + "Zeige dir alle Insel-Daten von Inseln mit einer ID zwischen <von-bis> an.", "/sbdev li", false, false);
                 Chat.sendSuggestCommandMessage(p, XColor.c2 + " /sbdev walls §fCreate island walls", XColor.c3 + "Lasse dir die Borders einer Insel anzeigen / bauen", "/sbdev walls", false, false);
+                Chat.sendClickableMessage(p, XColor.c2 + " /sbdev quarter §fCreate island quarter walls", XColor.c3 + "Erstelle ein Viertel der Insel Border", "/sbdev quarter", false, false);
             }
         }
     }
@@ -139,9 +185,11 @@ public class SBDEVCommand implements CommandExecutor, TabCompleter {
                     case 0:
                         break;
                     case 1:
-                        return Arrays.asList("lp", "li");
+                        return Arrays.asList("lp", "li", "walls", "quarter");
                     case 2:
-                        if(args[0].equalsIgnoreCase("li")) return Arrays.asList("0-15");
+                        if(args[0].equalsIgnoreCase("li")) return List.of("1-15");
+                        else if(args[0].equalsIgnoreCase("walls")) return List.of("1");
+                        else if(args[0].equalsIgnoreCase("quarter")) return List.of("1");
                         break;
                 }
             }

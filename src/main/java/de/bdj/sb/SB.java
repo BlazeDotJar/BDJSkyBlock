@@ -42,7 +42,7 @@ public class SB extends JavaPlugin {
         ProfileManager.reloadAll();
         Waitlobby.reloadLocation();
         Settings.reload();
-        IslandManager.reloadFiles();
+        IslandManager.reloadFiles(); //WARNING: This line must come after ProfileManager has reloaded its files!!
     }
 
     private void init() {
