@@ -6,6 +6,7 @@ import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -22,6 +23,20 @@ public class Chat {
             sender.sendMessage((withPrefix ? Settings.pluginPrefix + Settings.pluginSuffix : "") + msg);
         }
     }
+
+
+    public static void warn(CommandSender sender, String... msgs) {
+        error(sender, true, msgs);
+    }
+
+    public static void warn(CommandSender sender, boolean withPrefix, String... msgs) {
+        if(msgs.length == 0) return;
+
+        for(String msg : msgs) {
+            sender.sendMessage((withPrefix ? Settings.pluginPrefix + Settings.pluginSuffix : "") + "§e" + msg);
+        }
+    }
+
     public static void error(CommandSender sender, String... msgs) {
         error(sender, true, msgs);
     }
@@ -82,6 +97,18 @@ public class Chat {
 
         target.spigot().sendMessage(message);
         return true;
+    }
+
+    /**
+     * Sendet eine Nachricht mit Prefix an alle Operatoren
+     */
+    public static void sendOperatorMessage(String... strings) {
+        for(String msg : strings) {
+            for(Player p : Bukkit.getOnlinePlayers()) {
+                if(p.isOp()) p.sendMessage(Settings.opChatPrefix + msg);
+            }
+            Bukkit.getConsoleSender().sendMessage(Settings.opChatPrefix+msg);
+        }
     }
 
     public static String prepareString(String s) {

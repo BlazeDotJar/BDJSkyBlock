@@ -14,13 +14,14 @@ public class ConfirmSession extends TempSession{
     private Player host;
     private String confirmationCode = "";
     private String denyCode = "";
+    private ConfirmSession instance;
 
     public ConfirmSession(Player host, String confirmationCode, String denyCode, String runOutOfTimeString) {
         this.host = host;
         this.confirmationCode = confirmationCode;
         this.denyCode = denyCode;
         this.runOutOfTimeString = runOutOfTimeString;
-        start();
+        this.instance = this;
     }
     @Override
     public void start() {
@@ -29,6 +30,7 @@ public class ConfirmSession extends TempSession{
             @Override
             public void run() {
                 Chat.info(host, runOutOfTimeString);
+                ProfileManager.getProfile(host.getUniqueId()).removeTempSession(Settings.confirmationSessionKey, instance);
             }
         };
         delay.runTaskLater(SB.getInstance(), delayTime * 20L);

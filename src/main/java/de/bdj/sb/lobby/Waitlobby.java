@@ -12,7 +12,7 @@ import java.io.IOException;
 
 public class Waitlobby {
 
-    private static Location spawnpoint;
+    private static Location spawnpoint = new Location(Bukkit.getWorld("world"), 308, 77, 233, 0.23F, 1.6F); //Development default spawn
 
     public static void reloadLocation() {
         File file = new File("plugins/" + SB.name() + "/waitlobby.yml");

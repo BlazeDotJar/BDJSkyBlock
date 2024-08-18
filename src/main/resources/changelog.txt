@@ -16,6 +16,24 @@
           -> FIX: Description of the fix
 
 ------------------------------------------------------------------------
+  18.08.2024 - 14:30
+  Version: 0.3.0_1
+  Changes:
+    - Added Command /sb claimed
+        -> List all claimed islands in a given range
+    - Added Command /sb list
+        -> List all islands in a given range
+------------------------------------------------------------------------
+  17.08.2024 - 14:00
+  Version: 0.2.0_1
+  Changes:
+  New Bug:
+        - BUG: _1
+            -> SBCommand-TabCompleter: Every player gets a completion, even without the needed permissions!
+            -> ISCommand-TabCompleter: Every player gets a completion, even without the needed permissions!
+            -> SBDEVCommand-TabCompleter: Every player gets a completion, even without the needed permissions!
+
+------------------------------------------------------------------------
   16.08.2024 - 14:00
   Version: 0.2.0_0
   Changes:

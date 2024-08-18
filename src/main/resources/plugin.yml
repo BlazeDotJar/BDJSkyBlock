@@ -5,23 +5,41 @@ api-version: 1.21
 main: de.bdj.sb.SB
 commands:
   sb:
-    description: 'Help command'
+    description: 'SkyBlock main command for admins+'
   sbdev:
     description: 'BlazeDotJar analysis command'
+  is:
+    description: 'Island main command for players'
 permissions:
+  #--Dev permissions-----------------------------------------------------
   bdj.sb.*:
     description: 'Give this permission only to developers'
     children:
       bdj.sb.admin: true
-  bdj .sb.admin:
+  #--Admin permissions-----------------------------------------------------
+  bdj.sb.admin:
     description: 'Give this permission to all admins.'
     children:
       bdj.sb: true
       bdj.sb.rl: true
       bdj.sb.swl: true
+      bdj.sb.twl: true
   bdj.sb:
     description: 'Help command'
   bdj.sb.rl:
     description: 'Reload settings'
   bdj.sb.swl:
     description: 'Set waitlobby location'
+  bdj.sb.twl:
+    description: 'teleport to waitlobby location'
+  bdj.sb.claimed:
+    description: 'List all claimed islands in a given range'
+  #--Gameplay permissions-----------------------------------------------------
+  bdj.is.*:
+    description: 'Give this permission to all players'
+    children:
+      bdj.is: true
+  bdj.is:
+    description: 'Create an island or teleport to is'
+  bdj.is.delete:
+    description: 'Delete your island'

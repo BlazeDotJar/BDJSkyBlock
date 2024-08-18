@@ -10,6 +10,7 @@ import de.bdj.sb.profile.ProfileManager;
 import de.bdj.sb.session.ConfirmSession;
 import de.bdj.sb.session.TempSession;
 import de.bdj.sb.utlility.Chat;
+import de.bdj.sb.utlility.Code;
 import de.bdj.sb.utlility.Perms;
 import de.bdj.sb.utlility.XColor;
 import org.bukkit.command.Command;
@@ -25,7 +26,6 @@ public class SBCommand implements CommandExecutor, TabCompleter {
     public SBCommand() {
         ArrayList<String> cmds = new ArrayList<>();
         cmds.add("sb");
-        cmds.add("sbdev");
 
         for(String cmd : cmds) {
             SB.log("Registriere Command: /" + cmd);
@@ -45,6 +45,8 @@ public class SBCommand implements CommandExecutor, TabCompleter {
                     case 1:
                         if(args[0].equalsIgnoreCase("rl") && Perms.hasPermission(p, Perms.getPermission("sb rl"))) {
                             Settings.reload();
+                            ProfileManager.reloadAll();
+                            Waitlobby.reloadLocation();
                             Chat.info(p, "Die Settings wurden neu geladen!");
                         } else if(args[0].equalsIgnoreCase("twl") && Perms.hasPermission(p, Perms.getPermission("sb twl"))) {
                             Waitlobby.teleport(p);
@@ -53,7 +55,17 @@ public class SBCommand implements CommandExecutor, TabCompleter {
                             TempSession ts =  ProfileManager.getProfile(p.getUniqueId()).getTempSession("confirm_session");
                             if(ts != null) ts.terminate();
                             ConfirmSession cs = new ConfirmSession(p, "/sb swl confirm", "/sb swl deny", "Die Position der Wartelobby wurde nicht erneuert. Du warst zu langsam.");
+                            cs.start();
                             ProfileManager.getProfile(p.getUniqueId()).addTempSession(cs);
+                        } else if(args[0].equalsIgnoreCase("claimed") && Perms.hasPermission(p, Perms.getPermission("sb claimed"))) {
+                            int amountClaimedIslands = IslandManager.getAmountClaimedIslands();
+
+                            if(amountClaimedIslands < 50) {
+                                IslandManager.listClaimedIslands(p, 1, 50);
+                            } else {
+                                Chat.info(p, "Da die Anzahl an belegten Inseln höher als 50 beträgt, muss du einen Bereich angeben.", "Beispiel: Wenn du die Inseln 10 - 30 sehen möchtest, nutze §f/sb claimed 10-30");
+                            }
+
                         }
                             break;
                     case 2:
@@ -68,60 +80,62 @@ public class SBCommand implements CommandExecutor, TabCompleter {
                                 if(ts != null) ts.terminate();
                                 Chat.info(p, XColor.c2 + "Vorgang: §fWartelobby Position neusetzen " + XColor.c2 + "wurde abgelehnt.");
                             }
-                        }
-                        break;
-                }
-            } else if(cmd.getName().equalsIgnoreCase("sbdev") && p.getUniqueId().toString().equals("242dad39-544a-4c3a-8d61-17a38e004a6f")) {
-                switch(args.length) {
-                    case 0:
-                        sendCommandHelp(sender, "sbdev");
-                        break;
-                    case 1:
-                        if(args[0].equalsIgnoreCase("listprofiles") || args[0].equalsIgnoreCase("lp")) {
-                            HashMap<UUID, PlayerProfile> profiles = ProfileManager.getProfiles();
-                            Chat.info(p, "Geladene PlayerProfiles");
-                            for(UUID uuid : profiles.keySet()) {
-                                PlayerProfile pro = profiles.get(uuid);
-                                Chat.sendHoverableCommandHelpMessage(p, " -> §e" + uuid.toString(),
-                                        XColor.c1 + "UUID: §f" + uuid.toString() + "\n" +
-                                        XColor.c1 + "Last Joined: §f" + pro.getLastJoin(), false, false);
+                        } else if(args[0].equalsIgnoreCase("claimed") && Perms.hasPermission(p, Perms.getPermission("sb claimed"))) {
+                            int amountClaimedIslands = IslandManager.getAmountClaimedIslands();
+                            try {
+                                String[] split = args[1].split("-");
+                                int start = Integer.parseInt(split[0]);
+                                int end = Integer.parseInt(split[1]);
+
+                                if(start > end) {
+                                    int max = start;
+                                    start = end;
+                                    end = max;
+                                }
+
+                                if(end - start > IslandManager.maxClaimedListAmount) {
+                                    Chat.warn(p, "Dein Bereich war zu groß und wurde auf " + IslandManager.maxClaimedListAmount + " eingeschränkt.");
+                                    end = start + IslandManager.maxClaimedListAmount;
+                                }
+
+                                long startedAt = System.currentTimeMillis();
+
+                                HashMap<Integer, IslandProfile> islands = IslandManager.getIslandsInIslandIdRange(start, end);
+                                if(islands.isEmpty()) {
+                                    Chat.error(p, "Es gibt keine Inseln in dem von dir angebenen Bereich §f" + start + "-" + end);
+                                } else {
+                                    Chat.info(p, "Insel " + start + " bis " + end + " aufgelistet(" + islands.size() + " Inseln):");
+                                    for(int i : islands.keySet()) {
+                                        IslandProfile ip = islands.get(i);
+                                        Chat.sendHoverableCommandHelpMessage(p, " - " + XColor.c1 + "Island " + i, XColor.c2 + "Claimed: §f" + (ip.isClaimed() ? "Ja" : "Nein") + "\n" +
+                                                XColor.c2 + "Owner UUID: §f" + (ip.getOwnerUuid() == null ? "none" : ip.getOwnerUuid().toString()) + "\n" +
+                                                XColor.c2 + "X-Coord: §f" + ip.getX() + "\n" +
+                                                XColor.c2 + "Y-Coord: §f" + IslandManager.islandY + "\n" +
+                                                XColor.c2 + "Z-Coord: §f" + ip.getZ() + "\n" +
+                                                XColor.c2 + "Muss bereinigt werden: §f" + (ip.needCleearing() ? "§cJa\nNutze §c/sb helpadmin islandclear" : "§aNein"), false, false);
+                                    }
+
+                                    long finishedAt = System.currentTimeMillis();
+                                    Chat.info(p, "Diese Operation hat " + ((double)(finishedAt - startedAt) / 1000) + " Sekunden benötigt.");
+                                }
+                            } catch (Exception ex) {
+                                ex.printStackTrace();
+                                int min = Code.randomInteger(1, 30);
+                                int max = Code.randomInteger(min, min+30);
+                                Chat.error(p, "Du musst als Bereich 2 Ganzzahlen in folgenden Format angeben: §fVON-BIS", "Beispiel: /sb claimed " + min + "-" + max);
+                                Chat.error(p, "Deine Argumenete: args[1]=" + args[1]);
                             }
-                        } else if(args[0].equalsIgnoreCase("listisland") || args[0].equalsIgnoreCase("li")) {
-                            Chat.info(p, "Gebe einen Bereich an Inseln an, den du gerne auslesen möchtest.", "Als Beispiel: /sbdev li 0-50", "Du würdest also die Inseln mit einer Id zwischen 0 und 50 auslesen.");
-                        }
-                        break;
-                    case 2:
-                        if(args[0].equalsIgnoreCase("listisland") || args[0].equalsIgnoreCase("li")) {
-                            String range = args[1];
-                            if(!range.contains("-")) {
-                                Chat.error(p, "Das angegebene Format für deinen gewünschten Bereich ist falsch.", "Format: [von]-[bis]", "Beachte das bei der Bereichsangabe keine Leerzeichen verwendet werden dürfen!");
-                                return false;
+                            /*
+                                                        if(amountClaimedIslands < 50) {
+                                IslandManager.listClaimedIslands(p, 1, 50);
+                            } else {
+
                             }
-                            String[] split = range.split("-");
-                            int von = Integer.parseInt(split[0]);
-                            int bis = Integer.parseInt(split[1]);
-                            if(von > bis) {
-                                // Reverse von and bis so that von is the minimum and bis is the maximum
-                                int a = Math.max(von, bis);
-                                von = Math.min(von, bis);
-                                bis = a;
-                            }
-                            if(bis - von > 90) {
-                                bis = von + 90;
-                                Chat.info(p, "Die maximale Bereichspanne wird aufgrund der Chatlänge auf 90 reduziert. Der Bereich wurde korrigiert.");
-                            }
-                            Chat.info(p, "Hier sind alle Inseln von " + von + " bis " +  bis);
-                            for(int i = von; i != bis + 1; i++) {
-                                IslandProfile ip = IslandManager.getIslandDataFromIndexFile(i);
-                                Chat.sendClickableMessage(p, " -> ID-" + i,
-                                        XColor.c3 + "Island-Id: §f" + ip.getIslandId() + "\n" +
-                                        XColor.c3 + "Owner UUID: §e" + (ip.getOwnerUuid() == null ? "nicht vorhanden" : ip.getOwnerUuid().toString()) + "\n" +
-                                        XColor.c3 + "Is claimed: " + (ip.isClaimed() ? "§cBesetzt" : "§aFrei") + "\n" +
-                                        XColor.c3 + "X: §f" + ip.getX() + "\n" +
-                                        XColor.c3 + "Y: §f" + IslandManager.islandY + "\n" +
-                                        XColor.c3 + "Z: §f" + ip.getZ() + "\n" +
-                                        "§bKlicke, um dich zu dieser Insel zu teleportieren!", "/minecraft:teleport " + p.getName() + " " + ip.getX() + " " + IslandManager.islandY + " " + ip.getZ(), false, false);
-                            }
+                             */
+
+                        } else if(args[0].equalsIgnoreCase("islands") && Perms.hasPermission(p, Perms.getPermission("sb islands"))) {
+                            //TODO:
+
                         }
                         break;
                 }
@@ -139,27 +153,26 @@ public class SBCommand implements CommandExecutor, TabCompleter {
                 Chat.sendSuggestCommandMessage(p, XColor.c2 + " /sb rl §fSettings laden", XColor.c3 + "Lade die Einstellungen aus allen Config-Dateien von BDJSkyBlock neu." + (p.isOp() ? XColor.c4 + "\nPermission: §f" + Perms.getPermission("sb rl") : ""), "/sb rl", false, false);
                 Chat.sendClickableMessage(p, XColor.c2 + " /sb twl §fZur Wartelobby", XColor.c3 + "Teleportiere dich zur Wartelobby." + (p.isOp() ? XColor.c4 + "\nPermission: §f" + Perms.getPermission("sb twl") : ""), "/sb twl", false, false);
                 Chat.sendSuggestCommandMessage(p, XColor.c2 + " /sb swl §fWartelobby setzen", XColor.c3 + "Setze die Location für die Wartelobby. Die Wartelobby wird von Spielern betreten,\ndie darauf warten dass ihre Insel fertig generiert wurde." + (p.isOp() ? XColor.c4 + "\nPermission: §f" + Perms.getPermission("sb swl") : ""), "/sb swl", false, false);
-            }
-        } else if(command.equalsIgnoreCase("sbdev")) {
-            if(sender instanceof Player p) {
-                Chat.info(sender, "Alle verfügbaren SBDeveloper Befehle:");
-                Chat.sendSuggestCommandMessage(p, XColor.c2 + " /sbdev lp §fLoaded PlayerProfiles", XColor.c3 + "", "/sbdev lp", false, false);
-                Chat.sendSuggestCommandMessage(p, XColor.c2 + " /sbdev li §fList IslandData", XColor.c3 + "", "/sbdev li", false, false);
+                Chat.sendSuggestCommandMessage(p, XColor.c2 + " /sb claimed <Von-Bis> §fBelegte Inseln", XColor.c3 + "Liste dir alle belegten Inseln auf. Erkenne auch, ob eine Insel eine Bereinigung braucht." + (p.isOp() ? XColor.c4 + "\nPermission: §f" + Perms.getPermission("sb claimed") : ""), "/sb claimed", false, false);
+                Chat.sendSuggestCommandMessage(p, XColor.c2 + " /sb list <Von-Bis > §fInseln auflisten", XColor.c3 + "Liste dir alle Inseln in einem von dir angegebenen Island-ID Bereich auf. Gebe keinen Bereich an, um automatisch den Bereich 1-50 zu wählen." + (p.isOp() ? XColor.c4 + "\nPermission: §f" + Perms.getPermission("sb islands") : ""), "/sb islands", false, false);
+                Chat.info(p, "Weitere Befehle von BDJSkyBlock:");
+                Chat.info(p, "/is");
+                if(((Player) sender).getUniqueId().toString().equals("242dad39-544a-4c3a-8d61-17a38e004a6f")) Chat.info(p, "/sbdev");
             }
         }
     }
 
     @Override
     public List<String> onTabComplete(CommandSender sender, Command cmd, String s, String[] args) {
-
-        if(cmd.getName().equalsIgnoreCase("sb") && args.length == 1) return Arrays.asList("rl", "twl", "swl");
-        else {
-            if(sender instanceof Player p) {
-                if(cmd.getName().equalsIgnoreCase("sbdev") && p.getUniqueId().toString().equals("242dad39-544a-4c3a-8d61-17a38e004a6f")) {
-                    if(args.length == 1) return Arrays.asList("lp", "li");
-                    else if(args.length == 2) {
-                        if(args[0].equalsIgnoreCase("li")) return Arrays.asList("0-15");
-                    }
+        //TODO: BUG_1
+        //Every player gets a completion, even without the needed permissions!
+        if(sender instanceof Player p) {
+            if(cmd.getName().equalsIgnoreCase("sb")) {
+                switch(args.length) {
+                    case 0:
+                        return Arrays.asList("rl", "twl", "swl");
+                    case 1:
+                        break;
                 }
             }
         }

@@ -23,8 +23,18 @@ public class ProfileManager {
         profiles.remove(uuid);
     }
 
+    public static void unregisterAllProfiles() {
+        for(UUID uuid : profiles.keySet()) unregisterProfile(uuid);
+    }
+
     public static void reloadAll() {
-        for(Player p : Bukkit.getOnlinePlayers()) registerProfile(p.getUniqueId());
+        if(!profiles.isEmpty()) {
+            for(UUID uuid : profiles.keySet()) {
+                profiles.get(uuid).load();
+            }
+        } else {
+            for(Player p : Bukkit.getOnlinePlayers()) registerProfile(p.getUniqueId());
+        }
     }
 
     public static PlayerProfile getProfile(UUID uuid) {

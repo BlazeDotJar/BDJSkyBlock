@@ -15,7 +15,7 @@
     </properties>
 
     <repositories>
-        <!-- This adds the Spigot Maven repository to the build -->
+        <!-- Spigot Repository -->
         <repository>
             <id>spigot-repo</id>
             <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
@@ -23,7 +23,7 @@
     </repositories>
 
     <dependencies>
-        <!--This adds the Spigot API artifact to the build -->
+        <!-- Spigot API -->
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
@@ -31,5 +31,6 @@
             <scope>provided</scope>
         </dependency>
     </dependencies>
+
 
 </project>

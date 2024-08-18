@@ -18,6 +18,11 @@ public class Perms {
         if(command.equalsIgnoreCase("sb")) return "bdjsb.sb";
         else if(command.equalsIgnoreCase("sb rl")) return "bdjsb.sb.rl";
         else if(command.equalsIgnoreCase("sb swl")) return "bdjsb.sb.swl";
+        else if(command.equalsIgnoreCase("sb twl")) return "bdjsb.sb.twl";
+        else if(command.equalsIgnoreCase("sb claimed")) return "bdjsb.sb.claimed";
+        else if(command.equalsIgnoreCase("sb islands")) return "bdjsb.sb.islands";
+        else if(command.equalsIgnoreCase("is")) return "bdjsb.is";
+        else if(command.equalsIgnoreCase("is delete")) return "bdjsb.is.delete";
 
         return "no permissions found for cmd " + command;
     }

@@ -8,6 +8,7 @@ public class XColor {
     public static ChatColor c2 = ChatColor.of("#ff8c00"); //CommandHelp-Cmd Color
     public static ChatColor c3 = ChatColor.of("#00aeff"); //CommandHelp-Hover-Info Color
     public static ChatColor c4 = ChatColor.of("#47d7ff"); //CommandHelp-Hover-Permissions Color
+    public static ChatColor c5 = ChatColor.of("#ff2f0a"); //OPChatPrefix Color
 
     public static ChatColor getByName(String name) {
         if(name.equalsIgnoreCase("c1")) return c1;
