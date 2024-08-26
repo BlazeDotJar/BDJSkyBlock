@@ -22,7 +22,7 @@
         -> Ban player from your island
   New Bug:
         - BUG: _2
-            -> IS-Command: Delete an island as a member of an island. This end in a error
+            -> IS-Command: Delete an island as a member of an island. This end in an error
 
 ------------------------------------------------------------------------
   18.08.2024 - 22:20
