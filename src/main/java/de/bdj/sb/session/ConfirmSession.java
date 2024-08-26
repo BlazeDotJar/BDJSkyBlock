@@ -15,13 +15,15 @@ public class ConfirmSession extends TempSession{
     private String confirmationCode = "";
     private String denyCode = "";
     private ConfirmSession instance;
+    private ConfirmReason cr;
 
-    public ConfirmSession(Player host, String confirmationCode, String denyCode, String runOutOfTimeString) {
+    public ConfirmSession(Player host, String confirmationCode, String denyCode, String runOutOfTimeString, ConfirmReason cr) {
         this.host = host;
         this.confirmationCode = confirmationCode;
         this.denyCode = denyCode;
         this.runOutOfTimeString = runOutOfTimeString;
         this.instance = this;
+        this.cr = cr;
     }
     @Override
     public void start() {
@@ -57,5 +59,16 @@ public class ConfirmSession extends TempSession{
         if(!e.getPlayer().getUniqueId().toString().equals(host.getUniqueId().toString())) return;
         if(!e.getMessage().equalsIgnoreCase(confirmationCode)) return;
         delay.cancel();
+    }
+
+    public ConfirmReason getReason() {
+        return cr;
+    }
+
+    public static enum ConfirmReason {
+        MEMBER_OPERATION,
+        DELETE_OPERATION,
+        BAN_OPERATION,
+        SET_WAITLOBBY_OPERATION;
     }
 }

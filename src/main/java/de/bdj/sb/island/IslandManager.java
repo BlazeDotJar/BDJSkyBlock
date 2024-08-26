@@ -55,7 +55,10 @@ public class IslandManager {
         IslandProfile ip = getIslandDataFromIndexFile(islandId);
         profiles.remove(islandId);
         profiles.put(islandId, ip);
-        Chat.sendOperatorMessage("Reloaded IslandProfile#"+islandId+" from file");
+    }
+
+    public static IslandProfile getLoadedIslandProfile(int islandId) {
+        return profiles.get(islandId);
     }
 
     public static void loadPlayerIslandFile(int islandId) {

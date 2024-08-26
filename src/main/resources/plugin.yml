@@ -27,6 +27,7 @@ permissions:
       bdj.sb.claimed: true
       bdj.sb.islands: true
       bdj.sb.tp: true
+      bdj.sb.release: true
   bdj.sb:
     description: 'Help command'
   bdj.sb.rl:
@@ -41,16 +42,21 @@ permissions:
     description: 'List all islands in a given range'
   bdj.sb.tp:
     description: 'Teleort to an island'
+  bdj.sb.release:
+    description: 'Release an island to the market'
   #--Gameplay permissions-----------------------------------------------------
   bdj.is.*:
     description: 'Give this permission to all players'
     children:
       bdj.is: true
+      bdj.is.create: true
       bdj.is.help: true
       bdj.is.delete: true
       bdj.is.member: true
   bdj.is:
-    description: 'Create an island or teleport to is'
+    description: 'Teleport to your island'
+  bdj.is.create:
+    description: 'Create an island'
   bdj.is.help:
     description: 'Show command help'
   bdj.is.delete:

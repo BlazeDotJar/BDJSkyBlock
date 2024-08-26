@@ -14,6 +14,15 @@
           -> Initially found in version: VERSION
           -> Bug description: "DESCRIPTION"
           -> FIX: Description of the fix
+------------------------------------------------------------------------
+  26.08.2024 - 20:48
+  Version: 0.5.0_2
+  Changes:
+    - Added Command /is ban <Playername>
+        -> Ban player from your island
+  New Bug:
+        - BUG: _2
+            -> IS-Command: Delete an island as a member of an island. This end in a error
 
 ------------------------------------------------------------------------
   18.08.2024 - 22:20

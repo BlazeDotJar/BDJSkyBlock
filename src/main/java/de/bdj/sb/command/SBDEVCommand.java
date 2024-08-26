@@ -92,6 +92,9 @@ public class SBDEVCommand implements CommandExecutor, TabCompleter {
                                                     XColor.c3 + "X: §f" + ip.getX() + "\n" +
                                                     XColor.c3 + "Y: §f" + IslandManager.islandY + "\n" +
                                                     XColor.c3 + "Z: §f" + ip.getZ() + "\n" +
+                                                    XColor.c3 + "Members: §f" + ip.getMembers().toString() + "\n" +
+                                                    XColor.c3 + "Banned Players: §f" + ip.getBannedPlayers().toString() + "\n" +
+                                                    XColor.c3 + "Properties: §f" + ip.getProperties().toString() + "\n" +
                                                     XColor.c3 + "Braucht Bereinigung: §f" + ip.needCleearing() + "\n" +
                                                     "§bKlicke, um dich zu dieser Insel zu teleportieren!", "/minecraft:teleport " + p.getName() + " " + ip.getX() + " " + IslandManager.islandY + " " + ip.getZ(), false, false);
                                 } else if(i > bis) break;
@@ -167,10 +170,10 @@ public class SBDEVCommand implements CommandExecutor, TabCompleter {
         if(command.equalsIgnoreCase("sbdev")) {
             if(sender instanceof Player p) {
                 Chat.info(sender, "Alle verfügbaren SBDeveloper Befehle:");
-                Chat.sendSuggestCommandMessage(p, XColor.c2 + " /sbdev lp §fLoaded PlayerProfiles", XColor.c3 + "Zeige alle geladenen Spielerprofile an.", "/sbdev lp", false, false);
-                Chat.sendSuggestCommandMessage(p, XColor.c2 + " /sbdev li §fList IslandData", XColor.c3 + "Zeige dir alle Insel-Daten von Inseln mit einer ID zwischen <von-bis> an.", "/sbdev li", false, false);
-                Chat.sendSuggestCommandMessage(p, XColor.c2 + " /sbdev walls §fCreate island walls", XColor.c3 + "Lasse dir die Borders einer Insel anzeigen / bauen", "/sbdev walls", false, false);
-                Chat.sendClickableMessage(p, XColor.c2 + " /sbdev quarter §fCreate island quarter walls", XColor.c3 + "Erstelle ein Viertel der Insel Border", "/sbdev quarter", false, false);
+                Chat.sendSuggestCommandMessage(p, XColor.c2 + " /sbdev lp §fLoaded PlayerProfiles", XColor.c2 + "Zeige alle geladenen Spielerprofile an.", "/sbdev lp", false, false);
+                Chat.sendSuggestCommandMessage(p, XColor.c2 + " /sbdev li §fList IslandData", XColor.c2 + "Zeige dir alle Insel-Daten von Inseln mit einer ID zwischen <von-bis> an.", "/sbdev li", false, false);
+                Chat.sendSuggestCommandMessage(p, XColor.c2 + " /sbdev walls §fCreate island walls", XColor.c2 + "Lasse dir die Borders einer Insel anzeigen / bauen", "/sbdev walls", false, false);
+                Chat.sendClickableMessage(p, XColor.c2 + " /sbdev quarter §fCreate island quarter walls", XColor.c2 + "Erstelle ein Viertel der Insel Border", "/sbdev quarter", false, false);
             }
         }
     }

@@ -22,10 +22,13 @@ public class Perms {
         else if(command.equalsIgnoreCase("sb claimed")) return "bdj.sb.claimed";
         else if(command.equalsIgnoreCase("sb islands")) return "bdj.sb.islands";
         else if(command.equalsIgnoreCase("sb tp")) return "bdj.sb.tp";
+        else if(command.equalsIgnoreCase("sb release")) return "bdj.sb.release";
         else if(command.equalsIgnoreCase("is")) return "bdj.is";
+        else if(command.equalsIgnoreCase("is create")) return "bdj.is.create";
         else if(command.equalsIgnoreCase("is help")) return "bdj.is.help";
         else if(command.equalsIgnoreCase("is delete")) return "bdj.is.delete";
         else if(command.equalsIgnoreCase("is member")) return "bdj.is.member";
+        else if(command.equalsIgnoreCase("is ban")) return "bdj.is.ban";
 
         return "no permissions found for cmd " + command;
     }
