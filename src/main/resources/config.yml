@@ -9,6 +9,13 @@ island index file name: 'island_index_file.yml'
 skyblock overworld name: 'skyblockworld'
 skyblock nether name: 'skyblocknether'
 skyblock end name: 'skyblockend'
+server lobby spawn:
+  world: 'world'
+  x: 326
+  y: 85
+  z: 221
+  yaw: 0
+  pitch: 0
 # If you get in touch with the developer of this plugin, me (my in game name by now is BlazeDotJar), you maybe get told to
 # turn this skyblock plugin developer help mode to 'true'. This only turn on more detailed console output for me to
 # find out what went wrong with what ever issue you have found. Please keep this on 'false' by default :)

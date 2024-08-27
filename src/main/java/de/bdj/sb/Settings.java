@@ -1,7 +1,10 @@
 package de.bdj.sb;
 
+import de.bdj.sb.lobby.Lobby;
 import de.bdj.sb.utlility.XColor;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -42,11 +45,19 @@ public class Settings {
         String sbNetherName = cfg.getString("skyblock nether name");
         String sbEndName = cfg.getString("skyblock end name");
         pluginDeveloperHelpMode = cfg.getBoolean("skyblock plugin developer help mode");
+        String lobbySpawnWorld = cfg.getString("server lobby spawn.world");
+        double x = cfg.getDouble("server lobby spawn.x");
+        double y = cfg.getDouble("server lobby spawn.y");
+        double z = cfg.getDouble("server lobby spawn.z");
+        float yaw = (float)cfg.getInt("server lobby spawn.yaw");
+        float pitch = (float)cfg.getInt("server lobby spawn.pitch");
 
         pluginPrefix = processString(XColor.c1 + "§l" + pre);
         pluginSuffix = processString(suf);
         noPermMessage = processString(noPerm);
         islandIndexFileName = islandIndex;
+
+        new Lobby(new Location(Bukkit.getWorld(lobbySpawnWorld), x, y, z, yaw, pitch));
     }
 
     private static String processString(String raw) {

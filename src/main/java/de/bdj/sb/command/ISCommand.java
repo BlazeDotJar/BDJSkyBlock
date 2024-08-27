@@ -6,6 +6,7 @@ import de.bdj.sb.island.IslandManager;
 import de.bdj.sb.island.IslandProfile;
 import de.bdj.sb.island.result.AddMemberToIslandResult;
 import de.bdj.sb.island.result.RemoveMemberFromIslandResult;
+import de.bdj.sb.lobby.Lobby;
 import de.bdj.sb.profile.PlayerProfile;
 import de.bdj.sb.profile.ProfileManager;
 import de.bdj.sb.session.ConfirmSession;
@@ -70,7 +71,7 @@ public class ISCommand implements CommandExecutor, TabCompleter {
                                     cs.delayTime = 10; //The player will have 10 seconds to confirm the action
                                     cs.start();
                                     pro.addTempSession(cs);
-                                } else Chat.info(p, XColor.c2 + "Nutze §f/is delete confirm " + XColor.c2 + "um die Löschung zu bestätigen");
+                                } else Chat.info(p, XColor.c2 + "Nutze §f/is confirm " + XColor.c2 + "um die Löschung zu bestätigen");
                             }
                         } else if(args[0].equalsIgnoreCase("member") && Perms.hasPermission(p, Perms.getPermission("is member"))) {
                             Chat.sendSuggestCommandMessage(p, XColor.c2 + "/is member <Spielername> add §fMember hinzufügen", XColor.c3 + "Füge einen Spieler zu deiner Insel hinzu. Dieser kann ab diesen Zeitpunkt dann alles auf deiner Insel machen.\n" +
@@ -93,6 +94,10 @@ public class ISCommand implements CommandExecutor, TabCompleter {
                                         if(adtir == AddMemberToIslandResult.SUCCESS_MEMBER_ADDED) {
                                             Chat.info(inviter, "Du hast den Spieler " + target.getName() + " zu deiner Insel hinzugefügt.", "Dieser Spieler kann nun mit /is zu eurer Insel gelangen.");
                                             Chat.info(target, "Du bist nun Mitglied der Insel " + ProfileManager.getProfile(target.getUniqueId()).getIslandId() + ", Besitzer: " + inviter.getName());
+                                            cs.terminate();
+                                        } else if(adtir == AddMemberToIslandResult.CANCELLED_TARGET_PLAYER_ALREADY_HAS_ISLAND) {
+                                            Chat.error(p, "Du hast bereits eine Insel!");
+                                            cs.terminate();
                                         } else Chat.error(p, "Irgendetwas ist mit der Bestätigung schiefgelaufen. Fehlercode: " + adtir.toString());
                                     } else if(cs.getReason() == ConfirmSession.ConfirmReason.DELETE_OPERATION) {
                                         //The ConfirmSession is about deleting the island.
@@ -100,11 +105,18 @@ public class ISCommand implements CommandExecutor, TabCompleter {
                                         pro = ProfileManager.getProfile(p.getUniqueId());
                                         pro.removeTempSession(Settings.confirmationSessionKey, cs);
 
+                                        IslandProfile ip = IslandManager.getLoadedIslandProfile(pro.getIslandId());
+                                        if(ip.getMembers().size() != 0) {
+                                            Chat.error(p, "Du musst erst alle Member löschen um deine Insel löschen zu können!");
+                                            return false;
+                                        }
+
                                         boolean successfullyDeleted = IslandManager.removeOwner(pro.getIslandId());
                                         if(successfullyDeleted) {
                                             pro.setIslandId(0);
                                             pro.save();
                                             Chat.info(p, "Deine Löschung war erfolgreich.");
+                                            Lobby.teleport(p);
                                         } else {
                                             Chat.error(p, "Die Löschung deiner Insel hat nicht geklappt. Probiere es erneut oder kontaktiere das Serverpersonal.");
                                         }
@@ -116,7 +128,12 @@ public class ISCommand implements CommandExecutor, TabCompleter {
                                 ConfirmSession cs = (ConfirmSession) ProfileManager.getProfile(p.getUniqueId()).getTempSession(Settings.confirmationSessionKey);
                                 if(cs != null) {
                                     if(cs.getReason() == ConfirmSession.ConfirmReason.MEMBER_OPERATION) {
-
+                                        //The ConfirmSession is about a member operation. Means: The player is doing something with members. Example: accepting an invitation
+                                        Player target = (Player) cs.getExtraData("target_player");
+                                        Player inviter = (Player) cs.getExtraData("inviter_player");
+                                        cs.terminate();
+                                        Chat.info(inviter, "Die Einladung zu deiner Insel wurde von " + target.getName() + " abgebrochen.");
+                                        Chat.info(p, "Du hast die Insel Einladung von " + inviter.getName() + " abgebrochen.");
                                     } else if(cs.getReason() == ConfirmSession.ConfirmReason.DELETE_OPERATION) {
                                         cs.terminate();
                                         pro = ProfileManager.getProfile(p.getUniqueId());
@@ -125,6 +142,22 @@ public class ISCommand implements CommandExecutor, TabCompleter {
                                     }
                                 } else Chat.error(p, "Es gibt keine offene Bestätigungsanfrage.");
                             } else Chat.error(p, "Es gibt keine offene Bestätigungsanfrage.");
+                        } else if(args[0].equalsIgnoreCase("quit") && Perms.hasPermission(p, Perms.getPermission("is quit"))) {
+                            PlayerProfile pp = ProfileManager.getProfile(p.getUniqueId());
+                            int id = pp.getIslandId();
+                            IslandProfile ip = IslandManager.getLoadedIslandProfile(id);
+                            if(ip == null) {
+                                Chat.error(p, "Du bist kein Member auf einer Insel.");
+                                return false;
+                            }
+                            if(!ip.getMembers().contains(p.getUniqueId().toString())) {
+                                Chat.error(p, "Du bist kein Member auf einer Insel.");
+                                return false;
+                            }
+                            ip.removeMember(p.getUniqueId().toString());
+                            IslandManager.removeMemberFromIsland(id, p.getUniqueId());
+                            Chat.info(p, "Du hast deine Insel verlassen und kannst dir nun mit /is create eine neue erstellen.");
+                            Lobby.teleport(p);
                         }
                         break;
                     case 2:
@@ -167,7 +200,9 @@ public class ISCommand implements CommandExecutor, TabCompleter {
                                     cs.addExtraData("inviter_player", p);
                                     cs.addExtraData("target_player", target);
                                     ProfileManager.getProfile(target.getUniqueId()).addTempSession(cs);
+                                    Chat.info(target, XColor.c2 + "Du wurdest von §f" + p.getName() + XColor.c2 + " auf eine gemeinsame Insel eingeladen.");
                                     cs.start();
+                                    Chat.info(p, "Du hast " + target.getName() + " zu deiner Insel eingeladen.");
                                 } else Chat.error(p, "Der Spieler ist nicht online.");
                             } else if(args[2].equalsIgnoreCase("remove")) {
                                 String spielername = args[1];
@@ -181,6 +216,8 @@ public class ISCommand implements CommandExecutor, TabCompleter {
                                 if(target != null) {
                                     if(SkyBlockFunction.removeOnlineMember(p, target) == RemoveMemberFromIslandResult.SUCCESS_MEMBER_REMOVE) {
                                         Chat.info(p, "Du hast den Spieler " + spielername + " von deiner Insel entfernt.");
+                                        IslandProfile ip = IslandManager.getLoadedIslandProfile(pro.getIslandId());
+                                        if(ip.getArea().isIn(target.getLocation())) Lobby.teleport(target);
                                     }
                                 } else Chat.error(p, "Der Spieler ist nicht online.");
                             }
@@ -201,7 +238,9 @@ public class ISCommand implements CommandExecutor, TabCompleter {
                 Chat.sendClickableMessage(p, XColor.c2 + " /is help §fCommand Hilfe", XColor.c2 + "Liste alle /is Befehle auf um dir einen Überblick zu beschaffen." + (p.isOp() ? XColor.c4 + "\nPermission: §f" + Perms.getPermission("is help") : ""), "/is help", false, false);
                 Chat.sendSuggestCommandMessage(p, XColor.c2 + " /is delete §fInsel löschen", XColor.c2 + "Lösche deine Insel. Dies kann nicht rückgängig gemacht werden!" + (p.isOp() ? XColor.c4 + "\nPermission: §f" + Perms.getPermission("is delete") : ""), "/is delete", false, false);
                 Chat.sendSuggestCommandMessage(p, XColor.c2 + " /is member §fMember verwalten", XColor.c2 + "Verwalte Member deiner Insel. Füge Spieler hinzu, entferne diese wieder, etc." + (p.isOp() ? XColor.c4 + "\nPermission: §f" + Perms.getPermission("is member") : ""), "/is member", false, false);
+                Chat.sendSuggestCommandMessage(p, XColor.c2 + " /is quit §fInsel verlassen", XColor.c2 + "Wenn du Member einer Insel bist, kannst du sie hiermit verlassen um ein eigene zu erstellen." + (p.isOp() ? XColor.c4 + "\nPermission: §f" + Perms.getPermission("is quit") : ""), "/is quit", false, false);
                 Chat.sendSuggestCommandMessage(p, XColor.c2 + " /is ban <Spielername> §fVon Insel bannen", XColor.c2 + "Verbanne einen Spieler von deiner Insel. Dieser kann deine Insel also nicht betreten." + (p.isOp() ? XColor.c4 + "\nPermission: §f" + Perms.getPermission("is ban") : ""), "/is ban", false, false);
+                Chat.sendSuggestCommandMessage(p, XColor.orange + " /is clearmobs §fasdas", XColor.c2 + "BLABLA. Permission noch fixen in dieser ZEile" + (p.isOp() ? XColor.c4 + "\nPermission: §f" + Perms.getPermission("is fds") : ""), "/is sf", false, false);
             }
         }
     }
@@ -214,7 +253,7 @@ public class ISCommand implements CommandExecutor, TabCompleter {
             if(cmd.getName().equalsIgnoreCase("is")) {
                 switch(args.length) {
                     case 1:
-                        return Arrays.asList("confirm", "deny", "create", "help", "delete", "member", "ban");
+                        return Arrays.asList("confirm", "deny", "create", "help", "delete", "member", "ban", "quit");
                     case 2:
                         if(args[0].equalsIgnoreCase("ban")) {
                             return null;

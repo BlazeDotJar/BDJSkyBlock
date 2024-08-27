@@ -121,19 +121,19 @@ public class SBDEVCommand implements CommandExecutor, TabCompleter {
                             l.getBlock().setType(Material.RED_WOOL);
                             for(int i = 0; i != IslandManager.islandDiameter; i++) {
                                 l.add(1, 0, 0);
-                                l.getBlock().setType(Material.RED_WOOL);
+                                if(l.getBlock().getType() == Material.AIR) l.getBlock().setType(Material.RED_WOOL);
                             }
                             for(int i = 0; i != IslandManager.islandDiameter; i++) {
                                 l.add(0, 0, 1);
-                                l.getBlock().setType(Material.RED_WOOL);
+                                if(l.getBlock().getType() == Material.AIR) l.getBlock().setType(Material.RED_WOOL);
                             }
                             for(int i = 0; i != IslandManager.islandDiameter; i++) {
                                 l.add(-1, 0, 0);
-                                l.getBlock().setType(Material.RED_WOOL);
+                                if(l.getBlock().getType() == Material.AIR) l.getBlock().setType(Material.RED_WOOL);
                             }
                             for(int i = 0; i != IslandManager.islandDiameter; i++) {
                                 l.add(0, 0, -1);
-                                l.getBlock().setType(Material.RED_WOOL);
+                                if(l.getBlock().getType() == Material.AIR) l.getBlock().setType(Material.RED_WOOL);
                             }
                             Chat.info(p, "Walls für Insel " + islandId + " erstellt!");
                         } else if(args[0].equalsIgnoreCase("quarter") || args[0].equalsIgnoreCase("q")) {
@@ -143,19 +143,19 @@ public class SBDEVCommand implements CommandExecutor, TabCompleter {
                             l.getBlock().setType(Material.RED_WOOL);
                             for(int i = 0; i != (IslandManager.islandDiameter / 2); i++) {
                                 l.add(1, 0, 0);
-                                l.getBlock().setType(Material.RED_WOOL);
+                                if(l.getBlock().getType() == Material.AIR) l.getBlock().setType(Material.RED_WOOL);
                             }
                             for(int i = 0; i != (IslandManager.islandDiameter / 2); i++) {
                                 l.add(0, 0, 1);
-                                l.getBlock().setType(Material.RED_WOOL);
+                                if(l.getBlock().getType() == Material.AIR) l.getBlock().setType(Material.RED_WOOL);
                             }
                             for(int i = 0; i != (IslandManager.islandDiameter / 2); i++) {
                                 l.add(-1, 0, 0);
-                                l.getBlock().setType(Material.RED_WOOL);
+                                if(l.getBlock().getType() == Material.AIR) l.getBlock().setType(Material.RED_WOOL);
                             }
                             for(int i = 0; i != (IslandManager.islandDiameter / 2); i++) {
                                 l.add(0, 0, -1);
-                                l.getBlock().setType(Material.RED_WOOL);
+                                if(l.getBlock().getType() == Material.AIR) l.getBlock().setType(Material.RED_WOOL);
                             }
                             Chat.info(p, "Walls für Insel " + islandId + " erstellt!");
                         }

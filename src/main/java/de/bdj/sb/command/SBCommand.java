@@ -48,6 +48,7 @@ public class SBCommand implements CommandExecutor, TabCompleter {
                             Settings.reload();
                             ProfileManager.reloadAll();
                             Waitlobby.reloadLocation();
+                            IslandManager.reloadFiles();
                             Chat.info(p, "Die Settings wurden neu geladen!");
                         } else if(args[0].equalsIgnoreCase("twl") && Perms.hasPermission(p, Perms.getPermission("sb twl"))) {
                             Waitlobby.teleport(p);
@@ -165,12 +166,15 @@ public class SBCommand implements CommandExecutor, TabCompleter {
                                 Chat.info(p, "Insel " + start + " bis " + end + " aufgelistet(" + islands.size() + " Inseln):");
                                 for(int i : islands.keySet()) {
                                     IslandProfile ip = islands.get(i);
-                                    Chat.sendHoverableCommandHelpMessage(p, " - " + (ip.isClaimed() ? XColor.orange : XColor.green) + "Island " + i, XColor.c2 + "Claimed: §f" + (ip.isClaimed() ? "Ja" : "Nein") + "\n" +
+                                    Chat.sendClickableMessage(p, " - " + (ip.isClaimed() ? XColor.orange : XColor.green) + "Island " + i, XColor.c2 + "Claimed: §f" + (ip.isClaimed() ? "Ja" : "Nein") + "\n" +
                                             XColor.c2 + "Owner UUID: §f" + (ip.getOwnerUuid() == null ? "none" : ip.getOwnerUuid().toString()) + "\n" +
                                             XColor.c2 + "X-Coord: §f" + ip.getX() + "\n" +
                                             XColor.c2 + "Y-Coord: §f" + IslandManager.islandY + "\n" +
                                             XColor.c2 + "Z-Coord: §f" + ip.getZ() + "\n" +
-                                            XColor.c2 + "Muss bereinigt werden: §f" + (ip.needCleearing() ? "§cJa\nNutze §c/sb helpadmin islandclear" : "§aNein"), false, false);
+                                            XColor.c2 + "Muss bereinigt werden: §f" + (ip.needCleearing() ? "§cJa\nNutze §c/sb helpadmin islandclear" : "§aNein") + "\n" +
+                                            XColor.c2 + "Properties: §f"  + "\n"  +
+                                            ip.getProperties().toString() + "\n" +
+                                            XColor.c1 + "Klicke um dich zur Insel " + ip.getIslandId() + " zu teleportieren.", "/sb tp " + ip.getIslandId(),false, false);
                                 }
 
                                 long finishedAt = System.currentTimeMillis();

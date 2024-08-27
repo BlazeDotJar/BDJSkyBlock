@@ -131,7 +131,7 @@ public class IslandCreator {
                     c.set("Time When Created", SB.timeStamp.getCurrentTime());
                     c.set("Island ID", chosenIslandId);
                     c.set("Island Level", 0);
-                    c.set("Properties", Arrays.asList("mob griefing: false", "tnt damage: false","spread fire: false", "spawn monsters: true"));
+                    c.set("Properties", Arrays.asList("pvp: false", "mob griefing: false", "explosion damage: false", "tnt damage: false", "spread fire: false", "natural monster spawn: true"));
                     c.set("Banned Players", Arrays.asList());
                     c.set("Members", Arrays.asList());
 

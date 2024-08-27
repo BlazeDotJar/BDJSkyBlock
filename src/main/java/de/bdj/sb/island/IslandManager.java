@@ -32,16 +32,22 @@ public class IslandManager {
 
     public static void reloadFiles() {
         if(sipl != null) sipl.cancel();
-        SB.getInstance().saveResource("island_index_file.yml", false);
+        if(!profiles.isEmpty()) {
+            for(IslandProfile ip : profiles.values()) {
+                ip.loadData();
+            }
+            Chat.sendOperatorMessage("RELAODFILES WRONGLY!");
+        } else {
+            SB.getInstance().saveResource("island_index_file.yml", false);
 
-        File file = new File("plugins/" + SB.name() + "/" + Settings.islandIndexFileName);
-        FileConfiguration cfg = YamlConfiguration.loadConfiguration(file);
-        amountGenerated = cfg.getInt("Islands.Amount Generated");
+            File file = new File("plugins/" + SB.name() + "/" + Settings.islandIndexFileName);
+            FileConfiguration cfg = YamlConfiguration.loadConfiguration(file);
+            amountGenerated = cfg.getInt("Islands.Amount Generated");
 
-        for(Player p : Bukkit.getOnlinePlayers()) {
-            loadPlayerIslandFile(ProfileManager.getProfile(p.getUniqueId()).getIslandId());
+            for(Player p : Bukkit.getOnlinePlayers()) {
+                loadPlayerIslandFile(ProfileManager.getProfile(p.getUniqueId()).getIslandId());
+            }
         }
-
         sipl = new SlowIslandProfileLoader();
 
     }

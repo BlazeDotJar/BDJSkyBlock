@@ -10,6 +10,7 @@ import org.bukkit.entity.LivingEntity;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.UUID;
 
 public class IslandProfile {
@@ -25,7 +26,7 @@ public class IslandProfile {
     private final IslandArea area;
     private final ArrayList<String> members = new ArrayList<>(); //String = UUID as String
     private final ArrayList<String> bannedPlayers = new ArrayList<>(); //String = UUID as String
-    private final ArrayList<String> properties = new ArrayList<>(); //String = UUID as String
+    private final HashMap<String, String> properties = new HashMap<>(); //String = UUID as String
 
     public IslandProfile(int islandId, UUID ownerUuid, int x, int z, boolean isClaimed) {
         this.islandId = islandId;
@@ -64,7 +65,12 @@ public class IslandProfile {
             bannedPlayers.addAll(fileBannedPlayers);
         }
         if(!fileProperties.isEmpty()) {
-            properties.addAll(fileProperties);
+            for(String s : fileProperties) {
+                String[] split = s.split(": ");
+                String key = split[0];
+                String value = split[1];
+                properties.put(key, value);
+            }
         }
 
     }
@@ -148,7 +154,7 @@ public class IslandProfile {
         return bannedPlayers;
     }
 
-    public ArrayList<String> getProperties() {
+    public HashMap<String, String> getProperties() {
         return properties;
     }
 }

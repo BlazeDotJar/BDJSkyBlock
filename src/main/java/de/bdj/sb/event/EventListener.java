@@ -3,6 +3,11 @@ package de.bdj.sb.event;
 import de.bdj.sb.SB;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.*;
+import org.bukkit.event.entity.EntityDamageByBlockEvent;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntitySpawnEvent;
+import org.bukkit.event.entity.ExplosionPrimeEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
@@ -33,6 +38,40 @@ public class EventListener implements Listener {
     public void onMove(PlayerMoveEvent e) {
         PlayerMoveListener.onMove(e);
     }
+
+    @EventHandler
+    public void onBlockBreak(BlockBreakEvent e) {
+        BlockListener.onBlockBreak(e);
+    }
+    @EventHandler
+    public void onBlockPlace(BlockPlaceEvent e) {
+        BlockListener.onBlockPlace(e);
+    }
+    @EventHandler
+    public void onDamage(EntityDamageByEntityEvent e) {
+        EntityDamageEntityListener.onDamage(e);
+    }
+    @EventHandler
+    public void onExplosion(ExplosionPrimeEvent e) {
+        TNTListener.onExplosion(e);
+    }
+    @EventHandler
+    public void onFireSpread(BlockSpreadEvent e) {
+        FireSpreadListener.onFireSpread(e);
+    }
+    @EventHandler
+    public void onBlockBurn(BlockBurnEvent e) {
+        FireSpreadListener.onBurn(e);
+    }
+    @EventHandler
+    public void onBlockIgnite(BlockIgniteEvent e) {
+        FireSpreadListener.onIgnite(e);
+    }
+    @EventHandler
+    public void onSpawn(EntitySpawnEvent e) {
+        MobSpawnListener.onSpawn(e);
+    }
+
 
 
 }

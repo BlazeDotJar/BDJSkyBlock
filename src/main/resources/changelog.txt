@@ -15,6 +15,25 @@
           -> Bug description: "DESCRIPTION"
           -> FIX: Description of the fix
 ------------------------------------------------------------------------
+  27.08.2024 - 22:48
+  Version: 0.6.0_2
+  Changes:
+    - Added Island Properties Functions
+        -> PVP Enable/Disable
+        -> Explosion Damage Enable/Disable
+        -> Mob Griefing Enable/Disable
+        -> Tnt Damage Enable/Disable
+        -> Spread Fire Enable/Disable
+        -> Natural Monster Spawn Enable/Disable
+    - Added Command /is quit
+        -> If you are a member on an island, you can use this command to leave this island
+    - Added missing permissions
+        -> bdj.is.confirm
+        -> bdj.is.quit
+    - Added internal server lobby location for teleport when deleting your island
+        -> This still needs a command to give a copy of the server lobby location
+    - Fixed some unnoticed bugs with adding members to island
+------------------------------------------------------------------------
   26.08.2024 - 20:48
   Version: 0.5.0_2
   Changes:
@@ -23,7 +42,6 @@
   New Bug:
         - BUG: _2
             -> IS-Command: Delete an island as a member of an island. This end in an error
-
 ------------------------------------------------------------------------
   18.08.2024 - 22:20
   Version: 0.4.0_1
