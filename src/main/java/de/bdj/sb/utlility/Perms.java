@@ -23,6 +23,7 @@ public class Perms {
         else if(command.equalsIgnoreCase("sb islands")) return "bdj.sb.islands";
         else if(command.equalsIgnoreCase("sb tp")) return "bdj.sb.tp";
         else if(command.equalsIgnoreCase("sb release")) return "bdj.sb.release";
+        else if(command.equalsIgnoreCase("sb adminhelp")) return "bdj.sb.adminhelp";
         else if(command.equalsIgnoreCase("is")) return "bdj.is";
         else if(command.equalsIgnoreCase("is create")) return "bdj.is.create";
         else if(command.equalsIgnoreCase("is help")) return "bdj.is.help";

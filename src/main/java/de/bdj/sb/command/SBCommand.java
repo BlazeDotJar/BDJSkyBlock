@@ -18,6 +18,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
+import org.checkerframework.checker.units.qual.A;
 
 import java.util.*;
 
@@ -205,6 +206,7 @@ public class SBCommand implements CommandExecutor, TabCompleter {
                 Chat.sendSuggestCommandMessage(p, XColor.c2 + " /sb islands <Von-Bis> §fInseln auflisten", XColor.c2 + "Liste dir alle Inseln in einem von dir angegebenen Island-ID Bereich auf. Gebe keinen Bereich an, um automatisch den Bereich 1-50 zu wählen." + (p.isOp() ? XColor.c4 + "\nPermission: §f" + Perms.getPermission("sb islands") : ""), "/sb islands", false, false);
                 Chat.sendSuggestCommandMessage(p, XColor.c2 + " /sb tp <Island ID> §fInsel-Teleport", XColor.c2 + "Teleportiere dich zu einer beliebigen Insel. Die IslandId muss eine Ganzzahl sein." + (p.isOp() ? XColor.c4 + "\nPermission: §f" + Perms.getPermission("sb tp") : ""), "/sb tp", false, false);
                 Chat.sendSuggestCommandMessage(p, XColor.orange + " /sb release <Island ID> §fInsel freigeben", XColor.c2 + "Gebe eine Insel frei, damit Spieler diese wieder beziehen können." + (p.isOp() ? XColor.c4 + "\nPermission: §f" + Perms.getPermission("sb release") : ""), "/sb release", false, false);
+                Chat.sendSuggestCommandMessage(p, XColor.orange + " /sb helpadmin <Seiten-ID> §fAdmin-Handbuch", XColor.c2 + "Lies im Handbuch für Admins nach, wenn du vergessen hast, wie etwas zu handhaben ist." + (p.isOp() ? XColor.c4 + "\nPermission: §f" + Perms.getPermission("sb adminhelp") : ""), "/sb adminhelp", false, false);
                 Chat.info(p, "Weitere Befehle von BDJSkyBlock:");
                 Chat.info(p, "/is");
                 if(((Player) sender).getUniqueId().toString().equals("242dad39-544a-4c3a-8d61-17a38e004a6f")) Chat.info(p, "/sbdev");
@@ -217,12 +219,21 @@ public class SBCommand implements CommandExecutor, TabCompleter {
         //TODO: BUG_1
         //Every player gets a completion, even without the needed permissions!
         if(sender instanceof Player p) {
+            ArrayList<String> l = new ArrayList<>();
             if(cmd.getName().equalsIgnoreCase("sb")) {
                 switch(args.length) {
-                    case 0:
-                        return Arrays.asList("rl", "twl", "swl");
                     case 1:
-                        break;
+                        if(Perms.hasPermission(p, Perms.getPermission("sb rl"), false)) l.add("rl");
+                        if(Perms.hasPermission(p, Perms.getPermission("sb twl"), false)) l.add("twl");
+                        if(Perms.hasPermission(p, Perms.getPermission("sb swl"), false)) l.add("swl");
+                        if(Perms.hasPermission(p, Perms.getPermission("sb claimed"), false)) l.add("claimed");
+                        if(Perms.hasPermission(p, Perms.getPermission("sb islands"), false)) l.add("islands");
+                        if(Perms.hasPermission(p, Perms.getPermission("sb tp"), false)) l.add("tp");
+                        return l;
+                    case 2:
+                        if(args[0].equalsIgnoreCase("claimed") && Perms.hasPermission(p, Perms.getPermission("sb claimed"), false)) return Arrays.asList("1-10");
+                        else if(args[0].equalsIgnoreCase("islands") && Perms.hasPermission(p, Perms.getPermission("sb islands"), false)) return Arrays.asList("1-10");
+                        else if(args[0].equalsIgnoreCase("tp") && Perms.hasPermission(p, Perms.getPermission("sb tp"), false)) return Arrays.asList("1");
                 }
             }
         }

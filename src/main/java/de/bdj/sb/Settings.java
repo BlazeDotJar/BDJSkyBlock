@@ -14,9 +14,9 @@ public class Settings {
     public static String opChatPrefix = XColor.c5 + "Personal-Alert: §c"; //Configurable
     public static String noPermMessage = "§cDu hast kein Recht dazu"; //Configurable
     public static String islandIndexFileName = "§cDu hast kein Recht dazu"; //Configurable
-    public static String sbOverworldName = "sb_overworld"; //Configurable
-    public static String sbNetherName = "sb_nether"; //Configurable
-    public static String sbEndName = "sb_end"; //Configurable
+    public static String sbOverworldName = "skyblockworld"; //Configurable
+    public static String sbNetherName = "skyblocknether"; //Configurable
+    public static String sbEndName = "skyblockend"; //Configurable
     public static boolean teleportPlayersToWaitlobbyWhenCreating = true;
     public static boolean pluginDeveloperHelpMode = true;
 

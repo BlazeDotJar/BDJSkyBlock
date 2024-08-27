@@ -2,17 +2,13 @@ package de.bdj.sb.command;
 
 import de.bdj.sb.SB;
 import de.bdj.sb.Settings;
-import de.bdj.sb.island.IslandCreator;
-import de.bdj.sb.island.IslandGenManager;
 import de.bdj.sb.island.IslandManager;
 import de.bdj.sb.island.IslandProfile;
 import de.bdj.sb.island.result.AddMemberToIslandResult;
-import de.bdj.sb.island.result.IslandCreatorReserveResult;
 import de.bdj.sb.island.result.RemoveMemberFromIslandResult;
 import de.bdj.sb.profile.PlayerProfile;
 import de.bdj.sb.profile.ProfileManager;
 import de.bdj.sb.session.ConfirmSession;
-import de.bdj.sb.session.TempSession;
 import de.bdj.sb.utlility.Chat;
 import de.bdj.sb.utlility.Perms;
 import de.bdj.sb.utlility.XColor;
@@ -70,7 +66,7 @@ public class ISCommand implements CommandExecutor, TabCompleter {
                                     return false;
                                 }
                                 if(pro.getTempSession(Settings.confirmationSessionKey) == null) {
-                                    ConfirmSession cs = new ConfirmSession(p, "/is delete confirm", "/is delete deny", "Die Löschung deiner Insel wurde abgebrochen.", ConfirmSession.ConfirmReason.DELETE_OPERATION);
+                                    ConfirmSession cs = new ConfirmSession(p, "/is confirm", "/is deny", "Die Löschung deiner Insel wurde abgebrochen.", ConfirmSession.ConfirmReason.DELETE_OPERATION);
                                     cs.delayTime = 10; //The player will have 10 seconds to confirm the action
                                     cs.start();
                                     pro.addTempSession(cs);
@@ -83,10 +79,13 @@ public class ISCommand implements CommandExecutor, TabCompleter {
 
                             Chat.sendSuggestCommandMessage(p, XColor.c2 + "/is member <Spielername> remove §fMember entfernen", XColor.c3 + "Lösche einen Spieler von deiner Insel.", "/is member <Spielername> remove", false, false);
                         } else if(args[0].equalsIgnoreCase("confirm") && Perms.hasPermission(p, Perms.getPermission("is confirm"))) {
+                            // General confirm command
                             if(ProfileManager.getProfile(p.getUniqueId()).getTempSession(Settings.confirmationSessionKey) != null) {
+                                // Checking is the player has a opened session
                                 ConfirmSession cs = (ConfirmSession) ProfileManager.getProfile(p.getUniqueId()).getTempSession(Settings.confirmationSessionKey);
                                 if(cs != null) {
                                     if(cs.getReason() == ConfirmSession.ConfirmReason.MEMBER_OPERATION) {
+                                        //The ConfirmSession is about a member operation. Means: The player is doing something with members. Example: accepting an invitation
                                         Player target = (Player) cs.getExtraData("target_player");
                                         Player inviter = (Player) cs.getExtraData("inviter_player");
                                         //Erst ausführen nach confirmation
@@ -96,6 +95,7 @@ public class ISCommand implements CommandExecutor, TabCompleter {
                                             Chat.info(target, "Du bist nun Mitglied der Insel " + ProfileManager.getProfile(target.getUniqueId()).getIslandId() + ", Besitzer: " + inviter.getName());
                                         } else Chat.error(p, "Irgendetwas ist mit der Bestätigung schiefgelaufen. Fehlercode: " + adtir.toString());
                                     } else if(cs.getReason() == ConfirmSession.ConfirmReason.DELETE_OPERATION) {
+                                        //The ConfirmSession is about deleting the island.
                                         cs.terminate();
                                         pro = ProfileManager.getProfile(p.getUniqueId());
                                         pro.removeTempSession(Settings.confirmationSessionKey, cs);

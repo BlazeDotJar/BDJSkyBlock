@@ -1,7 +1,7 @@
 package de.bdj.sb.island;
 
 import de.bdj.sb.SB;
-import de.bdj.sb.utlility.Chat;
+import de.bdj.sb.Settings;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -33,7 +33,7 @@ public class IslandProfile {
         this.x = x;
         this.z = z;
         setClaimed(isClaimed);
-        islandLocation = new Location(Bukkit.getWorld("world"), x, IslandManager.islandY, z); //TODO: Die Welt muss angepasst werden, sobald die Multi-World-Funktion implementiert wurde!
+        islandLocation = new Location(Bukkit.getWorld(Settings.sbOverworldName), x, IslandManager.islandY, z); //TODO: Die Welt muss angepasst werden, sobald die Multi-World-Funktion implementiert wurde!
         spawnPoint = islandLocation.clone().add(0.5, 2,0.5);
         Location p1 = islandLocation.clone();
         Location p2 = new Location(p1.getWorld(), x + IslandManager.islandDiameter, 319, z + IslandManager.islandDiameter);

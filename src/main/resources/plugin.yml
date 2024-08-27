@@ -1,6 +1,6 @@
 name: BDJSkyBlock
 author: BlazeDotJar
-version: 0.0.1_0
+version: 0.5.0_2
 api-version: 1.21
 main: de.bdj.sb.SB
 commands:
@@ -28,6 +28,7 @@ permissions:
       bdj.sb.islands: true
       bdj.sb.tp: true
       bdj.sb.release: true
+      bdj.sb.adminhelp: true
   bdj.sb:
     description: 'Help command'
   bdj.sb.rl:
@@ -44,6 +45,8 @@ permissions:
     description: 'Teleort to an island'
   bdj.sb.release:
     description: 'Release an island to the market'
+  bdj.sb.adminhelp:
+    description: 'Show help for admins'
   #--Gameplay permissions-----------------------------------------------------
   bdj.is.*:
     description: 'Give this permission to all players'

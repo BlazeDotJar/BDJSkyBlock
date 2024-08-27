@@ -18,6 +18,7 @@ public class SB extends JavaPlugin {
     public static String version() { return getInstance().getDescription().getVersion(); }
 
     public static TimeStamp timeStamp;
+    public static boolean isReady = false;
 
     @Override
     public void onEnable() {
@@ -47,6 +48,22 @@ public class SB extends JavaPlugin {
 
     private void init() {
         log("---> init()");
+
+        if(Bukkit.getWorld(Settings.sbOverworldName) == null) {
+            log("-----> Creating " + Settings.sbOverworldName);
+            SkyWorldGenerator.createOverWorld();
+            log("-----> Finished " + Settings.sbOverworldName + "!");
+        }
+        if(Bukkit.getWorld(Settings.sbNetherName) == null) {
+            log("-----> Creating " + Settings.sbNetherName);
+            SkyWorldGenerator.createNetherWorld();
+            log("-----> Finished " + Settings.sbNetherName + "!");
+        }
+        if(Bukkit.getWorld(Settings.sbEndName) == null) {
+            log("-----> Creating " + Settings.sbEndName);
+            SkyWorldGenerator.createEndWorld();
+            log("-----> Finished " + Settings.sbEndName + "!");
+        }
 
     }
 
