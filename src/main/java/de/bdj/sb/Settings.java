@@ -1,5 +1,6 @@
 package de.bdj.sb;
 
+import de.bdj.BDJ;
 import de.bdj.sb.lobby.Lobby;
 import de.bdj.sb.utlility.XColor;
 import org.bukkit.Bukkit;
@@ -9,6 +10,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
+import java.util.Set;
 
 public class Settings {
 
@@ -27,6 +29,8 @@ public class Settings {
     public static String playerCreateSessionKey = "player_create_island_session";
     public static final int islandDiameter = 400;
     public static final int spaceBetweenIslands = 25;
+
+    public static boolean useBDJPlaceholderAPI = false;
 
     public Settings() {
         reload();
@@ -58,6 +62,18 @@ public class Settings {
         islandIndexFileName = islandIndex;
 
         new Lobby(new Location(Bukkit.getWorld(lobbySpawnWorld), x, y, z, yaw, pitch));
+
+        // Implement BDJPlaceholder Support
+        if(useBDJPlaceholderAPI) {
+            Set<String> placeholders = BDJ.getPlaceholders();
+            if(placeholders.isEmpty())return;
+            for(String ph : placeholders) {
+                if(ph.equalsIgnoreCase("server-prefix")) pluginPrefix = BDJ.getValue(ph);
+                else if(ph.equalsIgnoreCase("no-permission-message")) noPermMessage = BDJ.getValue(ph);
+
+                SB.log("loaded data from BDJPlaceholder '" + ph + "'");
+            }
+        }
     }
 
     private static String processString(String raw) {

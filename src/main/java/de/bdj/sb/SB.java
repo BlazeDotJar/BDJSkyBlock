@@ -1,6 +1,5 @@
 package de.bdj.sb;
 
-import de.bdj.BDJ;
 import de.bdj.NameFetcher;
 import de.bdj.UUIDFetcher;
 import de.bdj.sb.command.ISCommand;
@@ -30,6 +29,9 @@ public class SB extends JavaPlugin {
         timeStamp = new TimeStamp();
 
         log("---> onEnable()");
+
+        Settings.useBDJPlaceholderAPI = this.getServer().getPluginManager().isPluginEnabled("BDJPlaceholder");
+
         preInit();
         init();
         postInit();
@@ -40,8 +42,7 @@ public class SB extends JavaPlugin {
         log("Name von c3643210-81d3-429e-9535-646e57e36710 = " + NameFetcher.getName("c3643210-81d3-429e-9535-646e57e36710"));
         log("Name von 242dad39-544a-4c3a-8d61-17a38e004a6f = " + NameFetcher.getName("242dad39-544a-4c3a-8d61-17a38e004a6f"));
 
-        BDJ.registerPlaceholder("motd", "hallo123");
-        log("GETTING PLACEHOLDER: " + BDJ.getValue("motd"));
+
     }
 
     @Override

@@ -15,6 +15,11 @@
           -> Bug description: "DESCRIPTION"
           -> FIX: Description of the fix
 ------------------------------------------------------------------------
+  28.08.2024 - 18:36
+  Version: 0.7.0_2
+  Changes:
+    - Added island schematic placement with WorldEdit API
+------------------------------------------------------------------------
   27.08.2024 - 22:48
   Version: 0.6.0_2
   Changes:
