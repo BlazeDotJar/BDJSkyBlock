@@ -1,26 +1,19 @@
 package de.bdj.sb.island;
 
-import com.sk89q.worldedit.EditSession;
-import com.sk89q.worldedit.WorldEdit;
-import com.sk89q.worldedit.WorldEditException;
-import com.sk89q.worldedit.bukkit.BukkitAdapter;
-import com.sk89q.worldedit.extent.clipboard.Clipboard;
-import com.sk89q.worldedit.extent.clipboard.io.ClipboardFormat;
-import com.sk89q.worldedit.extent.clipboard.io.ClipboardFormats;
-import com.sk89q.worldedit.extent.clipboard.io.ClipboardReader;
-import com.sk89q.worldedit.function.operation.ForwardExtentCopy;
-import com.sk89q.worldedit.function.operation.Operations;
-import com.sk89q.worldedit.math.BlockVector3;
 import de.bdj.sb.SB;
 import de.bdj.sb.Settings;
+import de.bdj.sb.SkyWorldGenerator;
+import de.bdj.sb.island.weapi.WEIslandPaster;
 import de.bdj.sb.utlility.Chat;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.util.Vector;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.UUID;
 
 public class IslandPlacer {
@@ -50,13 +43,15 @@ public class IslandPlacer {
         //TODO: Start placing process.
         IslandProfile ip = IslandManager.getIslandDataFromIndexFile(islandId);
         if(ip != null && ip.getOwnerUuid() == null) ip.setOwnerUuid(uuid);
+        if(Bukkit.getWorld(Settings.sbOverworldName) == null) {
+            //Generate SkyBlock Worlds
+            SkyWorldGenerator.checkWorlds();
+        }
         Location l = new Location(Bukkit.getWorld(Settings.sbOverworldName), ip.getX(), IslandManager.islandY, ip.getZ());
 
         try {
-            pasteSchematic(l.clone().add(0, 2, 0), convertInputStreamToFile(SB.getInstance().getResource("schematics/island_1.schem"), "island_1.schem"));
-            Chat.sendOperatorMessage("§aIsland gepastet!");
-        } catch (IOException e) {
-            Chat.sendOperatorMessage("Island konnte nicht gepastet werden!");
+            WEIslandPaster.pasteSchematic(l.clone().add(0, 2, 0), "island_1_overworld");
+        } catch (Exception e) {
             l.add(-1, 0, -1).getBlock().setType(Material.BEDROCK);
             l.add(1, 0, 0).getBlock().setType(Material.BEDROCK);
             l.add(1, 0, 0).getBlock().setType(Material.BEDROCK);
@@ -101,35 +96,6 @@ public class IslandPlacer {
     public void finish() {
         //Island creation has finished. Deleting the IslandPlacer session
         IslandGenManager.cancelIslandPlacer(uuid);
-    }
-
-    public void pasteSchematic(Location loc, File schematicFile) {
-        com.sk89q.worldedit.world.World adaptedWorld = BukkitAdapter.adapt(loc.getWorld());
-
-        try (EditSession editSession = com.sk89q.worldedit.WorldEdit.getInstance().newEditSession(adaptedWorld)) {
-            ClipboardFormat format = ClipboardFormats.findByFile(schematicFile);
-            if (format != null) {
-                try (ClipboardReader reader = format.getReader(new FileInputStream(schematicFile))) {
-                    Clipboard clipboard = reader.read();
-
-                    Vector nv = loc.toVector();
-
-                    ForwardExtentCopy copy = new ForwardExtentCopy(
-                            clipboard,
-                            clipboard.getRegion(),
-                            clipboard.getOrigin(),
-                            editSession,
-                            new BlockVector3(nv.getBlockX(), nv.getBlockY(), nv.getBlockZ())
-                    );
-                    Operations.complete(copy);
-                    editSession.flushSession();
-                } catch (WorldEditException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     private File convertInputStreamToFile(InputStream inputStream, String fileName) throws IOException {

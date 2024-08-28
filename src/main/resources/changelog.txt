@@ -15,6 +15,22 @@
           -> Bug description: "DESCRIPTION"
           -> FIX: Description of the fix
 ------------------------------------------------------------------------
+  28.08.2024 - 21:43
+  Version: 0.8.0_3
+  Changes:
+    - Added gui menus
+        -> Create Island Menu
+            -> Classic SkyBlock
+            -> OneBlock Island
+        -> Island Dashboard
+            -> Teleport to island function is ready
+            -> Show island properties function is ready
+        -> Island Properties
+            -> Unfinished. PVP Toggle function is ready
+  New Bug:
+        - Bug: _3
+            -> When properties of an island has changed, it don't get saved because the save process is nowhere called
+------------------------------------------------------------------------
   28.08.2024 - 18:36
   Version: 0.7.0_2
   Changes:

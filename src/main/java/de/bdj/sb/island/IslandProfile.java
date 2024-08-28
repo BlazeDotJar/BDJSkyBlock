@@ -157,4 +157,9 @@ public class IslandProfile {
     public HashMap<String, String> getProperties() {
         return properties;
     }
+
+    public void setProperty(String key, String value) {
+        properties.remove(key);
+        properties.put(key, value);
+    }
 }

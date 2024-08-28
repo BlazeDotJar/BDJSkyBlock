@@ -6,6 +6,7 @@ import de.bdj.sb.command.ISCommand;
 import de.bdj.sb.command.SBCommand;
 import de.bdj.sb.command.SBDEVCommand;
 import de.bdj.sb.event.EventListener;
+import de.bdj.sb.gui.GuiButtonManager;
 import de.bdj.sb.island.IslandManager;
 import de.bdj.sb.lobby.Waitlobby;
 import de.bdj.sb.profile.ProfileManager;
@@ -35,14 +36,6 @@ public class SB extends JavaPlugin {
         preInit();
         init();
         postInit();
-
-        log("UUID von BDJ = " + UUIDFetcher.getUUID("BlazeDotJar"));
-        log("UUID von Juztn = " + UUIDFetcher.getUUID("JuzTn"));
-        log("UUID von Notch = " + UUIDFetcher.getUUID("Notch"));
-        log("Name von c3643210-81d3-429e-9535-646e57e36710 = " + NameFetcher.getName("c3643210-81d3-429e-9535-646e57e36710"));
-        log("Name von 242dad39-544a-4c3a-8d61-17a38e004a6f = " + NameFetcher.getName("242dad39-544a-4c3a-8d61-17a38e004a6f"));
-
-
     }
 
     @Override
@@ -62,21 +55,8 @@ public class SB extends JavaPlugin {
     private void init() {
         log("---> init()");
 
-        if(Bukkit.getWorld(Settings.sbOverworldName) == null) {
-            log("-----> Creating " + Settings.sbOverworldName);
-            SkyWorldGenerator.createOverWorld();
-            log("-----> Finished " + Settings.sbOverworldName + "!");
-        }
-        if(Bukkit.getWorld(Settings.sbNetherName) == null) {
-            log("-----> Creating " + Settings.sbNetherName);
-            SkyWorldGenerator.createNetherWorld();
-            log("-----> Finished " + Settings.sbNetherName + "!");
-        }
-        if(Bukkit.getWorld(Settings.sbEndName) == null) {
-            log("-----> Creating " + Settings.sbEndName);
-            SkyWorldGenerator.createEndWorld();
-            log("-----> Finished " + Settings.sbEndName + "!");
-        }
+        SkyWorldGenerator.checkWorlds();
+        new GuiButtonManager();
 
     }
 

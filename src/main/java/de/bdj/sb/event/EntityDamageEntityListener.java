@@ -4,7 +4,6 @@ import de.bdj.sb.island.IslandManager;
 import de.bdj.sb.island.IslandProfile;
 import de.bdj.sb.profile.PlayerProfile;
 import de.bdj.sb.profile.ProfileManager;
-import de.bdj.sb.utlility.Chat;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
@@ -27,7 +26,6 @@ public class EntityDamageEntityListener {
                 String value = ip.getProperties().get("pvp");
                 if(value != null && value.equalsIgnoreCase("false")) {
                     e.setCancelled(true);
-                    Chat.info(damager, "Damage cancelled!");
                     return;
                 }
             }

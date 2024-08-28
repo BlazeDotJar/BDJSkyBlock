@@ -2,6 +2,7 @@ package de.bdj.sb.command;
 
 import de.bdj.sb.SB;
 import de.bdj.sb.Settings;
+import de.bdj.sb.gui.GuiManager;
 import de.bdj.sb.island.IslandManager;
 import de.bdj.sb.island.IslandProfile;
 import de.bdj.sb.island.result.AddMemberToIslandResult;
@@ -45,13 +46,17 @@ public class ISCommand implements CommandExecutor, TabCompleter {
                 PlayerProfile pro = ProfileManager.getProfile(p.getUniqueId());
                 switch (args.length) {
                     case 0:
-                        if(pro.getIslandId() >= 1) {
-                            IslandManager.getLoadedIslandProfile(pro.getIslandId()).teleport(p);
-                        } else Chat.error(p, "Du hast keine Insel, zu der du dich teleportieren kannst.");
+                        if(Settings.useGui) {
+                            GuiManager.openIslandDashboard(p);
+                        } else {
+                            if(pro.getIslandId() >= 1) {
+                                IslandManager.getLoadedIslandProfile(pro.getIslandId()).teleport(p);
+                            } else Chat.error(p, "Du hast keine Insel, zu der du dich teleportieren kannst.");
+                        }
                         break;
                     case 1:
                         if(args[0].equalsIgnoreCase("create") && Perms.hasPermission(p, Perms.getPermission("is create"))) {
-                            SkyBlockFunction.createIsland(p, args);
+                            SkyBlockFunction.createIsland(p);
                         } else if(args[0].equalsIgnoreCase("ban") && Perms.hasPermission(p, Perms.getPermission("is ban"))) {
                             Chat.sendSuggestCommandMessage(p, XColor.c2 + " /is ban <Spielername> §fVon Insel bannen", XColor.c3 + "Verbanne einen Spieler von deiner Insel. Dieser kann deine Insel also nicht betreten." + (p.isOp() ? XColor.c4 + "\nPermission: §f" + Perms.getPermission("is ban") : ""), "/is ban", false, false);
                         } else if(args[0].equalsIgnoreCase("help") && Perms.hasPermission(p, Perms.getPermission("is help"))) {

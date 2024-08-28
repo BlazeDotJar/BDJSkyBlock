@@ -22,7 +22,7 @@
         </repository>
         <!-- WorldEdit Repository -->
         <repository>
-            <id>enginehub-repo</id>
+            <id>enginehub</id>
             <url>https://maven.enginehub.org/repo/</url>
         </repository>
     </repositories>

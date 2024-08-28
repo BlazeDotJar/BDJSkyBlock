@@ -45,7 +45,7 @@ public class SkyBlockFunction {
         } else return RemoveMemberFromIslandResult.CANCELLED_PLAYER_IS_NOT_MEMBER;
     }
 
-    public static void createIsland(Player p, String[] args) {
+    public static void createIsland(Player p) {
         PlayerProfile pro = ProfileManager.getProfile(p.getUniqueId());
         if(pro.getIslandId() < 1 || pro.getIslandId() == 0) {
             //Create an island

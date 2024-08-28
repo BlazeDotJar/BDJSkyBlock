@@ -4,6 +4,7 @@ import de.bdj.sb.SB;
 import de.bdj.sb.island.IslandCreator;
 import de.bdj.sb.island.IslandManager;
 import de.bdj.sb.island.IslandProfile;
+import de.bdj.sb.lobby.Lobby;
 import de.bdj.sb.profile.PlayerProfile;
 import de.bdj.sb.profile.ProfileManager;
 import de.bdj.sb.utlility.Chat;
@@ -57,6 +58,8 @@ public class SBDEVCommand implements CommandExecutor, TabCompleter {
                             Chat.info(p, "Gebe einen Bereich an Inseln an, den du gerne auslesen möchtest.", "Als Beispiel: /sbdev li 0-50", "Du würdest also die Inseln mit einer Id zwischen 0 und 50 auslesen.");
                         } else if(args[0].equalsIgnoreCase("walls") || args[0].equalsIgnoreCase("w")) {
                             Chat.info(p, "Gebe als zweites Argument eine Insel ID ein.");
+                        } else if(args[0].equalsIgnoreCase("hub") || args[0].equalsIgnoreCase("h")) {
+                            Lobby.teleport(p);
                         }
                         break;
                     case 2:
@@ -174,6 +177,7 @@ public class SBDEVCommand implements CommandExecutor, TabCompleter {
                 Chat.sendSuggestCommandMessage(p, XColor.c2 + " /sbdev li §fList IslandData", XColor.c2 + "Zeige dir alle Insel-Daten von Inseln mit einer ID zwischen <von-bis> an.", "/sbdev li", false, false);
                 Chat.sendSuggestCommandMessage(p, XColor.c2 + " /sbdev walls §fCreate island walls", XColor.c2 + "Lasse dir die Borders einer Insel anzeigen / bauen", "/sbdev walls", false, false);
                 Chat.sendClickableMessage(p, XColor.c2 + " /sbdev quarter §fCreate island quarter walls", XColor.c2 + "Erstelle ein Viertel der Insel Border", "/sbdev quarter", false, false);
+                Chat.sendClickableMessage(p, XColor.c2 + " /sbdev hub §fTp to hub", XColor.c2 + "Tp dich zur hub", "/sbdev hub", false, false);
             }
         }
     }
@@ -188,7 +192,7 @@ public class SBDEVCommand implements CommandExecutor, TabCompleter {
                     case 0:
                         break;
                     case 1:
-                        return Arrays.asList("lp", "li", "walls", "quarter");
+                        return Arrays.asList("hub", "lp", "li", "walls", "quarter");
                     case 2:
                         if(args[0].equalsIgnoreCase("li")) return List.of("1-15");
                         else if(args[0].equalsIgnoreCase("walls")) return List.of("1");

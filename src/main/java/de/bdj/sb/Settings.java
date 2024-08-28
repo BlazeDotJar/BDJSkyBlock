@@ -31,6 +31,7 @@ public class Settings {
     public static final int spaceBetweenIslands = 25;
 
     public static boolean useBDJPlaceholderAPI = false;
+    public static boolean useGui = true;
 
     public Settings() {
         reload();
