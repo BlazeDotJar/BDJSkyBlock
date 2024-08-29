@@ -130,8 +130,8 @@ public class IslandArea {
     }
 
     public Collection<Entity> getEntities() {
-        BoundingBox b = new BoundingBox(xMin, yMin, zMin, xMax, yMax, zMax);
-        Chat.debug("boundingbox of Island = " + b.getMaxX() + " / " + b.getMaxY() + " / " + b.getMaxZ() + " - " + b.getMinX() + " / " + b.getMinY() + " / " + b.getMinZ());
+        BoundingBox b = new BoundingBox(xMin, yMin, zMin, xMax + 1, yMax, zMax + 1);
+        Chat.debug("boundingbox of Island = " + b.getMaxX() + 1  + " / " + b.getMaxY() + " / " + b.getMaxZ() + 1 + " - " + b.getMinX() + " / " + b.getMinY() + " / " + b.getMinZ());
         return world.getNearbyEntities(b);
     }
 }

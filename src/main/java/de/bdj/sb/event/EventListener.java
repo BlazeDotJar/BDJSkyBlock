@@ -3,11 +3,13 @@ package de.bdj.sb.event;
 import de.bdj.sb.SB;
 import de.bdj.sb.event.gui.GuiClickListener;
 import de.bdj.sb.event.gui.InventoryCloseListener;
+import de.bdj.sb.island.generator.CobbleGeneratorRenewed;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.*;
+import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntitySpawnEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.ExplosionPrimeEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
@@ -20,6 +22,7 @@ public class EventListener implements Listener {
 
     public EventListener() {
         SB.getInstance().getServer().getPluginManager().registerEvents(this, SB.getInstance());
+        new CobbleGeneratorRenewed();
     }
 
     @EventHandler
@@ -59,6 +62,10 @@ public class EventListener implements Listener {
         TNTListener.onExplosion(e);
     }
     @EventHandler
+    public void onDamage(EntityDamageEvent e) {
+        EntityDamageListener.onDamage(e);
+    }
+    @EventHandler
     public void onFireSpread(BlockSpreadEvent e) {
         FireSpreadListener.onFireSpread(e);
     }
@@ -71,7 +78,7 @@ public class EventListener implements Listener {
         FireSpreadListener.onIgnite(e);
     }
     @EventHandler
-    public void onSpawn(EntitySpawnEvent e) {
+    public void onSpawn(CreatureSpawnEvent e) {
         MobSpawnListener.onSpawn(e);
     }
     @EventHandler

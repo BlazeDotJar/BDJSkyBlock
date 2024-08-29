@@ -36,8 +36,11 @@ public class DashboardFunction {
         } else if(meta.getPersistentDataContainer().has(new NamespacedKey(SB.getInstance(), "guibtn_island_properties_skyblock"))) {
             GuiManager.openPropertiesMenu((Player) e.getWhoClicked());
         } else if(meta.getPersistentDataContainer().has(new NamespacedKey(SB.getInstance(), "guibtn_island_kill_monsters_skyblock"))) {
-            ip.killHostileMobs();
-            Chat.info(e.getWhoClicked(), "Du hast deine Insel von Monstern befreit.");
+            int killed = ip.killHostileMobs();
+            long startedAt = System.currentTimeMillis();
+            Chat.info(e.getWhoClicked(), "Du hast deine Insel von " + killed + " Monstern befreit.");
+            long now = System.currentTimeMillis();
+            Chat.debug("Monster killing dauerte " + ((now - startedAt)) + " Millisekunden");
         }  else if(meta.getPersistentDataContainer().has(new NamespacedKey(SB.getInstance(), "sb_navigation"))) {
             String value = meta.getPersistentDataContainer().get(new NamespacedKey(SB.getInstance(), "sb_navigation"), PersistentDataType.STRING);
             if(value.equalsIgnoreCase("dashboard")) GuiManager.openIslandDashboard((Player) e.getWhoClicked());

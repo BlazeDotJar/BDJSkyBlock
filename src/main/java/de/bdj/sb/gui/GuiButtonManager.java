@@ -218,7 +218,7 @@ public class GuiButtonManager {
         meta.getPersistentDataContainer().set(key, PersistentDataType.STRING, "");
 
         lore = new ArrayList<>();
-        lore.add("§fToggle Explosion Damage auf deiner Insel");
+        lore.add("§fToggle Explosion Mob Damage auf deiner Insel");
         meta.setLore(lore);
         PROP_EXPLOSION_DAMAGE.setItemMeta(meta);
         lore.clear();
@@ -233,7 +233,7 @@ public class GuiButtonManager {
         meta.getPersistentDataContainer().set(key, PersistentDataType.STRING, "");
 
         lore = new ArrayList<>();
-        lore.add("§fToggle TNT Damage auf deiner Insel");
+        lore.add("§fToggle TNT Block Damage auf deiner Insel");
         meta.setLore(lore);
         PROP_TNT_DAMAGE.setItemMeta(meta);
         lore.clear();

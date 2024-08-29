@@ -15,6 +15,7 @@ import java.util.HashMap;
 public class GuiManager {
 
     public static String ISLAND_PROPERTIES_TITLE = "Insel Einstellungen";
+    public static String ISLAND_DASHBOARD_TITLE = "D A S H B O A R D";
 
     public static void openIslandDashboard(Player p) {
         ItemStack close = ItemEditor.addPersistentData(GuiButtonManager.getGuiBtn(GuiButtonType.Back_to_Dashboard), "sb_navigation", "close");
@@ -28,7 +29,7 @@ public class GuiManager {
 
             p.openInventory(inv);
         } else {
-            Inventory inv = Bukkit.createInventory(null, 27, "D A S H B O A R D");
+            Inventory inv = Bukkit.createInventory(null, 27, ISLAND_DASHBOARD_TITLE);
 
             inv.setItem(8, close);
             inv.setItem(11, GuiButtonManager.getGuiBtn(GuiButtonType.IslandAchievements));

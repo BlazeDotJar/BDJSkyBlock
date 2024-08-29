@@ -185,7 +185,7 @@ public class SBCommand implements CommandExecutor, TabCompleter {
                                 int islandId = Integer.parseInt(args[1]);
                                 if(islandId > 2500) throw new Exception("Insel ID ist zu groß");
                                 if(islandId < 1) throw new Exception("Insel ID ist zu klein");
-                                p.teleport(IslandManager.getIslandDataFromIndexFile(islandId).getIslandLocation().add(0.5, 1, 0.5));
+                                p.teleport(IslandManager.getIslandDataFromIndexFile(islandId).getSpawnPoint());
                             }catch(Exception ex) {
                                 Chat.error(p, "Du muss als Insel Id eine Ganzzahl angeben, die kleiner ist als " + IslandManager.amountGenerated + " aber größer als 0");
                             }

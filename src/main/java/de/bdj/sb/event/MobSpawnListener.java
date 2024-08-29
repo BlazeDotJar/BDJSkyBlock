@@ -2,14 +2,14 @@ package de.bdj.sb.event;
 
 import de.bdj.sb.island.IslandManager;
 import de.bdj.sb.island.IslandProfile;
-import de.bdj.sb.utlility.Chat;
 import org.bukkit.entity.Monster;
-import org.bukkit.event.entity.EntitySpawnEvent;
+import org.bukkit.event.entity.CreatureSpawnEvent;
 
 public class MobSpawnListener {
 
-    public static void onSpawn(EntitySpawnEvent e) {
+    public static void onSpawn(CreatureSpawnEvent e) {
         if(e.getEntity() instanceof Monster m) {
+            if(e.getSpawnReason() != CreatureSpawnEvent.SpawnReason.NATURAL) return;
             IslandProfile ip = IslandManager.getIslandLocationIsIn(m.getLocation());
             if(ip == null) {
                 return;

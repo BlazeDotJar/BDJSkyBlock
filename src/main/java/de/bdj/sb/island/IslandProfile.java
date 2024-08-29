@@ -200,15 +200,17 @@ public class IslandProfile {
         properties = props;
     }
 
-    public void killHostileMobs() {
+    public int killHostileMobs() {
+        int amount = 0;
         for(Entity ent : area.getEntities()) {
             if(ent instanceof Monster) {
                 if(ent.getCustomName() == null) {
                     ent.remove();
-                    Chat.debug("Killed " + ent.getType().toString());
+                    amount ++;
                 }
             }
         }
+        return amount;
     }
 
     public Location getCenter() {

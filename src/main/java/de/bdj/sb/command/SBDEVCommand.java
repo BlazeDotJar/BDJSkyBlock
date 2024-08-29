@@ -1,6 +1,7 @@
 package de.bdj.sb.command;
 
 import de.bdj.sb.SB;
+import de.bdj.sb.Settings;
 import de.bdj.sb.island.IslandCreator;
 import de.bdj.sb.island.IslandManager;
 import de.bdj.sb.island.IslandProfile;
@@ -60,6 +61,9 @@ public class SBDEVCommand implements CommandExecutor, TabCompleter {
                             Chat.info(p, "Gebe als zweites Argument eine Insel ID ein.");
                         } else if(args[0].equalsIgnoreCase("hub") || args[0].equalsIgnoreCase("h")) {
                             Lobby.teleport(p);
+                        } else if(args[0].equalsIgnoreCase("debug")) {
+                            Settings.pluginDeveloperHelpMode = !Settings.pluginDeveloperHelpMode;
+                            Chat.info(p, "Plugin Developer Mode: §f" + Settings.pluginDeveloperHelpMode);
                         }
                         break;
                     case 2:
@@ -178,6 +182,7 @@ public class SBDEVCommand implements CommandExecutor, TabCompleter {
                 Chat.sendSuggestCommandMessage(p, XColor.c2 + " /sbdev walls §fCreate island walls", XColor.c2 + "Lasse dir die Borders einer Insel anzeigen / bauen", "/sbdev walls", false, false);
                 Chat.sendClickableMessage(p, XColor.c2 + " /sbdev quarter §fCreate island quarter walls", XColor.c2 + "Erstelle ein Viertel der Insel Border", "/sbdev quarter", false, false);
                 Chat.sendClickableMessage(p, XColor.c2 + " /sbdev hub §fTp to hub", XColor.c2 + "Tp dich zur hub", "/sbdev hub", false, false);
+                Chat.sendClickableMessage(p, XColor.c2 + " /sbdev debug §fToggle debug", XColor.c2 + "Toggle debug mode", "/sbdev debug", false, false);
             }
         }
     }

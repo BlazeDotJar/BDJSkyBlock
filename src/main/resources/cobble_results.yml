@@ -1,0 +1,22 @@
+Generator:
+  DEFAULT:
+    Displayname: 'Standart Ausrüstung'
+    Lore:
+      - '&7Dieses Item ist erhältlich in der'
+      - '&aStandart Ausrüstung'
+    Results:
+#     - MAT A C arg1 arg2 arg3 arg4 arg5
+#       MAT = MATERIAL
+#           A = AMOUNT OF ENTRIES IN THE ARRAYLIST OF RESULTS
+#             C = CHANCE TO ACTUALLY PLACE THIS BLOCK
+#               arg1 = CONTENT KEY FOR CHESTS
+#                    arg2 = SETTINGS KEY FOR SPECIAL BLOCKS
+#                         arg3 = SPACEHOLDER
+#                              arg4 = SPACEHOLDER
+#                                   arg5 = SPACEHOLDER
+      - COBBLESTONE 20 60.1%
+      - STONE 3 60.9%
+      - COAL_ORE 1 30.2%
+      - IRON_ORE 1 10.3%
+      - DIAMOND_ORE 1 5.6%
+      - CHEST 1 15.0% ki8n4mf4 iencks942d

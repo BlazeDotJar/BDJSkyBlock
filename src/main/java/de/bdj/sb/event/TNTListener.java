@@ -3,6 +3,7 @@ package de.bdj.sb.event;
 import de.bdj.sb.island.IslandManager;
 import de.bdj.sb.island.IslandProfile;
 import org.bukkit.entity.Creeper;
+import org.bukkit.entity.EnderCrystal;
 import org.bukkit.entity.TNTPrimed;
 import org.bukkit.event.entity.ExplosionPrimeEvent;
 
@@ -19,10 +20,10 @@ public class TNTListener {
                 e.getEntity().getWorld().createExplosion(e.getEntity().getLocation(), 0F); // nur Sound und Partikel, keine Zerstörung
                 e.getEntity().remove();
             }
-        } else if(e.getEntity() instanceof TNTPrimed) {
+        } else if(e.getEntity() instanceof TNTPrimed || e.getEntity() instanceof EnderCrystal) {
             if(ip.getProperties().get("tnt damage").equalsIgnoreCase("false")) {
                 e.setCancelled(true);
-                e.getEntity().getWorld().createExplosion(e.getEntity().getLocation(), 0F); // nur Sound und Partikel, keine Zerstörung
+                e.getEntity().getWorld().createExplosion(e.getEntity().getLocation(), 4F, false, false); // nur Sound und Partikel, keine Zerstörung
             }
         }
     }

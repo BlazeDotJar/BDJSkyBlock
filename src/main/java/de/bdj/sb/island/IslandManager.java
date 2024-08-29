@@ -119,16 +119,6 @@ public class IslandManager {
             int z = cfg.getInt(islandPath + ".LocZ");
             boolean claimed = cfg.getBoolean(islandPath + ".Claimed");
 
-            if(Settings.pluginDeveloperHelpMode) {
-                SB.log("-> getIslandDataFromIndexFile@IslandManager.java");
-                SB.log("----> Loading Island " + islandId);
-                SB.log("----> island path = " + islandPath);
-                SB.log("----> claimed = " + claimed);
-                SB.log("----> owner = " + owner);
-                SB.log("----> x = " + x);
-                SB.log("----> z = " + z);
-            }
-
             IslandProfile ip =  new IslandProfile(islandId, (owner == null ? null : owner.equals("none") ? null : UUID.fromString(owner)), x, z, claimed);
             ip.setClaimed(claimed);
             islands.put(islandId, ip);

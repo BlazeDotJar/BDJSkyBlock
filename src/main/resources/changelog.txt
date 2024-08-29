@@ -15,6 +15,13 @@
           -> Bug description: "DESCRIPTION"
           -> FIX: Description of the fix
 ------------------------------------------------------------------------
+  29.08.2024 - 21:20
+  Version: 0.10.0_3
+  Changes:
+    - Added custom cobble stone generator
+        -> Custom, preset blocks gets generated.
+        -> This custom blocks can be edited in the cobble_result.yml
+------------------------------------------------------------------------
   29.08.2024 - 19:30
   Version: 0.9.0_3
   Changes:
