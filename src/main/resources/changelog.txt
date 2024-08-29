@@ -16,11 +16,14 @@
           -> FIX: Description of the fix
 ------------------------------------------------------------------------
   29.08.2024 - 21:20
-  Version: 0.10.0_3
+  Version: 0.10.1_3
   Changes:
     - Added custom cobble stone generator
         -> Custom, preset blocks gets generated.
         -> This custom blocks can be edited in the cobble_result.yml
+    - Fixed Island paste location
+        -> The island was pasted at the coordinates very minimum location. Now is pasted in the center of the island
+    - Fixed the location when you teleport to you island to the center, where now the island is pasted defaultly
 ------------------------------------------------------------------------
   29.08.2024 - 19:30
   Version: 0.9.0_3
