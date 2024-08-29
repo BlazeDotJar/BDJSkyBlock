@@ -47,10 +47,12 @@ public class IslandPlacer {
             //Generate SkyBlock Worlds
             SkyWorldGenerator.checkWorlds();
         }
-        Location l = new Location(Bukkit.getWorld(Settings.sbOverworldName), ip.getX(), IslandManager.islandY, ip.getZ());
+        Location l = new Location(Bukkit.getWorld(Settings.sbOverworldName), ip.getCenter().getX(), IslandManager.islandY, ip.getCenter().getZ());
 
         try {
-            WEIslandPaster.pasteSchematic(l.clone().add(0, 2, 0), "island_1_overworld");
+            Location center = ip.getCenter();
+            center.setY(IslandManager.islandY);
+            WEIslandPaster.pasteSchematic(center, "island_1_overworld");
         } catch (Exception e) {
             l.add(-1, 0, -1).getBlock().setType(Material.BEDROCK);
             l.add(1, 0, 0).getBlock().setType(Material.BEDROCK);
@@ -88,7 +90,7 @@ public class IslandPlacer {
 
         //Run Schematic placer here
 
-        p.teleport(new Location(Bukkit.getWorld(Settings.sbOverworldName), ip.getX(), IslandManager.islandY, ip.getZ()).add(0.5, 3, 0.5));
+        ip.teleport(p);
 
         finish();
     }

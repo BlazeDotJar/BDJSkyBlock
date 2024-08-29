@@ -15,4 +15,11 @@ public class ItemEditor {
         return item;
     }
 
+    public static ItemStack rename(ItemStack item, String newDisplayName) {
+        ItemMeta meta = item.getItemMeta();
+        meta.setDisplayName(newDisplayName);
+        item.setItemMeta(meta);
+        return item;
+    }
+
 }

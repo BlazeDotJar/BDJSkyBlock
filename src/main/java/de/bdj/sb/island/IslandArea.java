@@ -1,9 +1,15 @@
 package de.bdj.sb.island;
 
+import java.util.Collection;
+import java.util.List;
 import java.util.Random;
+
+import de.bdj.sb.utlility.Chat;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.util.BoundingBox;
 
 
 public class IslandArea {
@@ -121,6 +127,12 @@ public class IslandArea {
     public IslandArea setWorld(World world) {
         this.world = world;
         return this;
+    }
+
+    public Collection<Entity> getEntities() {
+        BoundingBox b = new BoundingBox(xMin, yMin, zMin, xMax, yMax, zMax);
+        Chat.debug("boundingbox of Island = " + b.getMaxX() + " / " + b.getMaxY() + " / " + b.getMaxZ() + " - " + b.getMinX() + " / " + b.getMinY() + " / " + b.getMinZ());
+        return world.getNearbyEntities(b);
     }
 }
 

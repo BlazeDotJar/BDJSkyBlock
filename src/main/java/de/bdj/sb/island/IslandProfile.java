@@ -2,13 +2,17 @@ package de.bdj.sb.island;
 
 import de.bdj.sb.SB;
 import de.bdj.sb.Settings;
+import de.bdj.sb.utlility.Chat;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Monster;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
@@ -26,7 +30,7 @@ public class IslandProfile {
     private final IslandArea area;
     private final ArrayList<String> members = new ArrayList<>(); //String = UUID as String
     private final ArrayList<String> bannedPlayers = new ArrayList<>(); //String = UUID as String
-    private final HashMap<String, String> properties = new HashMap<>(); //String = UUID as String
+    private HashMap<String, String> properties = new HashMap<>(); //String = UUID as String
 
     public IslandProfile(int islandId, UUID ownerUuid, int x, int z, boolean isClaimed) {
         this.islandId = islandId;
@@ -35,7 +39,7 @@ public class IslandProfile {
         this.z = z;
         setClaimed(isClaimed);
         islandLocation = new Location(Bukkit.getWorld(Settings.sbOverworldName), x, IslandManager.islandY, z); //TODO: Die Welt muss angepasst werden, sobald die Multi-World-Funktion implementiert wurde!
-        spawnPoint = islandLocation.clone().add(0.5, 2,0.5);
+        spawnPoint = islandLocation.clone().add((IslandManager.islandDiameter / 2) + 0.5, 2,(IslandManager.islandDiameter / 2) + 0.5);
         Location p1 = islandLocation.clone();
         Location p2 = new Location(p1.getWorld(), x + IslandManager.islandDiameter, 319, z + IslandManager.islandDiameter);
         p1.setY(-64);
@@ -158,8 +162,56 @@ public class IslandProfile {
         return properties;
     }
 
+    public void saveProperties() {
+        File file = new File("plugins/" + SB.name() + "/islands/" + ownerUuid.toString() + ".yml");
+        if(!file.exists()) {
+            //Chat.sendOperatorMessage("Fehler beim Laden der Islanddatei für Insel " + islandId + ". Möglicherweise fehlt die Datei " + ownerUuid.toString()+".yml im /islands/ Ordner.");
+            return;
+        }
+        FileConfiguration cfg = YamlConfiguration.loadConfiguration(file);
+
+        ArrayList<String> props = new ArrayList<>();
+        HashMap<String, String> p = (HashMap<String, String>) properties.clone();
+        for(String s : p.keySet()) {
+            props.add(s + ": " + p.get(s));
+        }
+
+        cfg.set("Properties", props);
+        try {
+            cfg.save(file);
+            Chat.debug("Properties von Insel " + islandId + " gespeichert!");
+        } catch (IOException e) {
+            SB.log("Konnte Properties von Insel " + islandId + " nicht speichern!");
+            Chat.debug("Konnte Properties von Insel " + islandId + " nicht speichern!");
+            throw new RuntimeException(e);
+        }
+
+    }
+
     public void setProperty(String key, String value) {
         properties.remove(key);
         properties.put(key, value);
+    }
+    public void setPropertyAllTo(String value) {
+        HashMap<String, String> props = (HashMap<String, String>) properties.clone();
+        for(String s : props.keySet()) {
+            props.put(s, value);
+        }
+        properties = props;
+    }
+
+    public void killHostileMobs() {
+        for(Entity ent : area.getEntities()) {
+            if(ent instanceof Monster) {
+                if(ent.getCustomName() == null) {
+                    ent.remove();
+                    Chat.debug("Killed " + ent.getType().toString());
+                }
+            }
+        }
+    }
+
+    public Location getCenter() {
+        return area.getCenter();
     }
 }

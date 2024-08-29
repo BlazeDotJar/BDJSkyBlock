@@ -7,7 +7,7 @@ public enum GuiButtonType {
     IslandTeleport,
     IslandAchievements,
     IslandProperties,
-    BACK_TO_DASHBOARD,
+    Back_to_Dashboard,
     PropBTN_ALLON,
     PropBTN_ALLOFF,
     PropSTATE_ON,
@@ -17,6 +17,7 @@ public enum GuiButtonType {
     PropExplosionDamage,
     PropTntDamage,
     PropSpreadFire,
-    PropNaturalMonsterSpawn;
+    PropNaturalMonsterSpawn,
+    Kill_Monster;
 
 }

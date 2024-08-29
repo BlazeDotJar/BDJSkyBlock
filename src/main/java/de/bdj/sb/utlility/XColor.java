@@ -11,6 +11,8 @@ public class XColor {
     public static ChatColor c5 = ChatColor.of("#ff2f0a"); //OPChatPrefix Color
     public static ChatColor orange = ChatColor.of("#ff2f00");
     public static ChatColor green = ChatColor.of("#00ff04");
+    public static ChatColor debug1 = ChatColor.of("#006aff");
+    public static ChatColor debug2 = ChatColor.of("#6eaaff");
 
     public static ChatColor getByName(String name) {
         if(name.equalsIgnoreCase("c1")) return c1;

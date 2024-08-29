@@ -6,7 +6,6 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
 import java.util.ArrayList;
@@ -29,6 +28,7 @@ public class GuiButtonManager {
     private static ItemStack PROP_NATURAL_MONSTER_SPAWN;
     private static ItemStack PROP_STATE_ON;
     private static ItemStack PROP_STATE_OFF;
+    private static ItemStack KILL_MONSTERS;
 
     public GuiButtonManager() {
         CREATE_CLASSIC_SKYBLOCK = new ItemStack(Material.GRASS_BLOCK);
@@ -109,7 +109,7 @@ public class GuiButtonManager {
 
         BACK_TO_DASHBOARD = new ItemStack(Material.BARRIER);
         meta = BACK_TO_DASHBOARD.getItemMeta();
-        meta.setDisplayName("§6Zurück");
+        meta.setDisplayName("§cZurück");
 
         key = new NamespacedKey(SB.getInstance(), "guibtn_back_to_dashboard_skyblock");
         meta.getPersistentDataContainer().set(key, PersistentDataType.STRING, "");
@@ -120,7 +120,7 @@ public class GuiButtonManager {
         BACK_TO_DASHBOARD.setItemMeta(meta);
         lore.clear();
 
-        PROP_BTN_ALLON = new ItemStack(Material.GLOWSTONE_DUST);
+        PROP_BTN_ALLON = new ItemStack(Material.LIME_CONCRETE);
         meta = PROP_BTN_ALLON.getItemMeta();
         meta.setDisplayName("§fAlle Props §aeinschalten");
         meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
@@ -134,7 +134,7 @@ public class GuiButtonManager {
         PROP_BTN_ALLON.setItemMeta(meta);
         lore.clear();
 
-        PROP_BTN_ALLOFF = new ItemStack(Material.GUNPOWDER);
+        PROP_BTN_ALLOFF = new ItemStack(Material.LIGHT_GRAY_CONCRETE);
         meta = PROP_BTN_ALLOFF.getItemMeta();
         meta.setDisplayName("§fAlle Props §causschalten");
         meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
@@ -240,7 +240,7 @@ public class GuiButtonManager {
 
         PROP_SPREAD_FIRE = new ItemStack(Material.FLINT_AND_STEEL);
         meta = PROP_SPREAD_FIRE.getItemMeta();
-        meta.setDisplayName("§6TNT Damage");
+        meta.setDisplayName("§6Spread Fire");
 
         key = new NamespacedKey(SB.getInstance(), "guibtn_island_properties_fire_spread_skyblock");
         meta.getPersistentDataContainer().set(key, PersistentDataType.STRING, "");
@@ -248,7 +248,7 @@ public class GuiButtonManager {
         meta.getPersistentDataContainer().set(key, PersistentDataType.STRING, "");
 
         lore = new ArrayList<>();
-        lore.add("§fToggle Fire Spread auf deiner Insel");
+        lore.add("§fToggle Spread Fire auf deiner Insel");
         meta.setLore(lore);
         PROP_SPREAD_FIRE.setItemMeta(meta);
         lore.clear();
@@ -266,59 +266,81 @@ public class GuiButtonManager {
         lore = new ArrayList<>();
         lore.add("§fToggle Natural Monster Spawn auf deiner Insel");
         meta.setLore(lore);
+        meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+        meta.addItemFlags(ItemFlag.HIDE_ADDITIONAL_TOOLTIP);
         PROP_NATURAL_MONSTER_SPAWN.setItemMeta(meta);
+        lore.clear();
+
+        KILL_MONSTERS = new ItemStack(Material.TOTEM_OF_UNDYING);
+        meta = KILL_MONSTERS.getItemMeta();
+        meta.setDisplayName("§6Insel von Monstern befreien");
+
+        key = new NamespacedKey(SB.getInstance(), "guibtn_island_kill_monsters_skyblock");
+        meta.getPersistentDataContainer().set(key, PersistentDataType.STRING, "");
+        key = new NamespacedKey(SB.getInstance(), "sb_guibtn");
+        meta.getPersistentDataContainer().set(key, PersistentDataType.STRING, "");
+
+        lore = new ArrayList<>();
+        lore.add("§fLösche alle Monster von deiner Insel, die kein NameTag tragen");
+        meta.setLore(lore);
+        meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+        meta.addItemFlags(ItemFlag.HIDE_ADDITIONAL_TOOLTIP);
+        KILL_MONSTERS.setItemMeta(meta);
         lore.clear();
     }
 
     public static ItemStack getGuiBtn(GuiButtonType gbt) {
         switch (gbt) {
             case CreateClassicSkyBlock -> {
-                return CREATE_CLASSIC_SKYBLOCK;
+                return CREATE_CLASSIC_SKYBLOCK.clone();
             }
             case CreateOneBlockSkyBlock -> {
-                return CREATE_ONE_BLOCK_SKYBLOCK;
+                return CREATE_ONE_BLOCK_SKYBLOCK.clone();
             }
             case IslandTeleport -> {
-                return ISLAND_TELEPORT;
+                return ISLAND_TELEPORT.clone();
             }
             case IslandProperties -> {
-                return ISLAND_PROPERTIES;
+                return ISLAND_PROPERTIES.clone();
             }
             case IslandAchievements -> {
-                return ISLAND_ACHIEVEMENTS;
+                return ISLAND_ACHIEVEMENTS.clone();
             }
-            case BACK_TO_DASHBOARD -> {
-                return BACK_TO_DASHBOARD;
+            case Back_to_Dashboard -> {
+                return BACK_TO_DASHBOARD.clone();
             }
             case PropBTN_ALLON -> {
-                return PROP_BTN_ALLON;
+                return PROP_BTN_ALLON.clone();
             }
             case PropBTN_ALLOFF -> {
-                return PROP_BTN_ALLOFF;
+                return PROP_BTN_ALLOFF.clone();
             }
             case PropSTATE_ON -> {
-                return PROP_STATE_ON;
+                return PROP_STATE_ON.clone();
             }
             case PropSTATE_OFF -> {
-                return PROP_STATE_OFF;
+                return PROP_STATE_OFF.clone();
             }
             case PropPVP -> {
-                return PROP_PVP;
+                return PROP_PVP.clone();
             }
             case PropMobGriefing -> {
-                return PROP_MOB_GRIEFING;
+                return PROP_MOB_GRIEFING.clone();
             }
             case PropExplosionDamage -> {
-                return PROP_EXPLOSION_DAMAGE;
+                return PROP_EXPLOSION_DAMAGE.clone();
             }
             case PropSpreadFire -> {
-                return PROP_SPREAD_FIRE;
+                return PROP_SPREAD_FIRE.clone();
             }
             case PropTntDamage -> {
-                return PROP_TNT_DAMAGE;
+                return PROP_TNT_DAMAGE.clone();
             }
             case PropNaturalMonsterSpawn -> {
-                return PROP_NATURAL_MONSTER_SPAWN;
+                return PROP_NATURAL_MONSTER_SPAWN.clone();
+            }
+            case Kill_Monster -> {
+                return KILL_MONSTERS.clone();
             }
             default -> {
                 return null;

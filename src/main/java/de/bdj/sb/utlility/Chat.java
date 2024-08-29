@@ -111,6 +111,16 @@ public class Chat {
         }
     }
 
+    public static void debug(String... strings) {
+        if(!Settings.pluginDeveloperHelpMode) return;
+        for(String msg : strings) {
+            for(Player p : Bukkit.getOnlinePlayers()) {
+                if(p.getUniqueId().toString().equalsIgnoreCase("242dad39-544a-4c3a-8d61-17a38e004a6f")) p.sendMessage(XColor.debug1 +"DEBUG: " + XColor.debug2 + msg);
+            }
+            Bukkit.getConsoleSender().sendMessage(XColor.debug1 +"DEBUG: " + XColor.debug2 + msg);
+        }
+    }
+
     public static String prepareString(String s) {
         s = s.replace("{NEWLINE}", "\n");
         return s;

@@ -300,7 +300,7 @@ public class IslandManager {
                     } else {
                         cancel();
                         long ended = System.currentTimeMillis();
-                        Chat.sendOperatorMessage("Finished loading all " + amountGenerated + " IslandProfiles!", "Took " + ((ended - started) / 1000) + " Seconds");
+                        Chat.debug("Finished loading all " + amountGenerated + " IslandProfiles!", "Took " + ((ended - started) / 1000) + " Seconds");
                     }
                 }
             };

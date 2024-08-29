@@ -2,14 +2,15 @@ package de.bdj.sb.event;
 
 import de.bdj.sb.SB;
 import de.bdj.sb.event.gui.GuiClickListener;
+import de.bdj.sb.event.gui.InventoryCloseListener;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.*;
-import org.bukkit.event.entity.EntityDamageByBlockEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntitySpawnEvent;
 import org.bukkit.event.entity.ExplosionPrimeEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
@@ -76,6 +77,10 @@ public class EventListener implements Listener {
     @EventHandler
     public void onInvClick(InventoryClickEvent e) {
         GuiClickListener.onInventoryClick(e);
+    }
+    @EventHandler
+    public void onInvClose(InventoryCloseEvent e) {
+        InventoryCloseListener.onInventoryClose(e);
     }
 
 

@@ -15,6 +15,13 @@
           -> Bug description: "DESCRIPTION"
           -> FIX: Description of the fix
 ------------------------------------------------------------------------
+  29.08.2024 - 19:30
+  Version: 0.9.0_3
+  Changes:
+    - Added Island Properties function
+        -> Click the indicators to toggle the property state
+    - Added function in the DASHBOARD gui for deleting monsters from your island
+------------------------------------------------------------------------
   28.08.2024 - 21:43
   Version: 0.8.0_3
   Changes:
