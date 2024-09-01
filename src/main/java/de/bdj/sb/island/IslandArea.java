@@ -134,5 +134,29 @@ public class IslandArea {
         Chat.debug("boundingbox of Island = " + b.getMaxX() + 1  + " / " + b.getMaxY() + " / " + b.getMaxZ() + 1 + " - " + b.getMinX() + " / " + b.getMinY() + " / " + b.getMinZ());
         return world.getNearbyEntities(b);
     }
+
+    public int getxMin() {
+        return xMin;
+    }
+
+    public int getxMax() {
+        return xMax;
+    }
+
+    public int getyMin() {
+        return yMin;
+    }
+
+    public int getyMax() {
+        return yMax;
+    }
+
+    public int getzMin() {
+        return zMin;
+    }
+
+    public int getzMax() {
+        return zMax;
+    }
 }
 

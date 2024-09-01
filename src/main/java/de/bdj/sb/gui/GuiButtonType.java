@@ -2,22 +2,25 @@ package de.bdj.sb.gui;
 
 public enum GuiButtonType {
 
-    CreateClassicSkyBlock,
-    CreateOneBlockSkyBlock,
-    IslandTeleport,
-    IslandAchievements,
-    IslandProperties,
-    Back_to_Dashboard,
-    PropBTN_ALLON,
-    PropBTN_ALLOFF,
-    PropSTATE_ON,
-    PropSTATE_OFF,
-    PropPVP,
-    PropMobGriefing,
-    PropExplosionDamage,
-    PropTntDamage,
-    PropSpreadFire,
-    PropNaturalMonsterSpawn,
-    Kill_Monster;
+    CREATE_CLASSIC_SKYBLOCK,
+    CREATE_ONE_BLOCK_SKYBLOCK,
+    ISLAND_TELEPORT,
+    ISLAND_ACHIEVEMENTS,
+    ISLAND_PROPERTIES,
+    BACK_TO_DASHBOARD,
+    PROP_BTN_ALLON,
+    PROP_BTN_ALLOFF,
+    PROP_STATE_ON,
+    PROP_STATE_OFF,
+    PROP_PVP,
+    PROP_MOB_GRIEFING,
+    PROP_EXPLOSION_DAMAGE,
+    PROP_TNT_DAMAGE,
+    PROP_SPREAD_FIRE,
+    PROP_NATURAL_MONSTER_SPAWN,
+    KILL_MONSTERS,
+    SET_ISLAND_SPAWN,
+    RELOAD_DATA,
+    DEV_TOOL_BIOME_CHANGE;
 
 }

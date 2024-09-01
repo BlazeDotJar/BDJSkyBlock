@@ -2,6 +2,7 @@ package de.bdj.sb.command;
 
 import de.bdj.sb.SB;
 import de.bdj.sb.Settings;
+import de.bdj.sb.gui.GuiManager;
 import de.bdj.sb.island.IslandCreator;
 import de.bdj.sb.island.IslandManager;
 import de.bdj.sb.island.IslandProfile;
@@ -64,6 +65,8 @@ public class SBDEVCommand implements CommandExecutor, TabCompleter {
                         } else if(args[0].equalsIgnoreCase("debug")) {
                             Settings.pluginDeveloperHelpMode = !Settings.pluginDeveloperHelpMode;
                             Chat.info(p, "Plugin Developer Mode: §f" + Settings.pluginDeveloperHelpMode);
+                        } else if(args[0].equalsIgnoreCase("tools")) {
+                            GuiManager.openDeveloperGui(p);
                         }
                         break;
                     case 2:
@@ -124,9 +127,57 @@ public class SBDEVCommand implements CommandExecutor, TabCompleter {
                         } else if(args[0].equalsIgnoreCase("walls") || args[0].equalsIgnoreCase("w")) {
                             int islandId = Integer.parseInt(args[1]);
                             IslandProfile ip = IslandManager.getIslandDataFromIndexFile(islandId);
-                            Location l = ip.getIslandLocation();
+                            Location l = ip.getIslandLocation().clone();
                             l.getBlock().setType(Material.RED_WOOL);
-                            for(int i = 0; i != IslandManager.islandDiameter; i++) {
+                            int xMin = ip.getArea().getxMin();
+                            int xMax = ip.getArea().getxMax();
+                            int zMin = ip.getArea().getzMin();
+                            int zMax = ip.getArea().getzMax();
+
+                            for(int i = xMin; i != xMax; i++) {
+                                l.add(1, 0, 0);
+                                if(l.getBlock().getType() == Material.AIR) l.getBlock().setType(Material.LIME_WOOL);
+                            }
+                            for(int i = zMin; i != zMax; i++) {
+                                l.add(0, 0, 1);
+                                if(l.getBlock().getType() == Material.AIR) l.getBlock().setType(Material.LIME_WOOL);
+                            }
+                            for(int i = xMin; i != xMax; i++) {
+                                l.add(-1, 0, 0);
+                                if(l.getBlock().getType() == Material.AIR) l.getBlock().setType(Material.LIME_WOOL);
+                            }
+                            for(int i = zMin; i != zMax; i++) {
+                                l.add(0, 0, -1);
+                                if(l.getBlock().getType() == Material.AIR) l.getBlock().setType(Material.LIME_WOOL);
+                            }
+
+                            l = ip.getIslandLocation().clone();
+                            l.setY(-64);
+                            for(int i = -64; i != 320; i++) {
+                                l.add(0, 1, 0);
+                                if(l.getBlock().getType() == Material.AIR) l.getBlock().setType(Material.YELLOW_WOOL);
+                            }
+                            l.add(IslandManager.islandDiameter, 0, 0);
+                            l.setY(-64);
+                            for(int i = -64; i != 320; i++) {
+                                l.add(0, 1, 0);
+                                if(l.getBlock().getType() == Material.AIR) l.getBlock().setType(Material.YELLOW_WOOL);
+                            }
+                            l.add(0, 0, IslandManager.islandDiameter);
+                            l.setY(-64);
+                            for(int i = -64; i != 320; i++) {
+                                l.add(0, 1, 0);
+                                if(l.getBlock().getType() == Material.AIR) l.getBlock().setType(Material.YELLOW_WOOL);
+                            }
+                            l.add(-IslandManager.islandDiameter, 0, 0);
+                            l.setY(-64);
+                            for(int i = -64; i != 320; i++) {
+                                l.add(0, 1, 0);
+                                if(l.getBlock().getType() == Material.AIR) l.getBlock().setType(Material.YELLOW_WOOL);
+                            }
+                            /*
+
+                                                        for(int i = 0; i != IslandManager.islandDiameter; i++) {
                                 l.add(1, 0, 0);
                                 if(l.getBlock().getType() == Material.AIR) l.getBlock().setType(Material.RED_WOOL);
                             }
@@ -142,6 +193,8 @@ public class SBDEVCommand implements CommandExecutor, TabCompleter {
                                 l.add(0, 0, -1);
                                 if(l.getBlock().getType() == Material.AIR) l.getBlock().setType(Material.RED_WOOL);
                             }
+
+                             */
                             Chat.info(p, "Walls für Insel " + islandId + " erstellt!");
                         } else if(args[0].equalsIgnoreCase("quarter") || args[0].equalsIgnoreCase("q")) {
                             int islandId = Integer.parseInt(args[1]);
@@ -183,6 +236,7 @@ public class SBDEVCommand implements CommandExecutor, TabCompleter {
                 Chat.sendClickableMessage(p, XColor.c2 + " /sbdev quarter §fCreate island quarter walls", XColor.c2 + "Erstelle ein Viertel der Insel Border", "/sbdev quarter", false, false);
                 Chat.sendClickableMessage(p, XColor.c2 + " /sbdev hub §fTp to hub", XColor.c2 + "Tp dich zur hub", "/sbdev hub", false, false);
                 Chat.sendClickableMessage(p, XColor.c2 + " /sbdev debug §fToggle debug", XColor.c2 + "Toggle debug mode", "/sbdev debug", false, false);
+                Chat.sendClickableMessage(p, XColor.c2 + " /sbdev tools §fOpen Tools Menu", XColor.c2 + "Open Tools Menu", "/sbdev tools", false, false);
             }
         }
     }
@@ -197,7 +251,7 @@ public class SBDEVCommand implements CommandExecutor, TabCompleter {
                     case 0:
                         break;
                     case 1:
-                        return Arrays.asList("hub", "lp", "li", "walls", "quarter");
+                        return Arrays.asList("debug", "hub", "lp", "li", "walls", "quarter", "tools");
                     case 2:
                         if(args[0].equalsIgnoreCase("li")) return List.of("1-15");
                         else if(args[0].equalsIgnoreCase("walls")) return List.of("1");

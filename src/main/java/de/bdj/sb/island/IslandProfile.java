@@ -5,6 +5,7 @@ import de.bdj.sb.Settings;
 import de.bdj.sb.utlility.Chat;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Entity;
@@ -39,11 +40,14 @@ public class IslandProfile {
         this.z = z;
         setClaimed(isClaimed);
         islandLocation = new Location(Bukkit.getWorld(Settings.sbOverworldName), x, IslandManager.islandY, z); //TODO: Die Welt muss angepasst werden, sobald die Multi-World-Funktion implementiert wurde!
-        spawnPoint = islandLocation.clone().add((IslandManager.islandDiameter / 2) + 0.5, 2,(IslandManager.islandDiameter / 2) + 0.5);
         Location p1 = islandLocation.clone();
         Location p2 = new Location(p1.getWorld(), x + IslandManager.islandDiameter, 319, z + IslandManager.islandDiameter);
         p1.setY(-64);
         area = new IslandArea(p1, p2);
+
+        if(ownerUuid == null) {
+            spawnPoint = new Location(p1.getWorld(), x + IslandManager.islandDiameter, IslandManager.islandY, z + IslandManager.islandDiameter);
+        } else spawnPoint = IslandDataReader.getSpawnPoint(ownerUuid.toString());
 
         loadData();
     }
@@ -81,8 +85,20 @@ public class IslandProfile {
 
 
     public void teleport(LivingEntity ent) {
-        ent.setFallDistance(0f);
-        ent.teleport(spawnPoint);
+        if(spawnPoint != null) {
+            Location l2 = spawnPoint.clone().add(0, -1, 0);
+            if(l2.getBlock().getType() == Material.AIR || l2.getBlock().getType() == Material.LAVA) l2.getBlock().setType(Material.GLASS);
+            ent.setFallDistance(0f);
+            ent.teleport(spawnPoint);
+            Chat.debug("Tp1");
+        } else {
+            Location loc = islandLocation.clone().add(((double) IslandManager.islandDiameter / 2) + 0.5, 0, ((double) IslandManager.islandDiameter / 2) + 0.5);
+            Location l1 = loc.clone().add(0,-1,0);
+            if(l1.getBlock().getType() == Material.AIR || l1.getBlock().getType() == Material.LAVA) l1.getBlock().setType(Material.GLASS);
+            ent.setFallDistance(0f);
+            ent.teleport(loc);
+            Chat.debug("Tp2");
+        }
     }
 
     public int getIslandId() {

@@ -2,10 +2,7 @@ package de.bdj.sb.command;
 
 import de.bdj.sb.SB;
 import de.bdj.sb.Settings;
-import de.bdj.sb.island.IslandCreator;
-import de.bdj.sb.island.IslandGenManager;
-import de.bdj.sb.island.IslandManager;
-import de.bdj.sb.island.IslandProfile;
+import de.bdj.sb.island.*;
 import de.bdj.sb.island.result.AddMemberToIslandResult;
 import de.bdj.sb.island.result.IslandCreatorReserveResult;
 import de.bdj.sb.island.result.RemoveMemberFromIslandResult;
@@ -23,7 +20,7 @@ public class SkyBlockFunction {
             Chat.error(owner, "Du musst dir erst selbst eine Insel erstellen.");
             return AddMemberToIslandResult.CANCELLED_YOU_DO_NOT_HAVE_ISLAND;
         } else if(targetIslandId < 1) {
-            if(IslandManager.addMemberToIsland(ownerIslandId, target.getUniqueId())) {
+            if(IslandDataWriter.addMemberToIsland(ownerIslandId, target.getUniqueId())) {
                 return AddMemberToIslandResult.SUCCESS_MEMBER_ADDED;
             } else return AddMemberToIslandResult.CANCELLED_PLAYER_IS_ALREADY_MEMBER;
         } else {
@@ -39,7 +36,7 @@ public class SkyBlockFunction {
             Chat.error(owner, "Du musst dir erst selbst eine Insel erstellen.");
             return RemoveMemberFromIslandResult.CANCELLED_YOU_DO_NOT_HAVE_ISLAND;
         } else if(targetIslandId == ownerIslandId) {
-            if(IslandManager.removeMemberFromIsland(ownerIslandId, target.getUniqueId())) {
+            if(IslandDataWriter.removeMemberFromIsland(ownerIslandId, target.getUniqueId())) {
                 return RemoveMemberFromIslandResult.SUCCESS_MEMBER_REMOVE;
             } else return RemoveMemberFromIslandResult.CANCELLED_PLAYER_IS_NOT_MEMBER;
         } else return RemoveMemberFromIslandResult.CANCELLED_PLAYER_IS_NOT_MEMBER;

@@ -20,6 +20,8 @@ public class GuiButtonManager {
     private static ItemStack BACK_TO_DASHBOARD;
     private static ItemStack PROP_BTN_ALLON;
     private static ItemStack PROP_BTN_ALLOFF;
+    private static ItemStack SET_ISLAND_SPAWN;
+    private static ItemStack RELOAD_DATA;
     private static ItemStack PROP_PVP;
     private static ItemStack PROP_MOB_GRIEFING;
     private static ItemStack PROP_EXPLOSION_DAMAGE;
@@ -29,6 +31,7 @@ public class GuiButtonManager {
     private static ItemStack PROP_STATE_ON;
     private static ItemStack PROP_STATE_OFF;
     private static ItemStack KILL_MONSTERS;
+    private static ItemStack DEV_TOOL_BIOME_CHANGE;
 
     public GuiButtonManager() {
         CREATE_CLASSIC_SKYBLOCK = new ItemStack(Material.GRASS_BLOCK);
@@ -287,60 +290,125 @@ public class GuiButtonManager {
         meta.addItemFlags(ItemFlag.HIDE_ADDITIONAL_TOOLTIP);
         KILL_MONSTERS.setItemMeta(meta);
         lore.clear();
+
+        SET_ISLAND_SPAWN = new ItemStack(Material.LIME_BED);
+        meta = SET_ISLAND_SPAWN.getItemMeta();
+        meta.setDisplayName("§6Insel Spawnpunkt setzen");
+
+        key = new NamespacedKey(SB.getInstance(), "guibtn_set_island_spawn");
+        meta.getPersistentDataContainer().set(key, PersistentDataType.STRING, "");
+        key = new NamespacedKey(SB.getInstance(), "sb_guibtn");
+        meta.getPersistentDataContainer().set(key, PersistentDataType.STRING, "");
+
+        lore = new ArrayList<>();
+        lore.add("§fSetze die Location, an der du");
+        lore.add("§fdich befindest, als Insel Spawnpunkt.");
+        meta.setLore(lore);
+        meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+        meta.addItemFlags(ItemFlag.HIDE_ADDITIONAL_TOOLTIP);
+        SET_ISLAND_SPAWN.setItemMeta(meta);
+        lore.clear();
+
+        RELOAD_DATA = new ItemStack(Material.CHEST);
+        meta = RELOAD_DATA.getItemMeta();
+        meta.setDisplayName("§6Inseldaten neuladen");
+
+        key = new NamespacedKey(SB.getInstance(), "guibtn_reload_data");
+        meta.getPersistentDataContainer().set(key, PersistentDataType.STRING, "");
+        key = new NamespacedKey(SB.getInstance(), "sb_guibtn");
+        meta.getPersistentDataContainer().set(key, PersistentDataType.STRING, "");
+
+        lore = new ArrayList<>();
+        lore.add("§fLade Insel Daten neu.");
+        lore.add("§fKann im Fehlerfall helfen.");
+        meta.setLore(lore);
+        meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+        meta.addItemFlags(ItemFlag.HIDE_ADDITIONAL_TOOLTIP);
+        RELOAD_DATA.setItemMeta(meta);
+        lore.clear();
+
+        // Dev Tool Buttons
+
+        DEV_TOOL_BIOME_CHANGE = new ItemStack(Material.OAK_SAPLING);
+        meta = DEV_TOOL_BIOME_CHANGE.getItemMeta();
+        meta.setDisplayName("§6Insel Biom auf Plains ändern");
+
+        key = new NamespacedKey(SB.getInstance(), "guibtn_dev_tool_change_biome");
+        meta.getPersistentDataContainer().set(key, PersistentDataType.STRING, "");
+        key = new NamespacedKey(SB.getInstance(), "sb_guibtn");
+        meta.getPersistentDataContainer().set(key, PersistentDataType.STRING, "");
+
+        lore = new ArrayList<>();
+        lore.add("§fDies kann etwas dauern und");
+        lore.add("§fkann zum Crash führen.");
+        meta.setLore(lore);
+        meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+        meta.addItemFlags(ItemFlag.HIDE_ADDITIONAL_TOOLTIP);
+        DEV_TOOL_BIOME_CHANGE.setItemMeta(meta);
+        lore.clear();
     }
 
     public static ItemStack getGuiBtn(GuiButtonType gbt) {
         switch (gbt) {
-            case CreateClassicSkyBlock -> {
+            case DEV_TOOL_BIOME_CHANGE -> {
+                return DEV_TOOL_BIOME_CHANGE;
+            }
+            case CREATE_CLASSIC_SKYBLOCK -> {
                 return CREATE_CLASSIC_SKYBLOCK.clone();
             }
-            case CreateOneBlockSkyBlock -> {
+            case CREATE_ONE_BLOCK_SKYBLOCK -> {
                 return CREATE_ONE_BLOCK_SKYBLOCK.clone();
             }
-            case IslandTeleport -> {
+            case ISLAND_TELEPORT -> {
                 return ISLAND_TELEPORT.clone();
             }
-            case IslandProperties -> {
+            case ISLAND_PROPERTIES -> {
                 return ISLAND_PROPERTIES.clone();
             }
-            case IslandAchievements -> {
+            case ISLAND_ACHIEVEMENTS -> {
                 return ISLAND_ACHIEVEMENTS.clone();
             }
-            case Back_to_Dashboard -> {
+            case BACK_TO_DASHBOARD -> {
                 return BACK_TO_DASHBOARD.clone();
             }
-            case PropBTN_ALLON -> {
+            case PROP_BTN_ALLON -> {
                 return PROP_BTN_ALLON.clone();
             }
-            case PropBTN_ALLOFF -> {
+            case PROP_BTN_ALLOFF -> {
                 return PROP_BTN_ALLOFF.clone();
             }
-            case PropSTATE_ON -> {
+            case PROP_STATE_ON -> {
                 return PROP_STATE_ON.clone();
             }
-            case PropSTATE_OFF -> {
+            case PROP_STATE_OFF -> {
                 return PROP_STATE_OFF.clone();
             }
-            case PropPVP -> {
+            case PROP_PVP -> {
                 return PROP_PVP.clone();
             }
-            case PropMobGriefing -> {
+            case PROP_MOB_GRIEFING -> {
                 return PROP_MOB_GRIEFING.clone();
             }
-            case PropExplosionDamage -> {
+            case PROP_EXPLOSION_DAMAGE -> {
                 return PROP_EXPLOSION_DAMAGE.clone();
             }
-            case PropSpreadFire -> {
+            case PROP_SPREAD_FIRE -> {
                 return PROP_SPREAD_FIRE.clone();
             }
-            case PropTntDamage -> {
+            case PROP_TNT_DAMAGE -> {
                 return PROP_TNT_DAMAGE.clone();
             }
-            case PropNaturalMonsterSpawn -> {
+            case PROP_NATURAL_MONSTER_SPAWN -> {
                 return PROP_NATURAL_MONSTER_SPAWN.clone();
             }
-            case Kill_Monster -> {
+            case KILL_MONSTERS -> {
                 return KILL_MONSTERS.clone();
+            }
+            case SET_ISLAND_SPAWN -> {
+                return SET_ISLAND_SPAWN.clone();
+            }
+            case RELOAD_DATA -> {
+                return RELOAD_DATA;
             }
             default -> {
                 return null;

@@ -7,16 +7,10 @@ import de.bdj.sb.island.generator.CobbleGeneratorRenewed;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.*;
-import org.bukkit.event.entity.CreatureSpawnEvent;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.ExplosionPrimeEvent;
+import org.bukkit.event.entity.*;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
-import org.bukkit.event.player.AsyncPlayerChatEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerMoveEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.*;
 
 public class EventListener implements Listener {
 
@@ -88,6 +82,14 @@ public class EventListener implements Listener {
     @EventHandler
     public void onInvClose(InventoryCloseEvent e) {
         InventoryCloseListener.onInventoryClose(e);
+    }
+    @EventHandler
+    public void onPlayerDeath(PlayerDeathEvent e) {
+        PlayerDeathListener.onPlayerRespawn(e);
+    }
+    @EventHandler
+    public void onRespawn(PlayerRespawnEvent e) {
+        PlayerDeathListener.onPlayerRespawn(e);
     }
 
 

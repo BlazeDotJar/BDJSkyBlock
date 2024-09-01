@@ -4,13 +4,15 @@ import net.md_5.bungee.api.ChatColor;
 
 public class XColor {
 
-    public static ChatColor c1 = ChatColor.of("#33ff7a"); //Prefix Color
-    public static ChatColor c2 = ChatColor.of("#ffdfbf"); //CommandHelp-Cmd Color
+    public static ChatColor c1 = ChatColor.of("#00ff4c"); //Prefix Color
+    public static ChatColor c2 = ChatColor.of("#00ff4c"); //CommandHelp-Cmd Color
     public static ChatColor c3 = ChatColor.of("#00aeff"); //CommandHelp-Hover-Info Color
     public static ChatColor c4 = ChatColor.of("#47d7ff"); //CommandHelp-Hover-Permissions Color
     public static ChatColor c5 = ChatColor.of("#ff2f0a"); //OPChatPrefix Color
+    public static ChatColor c6 = ChatColor.of("#ab1700"); //Deathmessage Color
     public static ChatColor orange = ChatColor.of("#ff2f00");
     public static ChatColor green = ChatColor.of("#00ff04");
+    public static ChatColor warn = ChatColor.of("#ff8c00");
     public static ChatColor debug1 = ChatColor.of("#006aff");
     public static ChatColor debug2 = ChatColor.of("#6eaaff");
 

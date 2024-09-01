@@ -26,14 +26,14 @@ public class Chat {
 
 
     public static void warn(CommandSender sender, String... msgs) {
-        error(sender, true, msgs);
+        warn(sender, true, msgs);
     }
 
     public static void warn(CommandSender sender, boolean withPrefix, String... msgs) {
         if(msgs.length == 0) return;
 
         for(String msg : msgs) {
-            sender.sendMessage((withPrefix ? Settings.pluginPrefix + Settings.pluginSuffix : "") + "§e" + msg);
+            sender.sendMessage((withPrefix ? Settings.pluginPrefix + Settings.pluginSuffix : "") + XColor.warn + msg);
         }
     }
 

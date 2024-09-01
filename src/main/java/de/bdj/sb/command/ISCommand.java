@@ -3,6 +3,7 @@ package de.bdj.sb.command;
 import de.bdj.sb.SB;
 import de.bdj.sb.Settings;
 import de.bdj.sb.gui.GuiManager;
+import de.bdj.sb.island.IslandDataWriter;
 import de.bdj.sb.island.IslandManager;
 import de.bdj.sb.island.IslandProfile;
 import de.bdj.sb.island.result.AddMemberToIslandResult;
@@ -116,7 +117,7 @@ public class ISCommand implements CommandExecutor, TabCompleter {
                                             return false;
                                         }
 
-                                        boolean successfullyDeleted = IslandManager.removeOwner(pro.getIslandId());
+                                        boolean successfullyDeleted = IslandDataWriter.removeOwner(pro.getIslandId());
                                         if(successfullyDeleted) {
                                             pro.setIslandId(0);
                                             pro.save();
@@ -160,7 +161,7 @@ public class ISCommand implements CommandExecutor, TabCompleter {
                                 return false;
                             }
                             ip.removeMember(p.getUniqueId().toString());
-                            IslandManager.removeMemberFromIsland(id, p.getUniqueId());
+                            IslandDataWriter.removeMemberFromIsland(id, p.getUniqueId());
                             Chat.info(p, "Du hast deine Insel verlassen und kannst dir nun mit /is create eine neue erstellen.");
                             Lobby.teleport(p);
                         }
@@ -238,14 +239,13 @@ public class ISCommand implements CommandExecutor, TabCompleter {
         if(command.equalsIgnoreCase("is help")) {
             if(sender instanceof Player p) {
                 Chat.info(sender, "Alle verfügbaren BDJSkyBlock Befehle:");
-                Chat.sendClickableMessage(p, XColor.c2 + " /is §fInsel teleport", XColor.c2 + "Teleportiere dich zu deiner Insel." + (p.isOp() ? XColor.c4 + "\nPermission: §f" + Perms.getPermission("is") : ""), "/is", false, false);
+                Chat.sendClickableMessage(p, XColor.c2 + " /is §fInsel Menü", XColor.c2 + "Öffne das Insel Menü." + (p.isOp() ? XColor.c4 + "\nPermission: §f" + Perms.getPermission("is") : ""), "/is", false, false);
                 Chat.sendClickableMessage(p, XColor.c2 + " /is create §fInsel erstellen", XColor.c2 + "Erstelle eine Insel." + (p.isOp() ? XColor.c4 + "\nPermission: §f" + Perms.getPermission("is create") : ""), "/is create", false, false);
                 Chat.sendClickableMessage(p, XColor.c2 + " /is help §fCommand Hilfe", XColor.c2 + "Liste alle /is Befehle auf um dir einen Überblick zu beschaffen." + (p.isOp() ? XColor.c4 + "\nPermission: §f" + Perms.getPermission("is help") : ""), "/is help", false, false);
                 Chat.sendSuggestCommandMessage(p, XColor.c2 + " /is delete §fInsel löschen", XColor.c2 + "Lösche deine Insel. Dies kann nicht rückgängig gemacht werden!" + (p.isOp() ? XColor.c4 + "\nPermission: §f" + Perms.getPermission("is delete") : ""), "/is delete", false, false);
                 Chat.sendSuggestCommandMessage(p, XColor.c2 + " /is member §fMember verwalten", XColor.c2 + "Verwalte Member deiner Insel. Füge Spieler hinzu, entferne diese wieder, etc." + (p.isOp() ? XColor.c4 + "\nPermission: §f" + Perms.getPermission("is member") : ""), "/is member", false, false);
                 Chat.sendSuggestCommandMessage(p, XColor.c2 + " /is quit §fInsel verlassen", XColor.c2 + "Wenn du Member einer Insel bist, kannst du sie hiermit verlassen um ein eigene zu erstellen." + (p.isOp() ? XColor.c4 + "\nPermission: §f" + Perms.getPermission("is quit") : ""), "/is quit", false, false);
                 Chat.sendSuggestCommandMessage(p, XColor.c2 + " /is ban <Spielername> §fVon Insel bannen", XColor.c2 + "Verbanne einen Spieler von deiner Insel. Dieser kann deine Insel also nicht betreten." + (p.isOp() ? XColor.c4 + "\nPermission: §f" + Perms.getPermission("is ban") : ""), "/is ban", false, false);
-                Chat.sendSuggestCommandMessage(p, XColor.orange + " /is clearmobs §fasdas", XColor.c2 + "BLABLA. Permission noch fixen in dieser ZEile" + (p.isOp() ? XColor.c4 + "\nPermission: §f" + Perms.getPermission("is fds") : ""), "/is sf", false, false);
             }
         }
     }

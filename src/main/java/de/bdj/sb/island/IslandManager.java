@@ -36,7 +36,6 @@ public class IslandManager {
             for(IslandProfile ip : profiles.values()) {
                 ip.loadData();
             }
-            Chat.sendOperatorMessage("RELAODFILES WRONGLY!");
         } else {
             SB.getInstance().saveResource("island_index_file.yml", false);
 
@@ -126,29 +125,7 @@ public class IslandManager {
         return islands;
     }
 
-    public static boolean removeOwner(int islandId) {
-        IslandProfile ip = getIslandDataFromIndexFile(islandId);
-        File file = new File("plugins/" + SB.name() + "/islands/" + ip.getOwnerUuid().toString() + ".yml");
-        FileConfiguration cfg = YamlConfiguration.loadConfiguration(file);
-        cfg.set("Owner UUID", "none");
-        cfg.set("Owner Deleted This Island", true);
-        try {
-            cfg.save(file);
-            file.renameTo(new File("plugins/" + SB.name() + "/islands/deleted_" + SB.timeStamp.getCurrentDate() + "_" + SB.timeStamp.getCurrentTime().replace(":", "-") + "_" + ip.getOwnerUuid().toString() + ".yml"));
 
-            File f = new File("plugins/" + SB.name() + "/" + Settings.islandIndexFileName);
-            if(!f.exists()) reloadFiles();
-            FileConfiguration c = YamlConfiguration.loadConfiguration(f);
-
-            c.set("Islands.ID-" + islandId + ".Owner UUID", "none");
-
-            c.save(f);
-            return true;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
 
     public static int getAmountClaimedIslands() {
         File file = new File("plugins/" + SB.name() + "/" + Settings.islandIndexFileName);
@@ -221,46 +198,6 @@ public class IslandManager {
 
     public static ConcurrentHashMap<Integer, IslandProfile> getProfiles() {
         return profiles;
-    }
-
-    public static boolean addMemberToIsland(int islandId, UUID uuid) {
-        if(!profiles.containsKey(islandId)) return false;
-
-        IslandProfile ip = profiles.get(islandId);
-        ip.addMember(uuid.toString());
-
-        File file = new File("plugins/" + SB.name() + "/islands/" + ip.getOwnerUuid().toString() + ".yml");
-        FileConfiguration cfg = YamlConfiguration.loadConfiguration(file);
-        cfg.set("Members", ip.getMembers());
-        try {
-            cfg.save(file);
-            ProfileManager.getProfile(uuid).setIslandId(islandId);
-            ProfileManager.getProfile(uuid).save();
-            return true;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-
-    public static boolean removeMemberFromIsland(int islandId, UUID uuid) {
-        if(!profiles.containsKey(islandId)) return false;
-
-        IslandProfile ip = profiles.get(islandId);
-        ip.removeMember(uuid.toString());
-
-        File file = new File("plugins/" + SB.name() + "/islands/" + ip.getOwnerUuid().toString() + ".yml");
-        FileConfiguration cfg = YamlConfiguration.loadConfiguration(file);
-        cfg.set("Members", ip.getMembers());
-        try {
-            cfg.save(file);
-            ProfileManager.getProfile(uuid).setIslandId(0);
-            ProfileManager.getProfile(uuid).save();
-            return true;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return false;
-        }
     }
 
     public static class SlowIslandProfileLoader {

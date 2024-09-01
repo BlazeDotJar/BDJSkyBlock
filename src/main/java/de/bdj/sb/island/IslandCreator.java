@@ -134,6 +134,12 @@ public class IslandCreator {
                     c.set("Properties", Arrays.asList("pvp: false", "mob griefing: false", "explosion damage: false", "tnt damage: false", "spread fire: false", "natural monster spawn: true"));
                     c.set("Banned Players", Arrays.asList());
                     c.set("Members", Arrays.asList());
+                    c.set("Island Spawnpoint.World", islandLoc.getWorld().getName());
+                    c.set("Island Spawnpoint.X", islandLoc.getX());
+                    c.set("Island Spawnpoint.Y", islandLoc.getY() + 1);
+                    c.set("Island Spawnpoint.Z", islandLoc.getZ());
+                    c.set("Island Spawnpoint.Yaw", islandLoc.getYaw());
+                    c.set("Island Spawnpoint.Pitch", islandLoc.getPitch());
 
                     c.save(f);
 

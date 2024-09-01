@@ -2,8 +2,10 @@ package de.bdj.sb.command;
 
 import de.bdj.sb.SB;
 import de.bdj.sb.Settings;
+import de.bdj.sb.island.IslandDataWriter;
 import de.bdj.sb.island.IslandManager;
 import de.bdj.sb.island.IslandProfile;
+import de.bdj.sb.island.result.SetIslandSpawnResult;
 import de.bdj.sb.lobby.Waitlobby;
 import de.bdj.sb.profile.PlayerProfile;
 import de.bdj.sb.profile.ProfileManager;
@@ -74,6 +76,8 @@ public class SBCommand implements CommandExecutor, TabCompleter {
                             Chat.info(p, "Gebe einen Bereich an, den du gerne anzeigen möchtest.", "Beispiel: §f/sb islands " + min + "-" + max);
                         } else if(args[0].equalsIgnoreCase("tp") && Perms.hasPermission(p, Perms.getPermission("sb tp"))) {
                             Chat.info(p, "Gebe eine Insel Id an. Beispiel: §f/sb tp " + Code.randomInteger(1, IslandManager.amountGenerated));
+                        } else if(args[0].equalsIgnoreCase("setspawn") && Perms.hasPermission(p, Perms.getPermission("sb setspawn"))) {
+                            Chat.sendSuggestCommandMessage(p, XColor.c2 + " /sb setspawn <Insel-ID> §fFremden Inselspawn setzen", XColor.c2 + "Setzte den Insel Spawn einer anderen Insel, falls der Spieler dies nicht schaffe sollte." + (p.isOp() ? XColor.c4 + "\nPermission: §f" + Perms.getPermission("sb setspawn") : ""), "/sb setspawn", false, false);
                         }
                             break;
                     case 2:
@@ -189,6 +193,35 @@ public class SBCommand implements CommandExecutor, TabCompleter {
                             }catch(Exception ex) {
                                 Chat.error(p, "Du muss als Insel Id eine Ganzzahl angeben, die kleiner ist als " + IslandManager.amountGenerated + " aber größer als 0");
                             }
+                        } else if(args[0].equalsIgnoreCase("setspawn") && Perms.hasPermission(p, Perms.getPermission("sb setspawn"))) {
+                            try {
+                                int id = Integer.parseInt(args[1]);
+                                if(id < 0 || id > IslandManager.amountGenerated) {
+                                    Chat.error(p, "Die Insel ID darf nicht kleine 0 und nicht größer als " + IslandManager.amountGenerated + " sein!");
+                                    return false;
+                                }
+
+                                IslandProfile ip = IslandManager.getLoadedIslandProfile(ProfileManager.getProfile(p.getUniqueId()).getIslandIsCurrentIn());
+                                if(ip == null) {
+                                    Chat.error(p, "Du musst dich auf der Insel " + id + " befinden!");
+                                    return false;
+                                }
+                                if(id != ip.getIslandId()) {
+                                    Chat.error(p, "Du befindest dich auf der falschen Insel!");
+                                    return false;
+                                }
+
+                                SetIslandSpawnResult r = IslandDataWriter.setIslandSpawn(id, p.getLocation().clone());
+                                if(r == SetIslandSpawnResult.SUCCESS) {
+                                    IslandManager.reloadFile(ip.getIslandId());
+                                    Chat.info(p, "Du hast den Insel Spawnpunkt von Insel " + id + " neu gesetzt!");
+                                } else {
+                                    Chat.warn(p, "Etwas ist schief gelaufen.");
+                                }
+
+                            } catch(Exception ex) {
+                                Chat.error(p, "Du musst eine Zahl als Insel ID angeben!");
+                            }
                         }
                         break;
                 }
@@ -209,6 +242,7 @@ public class SBCommand implements CommandExecutor, TabCompleter {
                 Chat.sendSuggestCommandMessage(p, XColor.c2 + " /sb claimed <Von-Bis> §fBelegte Inseln", XColor.c2 + "Liste dir alle belegten Inseln auf. Erkenne auch, ob eine Insel eine Bereinigung braucht." + (p.isOp() ? XColor.c4 + "\nPermission: §f" + Perms.getPermission("sb claimed") : ""), "/sb claimed", false, false);
                 Chat.sendSuggestCommandMessage(p, XColor.c2 + " /sb islands <Von-Bis> §fInseln auflisten", XColor.c2 + "Liste dir alle Inseln in einem von dir angegebenen Island-ID Bereich auf. Gebe keinen Bereich an, um automatisch den Bereich 1-50 zu wählen." + (p.isOp() ? XColor.c4 + "\nPermission: §f" + Perms.getPermission("sb islands") : ""), "/sb islands", false, false);
                 Chat.sendSuggestCommandMessage(p, XColor.c2 + " /sb tp <Island ID> §fInsel-Teleport", XColor.c2 + "Teleportiere dich zu einer beliebigen Insel. Die IslandId muss eine Ganzzahl sein." + (p.isOp() ? XColor.c4 + "\nPermission: §f" + Perms.getPermission("sb tp") : ""), "/sb tp", false, false);
+                Chat.sendSuggestCommandMessage(p, XColor.c2 + " /sb setspawn <Insel-ID> §fFremden Inselspawn setzen", XColor.c2 + "Setzte den Insel Spawn einer anderen Insel, falls der Spieler dies nicht schaffen sollte." + (p.isOp() ? XColor.c4 + "\nPermission: §f" + Perms.getPermission("sb setspawn") : ""), "/sb setspawn", false, false);
                 Chat.sendSuggestCommandMessage(p, XColor.orange + " /sb release <Island ID> §fInsel freigeben", XColor.c2 + "Gebe eine Insel frei, damit Spieler diese wieder beziehen können." + (p.isOp() ? XColor.c4 + "\nPermission: §f" + Perms.getPermission("sb release") : ""), "/sb release", false, false);
                 Chat.sendSuggestCommandMessage(p, XColor.orange + " /sb helpadmin <Seiten-ID> §fAdmin-Handbuch", XColor.c2 + "Lies im Handbuch für Admins nach, wenn du vergessen hast, wie etwas zu handhaben ist." + (p.isOp() ? XColor.c4 + "\nPermission: §f" + Perms.getPermission("sb adminhelp") : ""), "/sb adminhelp", false, false);
                 Chat.info(p, "Weitere Befehle von BDJSkyBlock:");
@@ -233,6 +267,7 @@ public class SBCommand implements CommandExecutor, TabCompleter {
                         if(Perms.hasPermission(p, Perms.getPermission("sb claimed"), false)) l.add("claimed");
                         if(Perms.hasPermission(p, Perms.getPermission("sb islands"), false)) l.add("islands");
                         if(Perms.hasPermission(p, Perms.getPermission("sb tp"), false)) l.add("tp");
+                        if(Perms.hasPermission(p, Perms.getPermission("sb setspawn"), false)) l.add("setspawn");
                         return l;
                     case 2:
                         if(args[0].equalsIgnoreCase("claimed") && Perms.hasPermission(p, Perms.getPermission("sb claimed"), false)) return Arrays.asList("1-10");

@@ -1,6 +1,6 @@
 name: BDJSkyBlock
 author: BlazeDotJar
-version: 0.10.1_3
+version: 0.11.1_4
 api-version: 1.21
 depend:
   - 'BDJPlaceholder'
@@ -19,6 +19,7 @@ permissions:
     description: 'Give this permission only to developers'
     children:
       bdj.sb.admin: true
+      bdj.is.*: true
   #--Admin permissions-----------------------------------------------------
   bdj.sb.admin:
     description: 'Give this permission to all admins.'
@@ -32,6 +33,7 @@ permissions:
       bdj.sb.tp: true
       bdj.sb.release: true
       bdj.sb.adminhelp: true
+      bdj.sb.setspawn: true
   bdj.sb:
     description: 'Help command'
   bdj.sb.rl:
@@ -50,6 +52,8 @@ permissions:
     description: 'Release an island to the market'
   bdj.sb.adminhelp:
     description: 'Show help for admins'
+  bdj.sb.setspawn:
+    description: 'Set the island spawn of another players island'
   #--Gameplay permissions-----------------------------------------------------
   bdj.is.*:
     description: 'Give this permission to all players'

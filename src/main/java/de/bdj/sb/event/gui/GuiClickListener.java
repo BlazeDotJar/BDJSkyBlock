@@ -11,7 +11,8 @@ public class GuiClickListener {
     public static void onInventoryClick(InventoryClickEvent e) {
         NamespacedKey key = new NamespacedKey(SB.getInstance(), "sb_guibtn");
         if(e.getView().getTitle().equalsIgnoreCase(GuiManager.ISLAND_DASHBOARD_TITLE) ||
-                e.getView().getTitle().equalsIgnoreCase(GuiManager.ISLAND_PROPERTIES_TITLE)) {
+                e.getView().getTitle().equalsIgnoreCase(GuiManager.ISLAND_PROPERTIES_TITLE) ||
+                e.getView().getTitle().equalsIgnoreCase(GuiManager.DEV_TOOLS_TITLE)) {
             e.setCancelled(true);
         }
         if(e.getCurrentItem() == null) return;
