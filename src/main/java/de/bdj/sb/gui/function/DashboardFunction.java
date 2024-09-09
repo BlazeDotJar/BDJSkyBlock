@@ -13,6 +13,7 @@ import de.bdj.sb.profile.ProfileManager;
 import de.bdj.sb.utlility.Chat;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
+import org.bukkit.block.Biome;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
@@ -26,11 +27,10 @@ public class DashboardFunction {
         ItemMeta meta = item.getItemMeta();
         IslandProfile ip = IslandManager.getLoadedIslandProfile(ProfileManager.getProfile(e.getWhoClicked().getUniqueId()).getIslandId());
         if(meta.getPersistentDataContainer().has(new NamespacedKey(SB.getInstance(), "guibtn_dev_tool_change_biome"))) {
-            Chat.info(e.getWhoClicked(), "Ändere Biome...");
-            long startedAt = System.currentTimeMillis();
-            WETools.changeBiome(ip.getArea().getPoint1(), ip.getArea().getPoint2());
-            long finished = System.currentTimeMillis();
-            Chat.info(e.getWhoClicked(), "Das Biom ist geändert worden. Das dauerte " + ((finished - startedAt) / 1000) + " Sekunden");
+            Chat.info(e.getWhoClicked(), "Ändere Biome...", "Dies kann wenige Minuten dauern. Nach circa 5 Minuten solltest du mal rejoinen, damit du die Änderungen sehen kannst.");
+            WETools.changeBiome(ip.getArea().getPoint1(), ip.getArea().getPoint2(), Biome.PLAINS);
+        } else if(meta.getPersistentDataContainer().has(new NamespacedKey(SB.getInstance(), "guibtn_dev_tool_build_column"))) {
+            e.getWhoClicked().getInventory().addItem(e.getCurrentItem());
         } else if(meta.getPersistentDataContainer().has(new NamespacedKey(SB.getInstance(), "guibtn_create_classic_skyblock"))) {
             //Create skyblock island
             SkyBlockFunction.createIsland((Player)e.getWhoClicked());

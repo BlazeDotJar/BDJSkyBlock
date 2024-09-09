@@ -25,6 +25,8 @@ public class Perms {
         else if(command.equalsIgnoreCase("sb release")) return "bdj.sb.release";
         else if(command.equalsIgnoreCase("sb adminhelp")) return "bdj.sb.adminhelp";
         else if(command.equalsIgnoreCase("sb setspawn")) return "bdj.sb.setspawn";
+        else if(command.equalsIgnoreCase("sb addmember")) return "bdj.sb.addmember";
+        else if(command.equalsIgnoreCase("sb delmember")) return "bdj.sb.delmember";
         else if(command.equalsIgnoreCase("is")) return "bdj.is";
         else if(command.equalsIgnoreCase("is create")) return "bdj.is.create";
         else if(command.equalsIgnoreCase("is help")) return "bdj.is.help";

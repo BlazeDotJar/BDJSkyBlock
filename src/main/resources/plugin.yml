@@ -1,6 +1,6 @@
 name: BDJSkyBlock
 author: BlazeDotJar
-version: 0.11.1_4
+version: 0.12.1_4
 api-version: 1.21
 depend:
   - 'BDJPlaceholder'
@@ -32,6 +32,8 @@ permissions:
       bdj.sb.tp: true
       bdj.sb.release: true
       bdj.sb.adminhelp: true
+      bdj.sb.addmember: true
+      bdj.sb.delmember: true
   bdj.sb:
     description: 'Help command'
   bdj.sb.rl:

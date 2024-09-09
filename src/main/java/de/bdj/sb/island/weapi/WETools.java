@@ -7,7 +7,6 @@ import de.bdj.sb.SB;
 import de.bdj.sb.utlility.Chat;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.block.Biome;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -18,7 +17,7 @@ public class WETools {
 
     private static HashMap<String, Integer> timers = new HashMap<String, Integer>();
 
-    public static void changeBiome(Location pos1, Location pos2) {
+    public static void changeBiome(Location pos1, Location pos2, Biome biome) {
         CuboidRegion cr = new CuboidRegion(BlockVector3.at(pos1.getX(), pos1.getY(), pos1.getZ()), BlockVector3.at(pos2.getX(), pos2.getY(), pos2.getZ()));
         Set<BlockVector2> chunks = cr.getChunks();
 
@@ -46,10 +45,14 @@ public class WETools {
                             xx = x;
                             yy = y;
                             zz = z;
-                            c.getBlock(x, y, z).setBiome(Biome.PLAINS);
+                            c.getBlock(x, y, z).setBiome(biome);
+                            /*
+                            //DEBUG START
                             if(y == 100) {
                                 c.getBlock(x, y, z).setType(Material.WHITE_STAINED_GLASS);
                             }
+                            // DEBUG END
+                             */
                         }
                     }
                 }

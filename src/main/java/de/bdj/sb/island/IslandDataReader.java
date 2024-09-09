@@ -26,15 +26,10 @@ public class IslandDataReader {
         float yaw = (float)cfg.getInt("Island Spawnpoint.Yaw");
         float pitch = (float)cfg.getInt("Island Spawnpoint.Pitch");
 
-        Location loc = new Location(Bukkit.getWorld(world), x, y, z, yaw, pitch);
+        if(world == null) return null;
 
-        try {
-            cfg.save(file);
-            return loc;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
+        Location loc = new Location(Bukkit.getWorld(world), x, y, z, yaw, pitch);
+        return loc;
     }
 
 }

@@ -4,10 +4,12 @@ import de.bdj.sb.SB;
 import de.bdj.sb.Settings;
 import de.bdj.sb.SkyWorldGenerator;
 import de.bdj.sb.island.weapi.WEIslandPaster;
+import de.bdj.sb.island.weapi.WETools;
 import de.bdj.sb.utlility.Chat;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.Biome;
 import org.bukkit.entity.Player;
 
 import java.io.File;
@@ -91,6 +93,7 @@ public class IslandPlacer {
         //Run Schematic placer here
 
         ip.teleport(p);
+        WETools.changeBiome(ip.getArea().getPoint1(), ip.getArea().getPoint2(), Biome.DESERT);
 
         finish();
     }

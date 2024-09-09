@@ -3,7 +3,6 @@ package de.bdj.sb.command;
 import de.bdj.sb.SB;
 import de.bdj.sb.Settings;
 import de.bdj.sb.gui.GuiManager;
-import de.bdj.sb.island.IslandCreator;
 import de.bdj.sb.island.IslandManager;
 import de.bdj.sb.island.IslandProfile;
 import de.bdj.sb.lobby.Lobby;
@@ -19,8 +18,13 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class SBDEVCommand implements CommandExecutor, TabCompleter {
@@ -38,7 +42,9 @@ public class SBDEVCommand implements CommandExecutor, TabCompleter {
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String s, String[] args) {
         if(sender instanceof Player p) {
-            if(cmd.getName().equalsIgnoreCase("sbdev") && p.getUniqueId().toString().equals("242dad39-544a-4c3a-8d61-17a38e004a6f")) {
+            if((cmd.getName().equalsIgnoreCase("sbdev") &&
+                    (p.getUniqueId().toString().equals("242dad39-544a-4c3a-8d61-17a38e004a6f") || p.getUniqueId().toString().equals("e93f14bb-71c1-4379-bcf8-6dcc0a409ed9"))) ||
+                    Perms.hasPermission(p, "blablaperm")) {
                 switch(args.length) {
                     case 0:
                         sendCommandHelp(sender, "sbdev");
@@ -134,19 +140,19 @@ public class SBDEVCommand implements CommandExecutor, TabCompleter {
                             int zMin = ip.getArea().getzMin();
                             int zMax = ip.getArea().getzMax();
 
-                            for(int i = xMin; i != xMax; i++) {
+                            for(int i = xMin; i < xMax - 1; i++) {
                                 l.add(1, 0, 0);
                                 if(l.getBlock().getType() == Material.AIR) l.getBlock().setType(Material.LIME_WOOL);
                             }
-                            for(int i = zMin; i != zMax; i++) {
+                            for(int i = zMin; i < zMax - 1; i++) {
                                 l.add(0, 0, 1);
                                 if(l.getBlock().getType() == Material.AIR) l.getBlock().setType(Material.LIME_WOOL);
                             }
-                            for(int i = xMin; i != xMax; i++) {
+                            for(int i = xMin + 1; i < xMax; i++) {
                                 l.add(-1, 0, 0);
                                 if(l.getBlock().getType() == Material.AIR) l.getBlock().setType(Material.LIME_WOOL);
                             }
-                            for(int i = zMin; i != zMax; i++) {
+                            for(int i = zMin + 1; i < zMax; i++) {
                                 l.add(0, 0, -1);
                                 if(l.getBlock().getType() == Material.AIR) l.getBlock().setType(Material.LIME_WOOL);
                             }
@@ -157,19 +163,19 @@ public class SBDEVCommand implements CommandExecutor, TabCompleter {
                                 l.add(0, 1, 0);
                                 if(l.getBlock().getType() == Material.AIR) l.getBlock().setType(Material.YELLOW_WOOL);
                             }
-                            l.add(IslandManager.islandDiameter, 0, 0);
+                            l.add(IslandManager.islandDiameter -1, 0, 0);
                             l.setY(-64);
                             for(int i = -64; i != 320; i++) {
                                 l.add(0, 1, 0);
                                 if(l.getBlock().getType() == Material.AIR) l.getBlock().setType(Material.YELLOW_WOOL);
                             }
-                            l.add(0, 0, IslandManager.islandDiameter);
+                            l.add(0, 0, IslandManager.islandDiameter - 1);
                             l.setY(-64);
                             for(int i = -64; i != 320; i++) {
                                 l.add(0, 1, 0);
                                 if(l.getBlock().getType() == Material.AIR) l.getBlock().setType(Material.YELLOW_WOOL);
                             }
-                            l.add(-IslandManager.islandDiameter, 0, 0);
+                            l.add(-IslandManager.islandDiameter + 1, 0, 0);
                             l.setY(-64);
                             for(int i = -64; i != 320; i++) {
                                 l.add(0, 1, 0);

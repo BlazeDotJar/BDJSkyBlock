@@ -48,8 +48,8 @@ public class IslandManager {
             }
         }
         sipl = new SlowIslandProfileLoader();
-
     }
+
     public static void reloadFile(int islandId) {
         if(sipl != null) sipl.cancel();
         SB.getInstance().saveResource("island_index_file.yml", false);
@@ -79,6 +79,10 @@ public class IslandManager {
 
         String islandPath = "Islands.ID-"+islandId;
         String owner = cfg.getString(islandPath + ".Owner UUID");
+
+        if(Settings.pluginDeveloperHelpMode) {
+            SB.log("-----------------------------", "IslandManager.getIslandDataFromIndexFile() -> trying to load ID " + islandId);
+        }
         if(owner == null) {
             return null;
         }
@@ -87,19 +91,14 @@ public class IslandManager {
         boolean claimed = cfg.getBoolean(islandPath + ".Claimed");
 
         if(Settings.pluginDeveloperHelpMode) {
-            SB.log("-> getIslandDataFromIndexFile@IslandManager.java");
-            SB.log("----> Loading Island " + islandId);
-            SB.log("----> island path = " + islandPath);
-            SB.log("----> claimed = " + claimed);
-            SB.log("----> owner = " + owner);
-            SB.log("----> x = " + x);
-            SB.log("----> z = " + z);
+            SB.log("IslandManager.getIslandDataFromIndexFile() -> Loaded Island ID: " + islandId + "(total loaded: " + profiles.size() + ")");
         }
 
         IslandProfile ip =  new IslandProfile(islandId, (owner == null ? null : owner.equals("none") ? null : UUID.fromString(owner)), x, z, claimed);
         ip.setClaimed(claimed);
         return ip;
     }
+
     public static HashMap<Integer, IslandProfile> getIslandDataFromIndexFile(int start, int end) {
         File file = new File("plugins/" + SB.name() + "/" + Settings.islandIndexFileName);
         if(!file.exists()) reloadFiles();
@@ -219,7 +218,7 @@ public class IslandManager {
                         }
                        //SB.log("Loaded Profiles from " + lastLoadedId + " to " + (lastLoadedId + loadPerSecond));
                         lastLoadedId += loadPerSecond;
-                    } else if(lastLoadedId <= amountGenerated){
+                    } else if(lastLoadedId < amountGenerated) {
                         //Load the last single profiles
                         IslandProfile ip = getIslandDataFromIndexFile(lastLoadedId);
                         profiles.put(lastLoadedId, ip);
@@ -227,7 +226,7 @@ public class IslandManager {
                     } else {
                         cancel();
                         long ended = System.currentTimeMillis();
-                        Chat.debug("Finished loading all " + amountGenerated + " IslandProfiles!", "Took " + ((ended - started) / 1000) + " Seconds");
+                        //Chat.debug("Finished loading all " + amountGenerated + " IslandProfiles!", "Took " + ((ended - started) / 1000) + " Seconds");
                     }
                 }
             };

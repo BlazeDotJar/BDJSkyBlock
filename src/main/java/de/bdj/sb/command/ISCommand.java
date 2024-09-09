@@ -202,12 +202,9 @@ public class ISCommand implements CommandExecutor, TabCompleter {
                                         Chat.error(p, "Dieser Spieler ist bereits Member auf deiner Insel.");
                                         return false;
                                     }
-                                    ConfirmSession cs = new ConfirmSession(target, "/is confirm", "/is deny", "Das Hinzufügen eines Members wurde abgebrochen.", ConfirmSession.ConfirmReason.MEMBER_OPERATION);
-                                    cs.addExtraData("inviter_player", p);
-                                    cs.addExtraData("target_player", target);
-                                    ProfileManager.getProfile(target.getUniqueId()).addTempSession(cs);
-                                    Chat.info(target, XColor.c2 + "Du wurdest von §f" + p.getName() + XColor.c2 + " auf eine gemeinsame Insel eingeladen.");
-                                    cs.start();
+                                    //Start ConfirmationSession for member adding
+                                    SkyBlockFunction.startAddMemberConfirmation(target, p);
+
                                     Chat.info(p, "Du hast " + target.getName() + " zu deiner Insel eingeladen.");
                                 } else Chat.error(p, "Der Spieler ist nicht online.");
                             } else if(args[2].equalsIgnoreCase("remove")) {

@@ -32,6 +32,8 @@ public class GuiButtonManager {
     private static ItemStack PROP_STATE_OFF;
     private static ItemStack KILL_MONSTERS;
     private static ItemStack DEV_TOOL_BIOME_CHANGE;
+    private static ItemStack DEV_BUILD_COL;
+    private static ItemStack DEV_BUILD_COL_2;
 
     public GuiButtonManager() {
         CREATE_CLASSIC_SKYBLOCK = new ItemStack(Material.GRASS_BLOCK);
@@ -69,6 +71,7 @@ public class GuiButtonManager {
         ISLAND_TELEPORT = new ItemStack(Material.COMPASS);
         meta = ISLAND_TELEPORT.getItemMeta();
         meta.setDisplayName("§bTeleportiere dich auf deine Insel");
+        meta.setCustomModelData(99);
 
         key = new NamespacedKey(SB.getInstance(), "guibtn_teleport_skyblock");
         meta.getPersistentDataContainer().set(key, PersistentDataType.STRING, "");
@@ -346,12 +349,53 @@ public class GuiButtonManager {
         meta.addItemFlags(ItemFlag.HIDE_ADDITIONAL_TOOLTIP);
         DEV_TOOL_BIOME_CHANGE.setItemMeta(meta);
         lore.clear();
+
+        DEV_BUILD_COL = new ItemStack(Material.COMPASS);
+        meta = DEV_BUILD_COL.getItemMeta();
+
+        key = new NamespacedKey(SB.getInstance(), "guibtn_dev_tool_build_column");
+        meta.getPersistentDataContainer().set(key, PersistentDataType.STRING, "");
+        key = new NamespacedKey(SB.getInstance(), "sb_guibtn");
+        meta.getPersistentDataContainer().set(key, PersistentDataType.STRING, "");
+        meta.setCustomModelData(98);
+
+        lore = new ArrayList<>();
+        lore.add("2x1 Column");
+        meta.setLore(lore);
+        meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+        meta.addItemFlags(ItemFlag.HIDE_ADDITIONAL_TOOLTIP);
+        DEV_BUILD_COL.setItemMeta(meta);
+        lore.clear();
+
+
+        DEV_BUILD_COL_2 = new ItemStack(Material.COMPASS);
+        meta = DEV_BUILD_COL_2.getItemMeta();
+
+        key = new NamespacedKey(SB.getInstance(), "guibtn_dev_tool_build_column");
+        meta.getPersistentDataContainer().set(key, PersistentDataType.STRING, "");
+        key = new NamespacedKey(SB.getInstance(), "sb_guibtn");
+        meta.getPersistentDataContainer().set(key, PersistentDataType.STRING, "");
+        meta.setCustomModelData(97);
+
+        lore = new ArrayList<>();
+        lore.add("1x1 Column");
+        meta.setLore(lore);
+        meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+        meta.addItemFlags(ItemFlag.HIDE_ADDITIONAL_TOOLTIP);
+        DEV_BUILD_COL_2.setItemMeta(meta);
+        lore.clear();
     }
 
     public static ItemStack getGuiBtn(GuiButtonType gbt) {
         switch (gbt) {
             case DEV_TOOL_BIOME_CHANGE -> {
-                return DEV_TOOL_BIOME_CHANGE;
+                return DEV_TOOL_BIOME_CHANGE.clone();
+            }
+            case DEV_BUILD_COL -> {
+                return DEV_BUILD_COL.clone();
+            }
+            case DEV_BUILD_COL_2 -> {
+                return DEV_BUILD_COL_2.clone();
             }
             case CREATE_CLASSIC_SKYBLOCK -> {
                 return CREATE_CLASSIC_SKYBLOCK.clone();

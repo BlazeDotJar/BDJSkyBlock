@@ -46,7 +46,7 @@ public class IslandProfile {
         area = new IslandArea(p1, p2);
 
         if(ownerUuid == null) {
-            spawnPoint = new Location(p1.getWorld(), x + IslandManager.islandDiameter, IslandManager.islandY, z + IslandManager.islandDiameter);
+            spawnPoint = new Location(p1.getWorld(), x + (IslandManager.islandDiameter / 2), IslandManager.islandY, z + (IslandManager.islandDiameter / 2));
         } else spawnPoint = IslandDataReader.getSpawnPoint(ownerUuid.toString());
 
         loadData();
@@ -85,20 +85,22 @@ public class IslandProfile {
 
 
     public void teleport(LivingEntity ent) {
+        Location l = null;
         if(spawnPoint != null) {
             Location l2 = spawnPoint.clone().add(0, -1, 0);
             if(l2.getBlock().getType() == Material.AIR || l2.getBlock().getType() == Material.LAVA) l2.getBlock().setType(Material.GLASS);
-            ent.setFallDistance(0f);
-            ent.teleport(spawnPoint);
-            Chat.debug("Tp1");
+            l = spawnPoint.clone();
         } else {
             Location loc = islandLocation.clone().add(((double) IslandManager.islandDiameter / 2) + 0.5, 0, ((double) IslandManager.islandDiameter / 2) + 0.5);
             Location l1 = loc.clone().add(0,-1,0);
             if(l1.getBlock().getType() == Material.AIR || l1.getBlock().getType() == Material.LAVA) l1.getBlock().setType(Material.GLASS);
-            ent.setFallDistance(0f);
-            ent.teleport(loc);
-            Chat.debug("Tp2");
+            l = loc.clone();
         }
+
+        if(l.getBlock().getType() != Material.AIR) l.getBlock().setType(Material.AIR);
+        if(l.clone().add(0,1,0).getBlock().getType() != Material.AIR) l.clone().add(0,1,0).getBlock().setType(Material.AIR);
+        ent.setFallDistance(0f);
+        ent.teleport(l);
     }
 
     public int getIslandId() {

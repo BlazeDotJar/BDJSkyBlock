@@ -8,7 +8,9 @@ import de.bdj.sb.island.result.IslandCreatorReserveResult;
 import de.bdj.sb.island.result.RemoveMemberFromIslandResult;
 import de.bdj.sb.profile.PlayerProfile;
 import de.bdj.sb.profile.ProfileManager;
+import de.bdj.sb.session.ConfirmSession;
 import de.bdj.sb.utlility.Chat;
+import de.bdj.sb.utlility.XColor;
 import org.bukkit.entity.Player;
 
 public class SkyBlockFunction {
@@ -75,6 +77,15 @@ public class SkyBlockFunction {
             }
 
         }
+    }
+
+    public static void startAddMemberConfirmation(Player target, Player inviter) {
+        ConfirmSession cs = new ConfirmSession(target, "/is confirm", "/is deny", "Das Hinzufügen eines Members wurde abgebrochen.", ConfirmSession.ConfirmReason.MEMBER_OPERATION);
+        cs.addExtraData("inviter_player", inviter);
+        cs.addExtraData("target_player", target);
+        ProfileManager.getProfile(target.getUniqueId()).addTempSession(cs);
+        Chat.info(target, XColor.c2 + "Du wurdest von §f" + inviter.getName() + XColor.c2 + " auf eine gemeinsame Insel eingeladen.");
+        cs.start();
     }
 
 }

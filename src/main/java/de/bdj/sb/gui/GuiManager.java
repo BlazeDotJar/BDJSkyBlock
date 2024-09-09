@@ -51,6 +51,8 @@ public class GuiManager {
 
         inv.setItem(8, close);
         inv.setItem(0, GuiButtonManager.getGuiBtn(GuiButtonType.DEV_TOOL_BIOME_CHANGE));
+        inv.setItem(1, GuiButtonManager.getGuiBtn(GuiButtonType.DEV_BUILD_COL));
+        inv.setItem(2, GuiButtonManager.getGuiBtn(GuiButtonType.DEV_BUILD_COL_2));
 
         p.openInventory(inv);
     }
