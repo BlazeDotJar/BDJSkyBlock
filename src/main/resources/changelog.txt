@@ -15,6 +15,26 @@
           -> Bug description: "DESCRIPTION"
           -> FIX: Description of the fix
 ------------------------------------------------------------------------
+  24.09.2024 - 20:50
+  Version: 0.14.1_5
+  Changes:
+    - Added Member GUI
+    - Added member administration gui
+        -> Remove from members
+        -> Ban from island
+        -> Toggle member specific properties in the member administration gui
+            -> MobKilling Property
+            -> Modify Property
+  New Bug:
+    - BUG: _5
+        -> Members GUI, skin of the members does not load to the skull when the player is offline
+------------------------------------------------------------------------
+  11.09.2024 - XX:XX
+  Version: 0.13.1_4
+  Changes:
+    - Added command '/sb delmember'
+        -> Support an island owner with removing some members
+------------------------------------------------------------------------
   09.09.2024 - 18:30
   Version: 0.12.1_4
   Changes:

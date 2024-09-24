@@ -32,9 +32,11 @@ public class Perms {
         else if(command.equalsIgnoreCase("is help")) return "bdj.is.help";
         else if(command.equalsIgnoreCase("is delete")) return "bdj.is.delete";
         else if(command.equalsIgnoreCase("is member")) return "bdj.is.member";
+        else if(command.equalsIgnoreCase("is members")) return "bdj.is.members";
         else if(command.equalsIgnoreCase("is quit")) return "bdj.is.quit";
         else if(command.equalsIgnoreCase("is ban")) return "bdj.is.ban";
         else if(command.equalsIgnoreCase("is confirm")) return "bdj.is.confirm";
+        else if(command.equalsIgnoreCase("is info")) return "bdj.is.info";
 
         return "no permissions found for cmd " + command;
     }

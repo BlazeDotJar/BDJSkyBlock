@@ -1,7 +1,5 @@
 package de.bdj.sb;
 
-import de.bdj.NameFetcher;
-import de.bdj.UUIDFetcher;
 import de.bdj.sb.command.ISCommand;
 import de.bdj.sb.command.SBCommand;
 import de.bdj.sb.command.SBDEVCommand;

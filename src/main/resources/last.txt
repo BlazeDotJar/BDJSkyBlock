@@ -1,0 +1,2 @@
+Ich bin stehen geblieben beim erstellen der "RemoveMemberFromIslandResult" in der SkyBlockFunction Methode.
+Ursprünglich wollte ich den Bfehl "/is ban" machen.

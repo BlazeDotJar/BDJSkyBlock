@@ -1,6 +1,8 @@
 package de.bdj.sb.gui;
 
 import de.bdj.sb.SB;
+import de.bdj.sb.island.IslandManager;
+import de.bdj.sb.utlility.XColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemFlag;
@@ -30,6 +32,7 @@ public class GuiButtonManager {
     private static ItemStack PROP_NATURAL_MONSTER_SPAWN;
     private static ItemStack PROP_STATE_ON;
     private static ItemStack PROP_STATE_OFF;
+    private static ItemStack MEMBERS_GUI;
     private static ItemStack KILL_MONSTERS;
     private static ItemStack DEV_TOOL_BIOME_CHANGE;
     private static ItemStack DEV_BUILD_COL;
@@ -330,6 +333,23 @@ public class GuiButtonManager {
         RELOAD_DATA.setItemMeta(meta);
         lore.clear();
 
+        MEMBERS_GUI = new ItemStack(Material.PLAYER_HEAD);
+        meta = MEMBERS_GUI.getItemMeta();
+        meta.setDisplayName("§6Insel Member anzeigen");
+
+        key = new NamespacedKey(SB.getInstance(), "guibtn_members");
+        meta.getPersistentDataContainer().set(key, PersistentDataType.STRING, "");
+        key = new NamespacedKey(SB.getInstance(), "sb_guibtn");
+        meta.getPersistentDataContainer().set(key, PersistentDataType.STRING, "");
+
+        lore = new ArrayList<>();
+        lore.add("§fVerwalte deine Insel Member.");
+        meta.setLore(lore);
+        meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+        meta.addItemFlags(ItemFlag.HIDE_ADDITIONAL_TOOLTIP);
+        MEMBERS_GUI.setItemMeta(meta);
+        lore.clear();
+
         // Dev Tool Buttons
 
         DEV_TOOL_BIOME_CHANGE = new ItemStack(Material.OAK_SAPLING);
@@ -453,6 +473,9 @@ public class GuiButtonManager {
             }
             case RELOAD_DATA -> {
                 return RELOAD_DATA;
+            }
+            case MEMBERS_GUI -> {
+                return MEMBERS_GUI;
             }
             default -> {
                 return null;

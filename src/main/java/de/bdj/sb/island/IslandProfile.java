@@ -30,6 +30,7 @@ public class IslandProfile {
     private Location spawnPoint = null;
     private final IslandArea area;
     private final ArrayList<String> members = new ArrayList<>(); //String = UUID as String
+    private final HashMap<String, MemberProfile> memberProfiles = new HashMap<>(); //String = UUID as String
     private final ArrayList<String> bannedPlayers = new ArrayList<>(); //String = UUID as String
     private HashMap<String, String> properties = new HashMap<>(); //String = UUID as String
 
@@ -80,7 +81,20 @@ public class IslandProfile {
                 properties.put(key, value);
             }
         }
+        if(!members.isEmpty()) {
+            for(String mUuid : members) {
+                memberProfiles.put(mUuid, new MemberProfile(mUuid, islandId));
+            }
+        }
 
+    }
+
+    public void saveMemberProfiles() {
+        if(memberProfiles.isEmpty()) return;
+
+        for(MemberProfile mp : memberProfiles.values()) {
+            mp.saveData();
+        }
     }
 
 
@@ -158,6 +172,10 @@ public class IslandProfile {
 
     public ArrayList<String> getMembers() {
         return members;
+    }
+
+    public MemberProfile getMemberProfile(String memberUuid) {
+        return memberProfiles.get(memberUuid);
     }
 
     public boolean isMember(UUID uuid) {

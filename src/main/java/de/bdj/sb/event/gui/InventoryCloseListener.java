@@ -10,6 +10,8 @@ public class InventoryCloseListener {
     public static void onInventoryClose(InventoryCloseEvent e) {
         if(e.getView().getTitle().equalsIgnoreCase(GuiManager.ISLAND_PROPERTIES_TITLE)) {
             IslandManager.getLoadedIslandProfile(ProfileManager.getProfile(e.getPlayer().getUniqueId()).getIslandId()).saveProperties();
+        } else if(e.getView().getTitle().equalsIgnoreCase(GuiManager.MEMBER_ADMINISTRATION_GUI_TITLE)) {
+            IslandManager.getLoadedIslandProfile(ProfileManager.getProfile(e.getPlayer().getUniqueId()).getIslandId()).saveMemberProfiles();
         }
     }
 

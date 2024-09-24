@@ -1,5 +1,6 @@
 package de.bdj.sb.command;
 
+import de.bdj.NameFetcher;
 import de.bdj.sb.SB;
 import de.bdj.sb.Settings;
 import de.bdj.sb.gui.GuiManager;
@@ -25,6 +26,7 @@ import org.bukkit.entity.Player;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 public class ISCommand implements CommandExecutor, TabCompleter {
 
@@ -56,7 +58,11 @@ public class ISCommand implements CommandExecutor, TabCompleter {
                         }
                         break;
                     case 1:
-                        if(args[0].equalsIgnoreCase("create") && Perms.hasPermission(p, Perms.getPermission("is create"))) {
+                        if(args[0].equalsIgnoreCase("info") && Perms.hasPermission(p, Perms.getPermission("is info"))) {
+                            Chat.info(p, "Nützliche Informationen:");
+                            Chat.info(p, false, " - Dein Standort: Insel " + XColor.green + pro.getIslandIsCurrentIn());
+                            Chat.info(p, false, " - Deine Insel: " + XColor.green + pro.getIslandId());
+                        }else if(args[0].equalsIgnoreCase("create") && Perms.hasPermission(p, Perms.getPermission("is create"))) {
                             SkyBlockFunction.createIsland(p);
                         } else if(args[0].equalsIgnoreCase("ban") && Perms.hasPermission(p, Perms.getPermission("is ban"))) {
                             Chat.sendSuggestCommandMessage(p, XColor.c2 + " /is ban <Spielername> §fVon Insel bannen", XColor.c3 + "Verbanne einen Spieler von deiner Insel. Dieser kann deine Insel also nicht betreten." + (p.isOp() ? XColor.c4 + "\nPermission: §f" + Perms.getPermission("is ban") : ""), "/is ban", false, false);
@@ -79,7 +85,19 @@ public class ISCommand implements CommandExecutor, TabCompleter {
                                     pro.addTempSession(cs);
                                 } else Chat.info(p, XColor.c2 + "Nutze §f/is confirm " + XColor.c2 + "um die Löschung zu bestätigen");
                             }
-                        } else if(args[0].equalsIgnoreCase("member") && Perms.hasPermission(p, Perms.getPermission("is member"))) {
+                        } else if(args[0].equalsIgnoreCase("members") && Perms.hasPermission(p, Perms.getPermission("is members"))) {
+                            IslandProfile ip = IslandManager.getLoadedIslandProfile(pro.getIslandId());
+                            ArrayList<String> mems = ip.getMembers();
+                            if(!mems.isEmpty()) {
+                                Chat.info(p, "Dies sind alle Member deiner Insel:");
+                                p.sendTitle("Lade Spielernamen","der Member", 0, 40, 0);
+                                for(String sUuid : mems) {
+                                    Chat.sendHoverableCommandHelpMessage(p, " - " + NameFetcher.getName(sUuid), XColor.green + "UUID: \n§f" + sUuid, false, false);
+                                }
+                            } else {
+                                Chat.info(p, "Deine Insel hat keine Member.");
+                            }
+                        }else if(args[0].equalsIgnoreCase("member") && Perms.hasPermission(p, Perms.getPermission("is member"))) {
                             Chat.sendSuggestCommandMessage(p, XColor.c2 + "/is member <Spielername> add §fMember hinzufügen", XColor.c3 + "Füge einen Spieler zu deiner Insel hinzu. Dieser kann ab diesen Zeitpunkt dann alles auf deiner Insel machen.\n" +
                                     "Beispielsweise kann dieser in Kisten schauen, bauen, abbauen.\n" +
                                     "Was er nicht kann ist, die Insel zu verwalten zum Beispiel: Member adden, removen.", "/is member <Spielername> add", false, false);
@@ -112,7 +130,7 @@ public class ISCommand implements CommandExecutor, TabCompleter {
                                         pro.removeTempSession(Settings.confirmationSessionKey, cs);
 
                                         IslandProfile ip = IslandManager.getLoadedIslandProfile(pro.getIslandId());
-                                        if(ip.getMembers().size() != 0) {
+                                        if(!ip.getMembers().isEmpty()) {
                                             Chat.error(p, "Du musst erst alle Member löschen um deine Insel löschen zu können!");
                                             return false;
                                         }
@@ -169,6 +187,7 @@ public class ISCommand implements CommandExecutor, TabCompleter {
                     case 2:
                         if(args[0].equalsIgnoreCase("ban") && Perms.hasPermission(p, Perms.getPermission("is ban"))) {
                             //TODO:
+
                         } else if(args[0].equalsIgnoreCase("member") && Perms.hasPermission(p, Perms.getPermission("is member"))) {
                             Chat.sendSuggestCommandMessage(p, XColor.c2 + "/is member <Spielername> add §fMember hinzufügen", XColor.c3 + "Füge einen Spieler zu deiner Insel hinzu. Dieser kann ab diesen Zeitpunkt dann alles auf deiner Insel machen.\n" +
                                     "Beispielsweise kann dieser in Kisten schauen, bauen, abbauen.\n" +
@@ -240,9 +259,11 @@ public class ISCommand implements CommandExecutor, TabCompleter {
                 Chat.sendClickableMessage(p, XColor.c2 + " /is create §fInsel erstellen", XColor.c2 + "Erstelle eine Insel." + (p.isOp() ? XColor.c4 + "\nPermission: §f" + Perms.getPermission("is create") : ""), "/is create", false, false);
                 Chat.sendClickableMessage(p, XColor.c2 + " /is help §fCommand Hilfe", XColor.c2 + "Liste alle /is Befehle auf um dir einen Überblick zu beschaffen." + (p.isOp() ? XColor.c4 + "\nPermission: §f" + Perms.getPermission("is help") : ""), "/is help", false, false);
                 Chat.sendSuggestCommandMessage(p, XColor.c2 + " /is delete §fInsel löschen", XColor.c2 + "Lösche deine Insel. Dies kann nicht rückgängig gemacht werden!" + (p.isOp() ? XColor.c4 + "\nPermission: §f" + Perms.getPermission("is delete") : ""), "/is delete", false, false);
+                Chat.sendSuggestCommandMessage(p, XColor.c2 + " /is members §fMembers listen", XColor.c2 + "Liste alle Member deiner Insel auf." + (p.isOp() ? XColor.c4 + "\nPermission: §f" + Perms.getPermission("is members") : ""), "/is members", false, false);
                 Chat.sendSuggestCommandMessage(p, XColor.c2 + " /is member §fMember verwalten", XColor.c2 + "Verwalte Member deiner Insel. Füge Spieler hinzu, entferne diese wieder, etc." + (p.isOp() ? XColor.c4 + "\nPermission: §f" + Perms.getPermission("is member") : ""), "/is member", false, false);
                 Chat.sendSuggestCommandMessage(p, XColor.c2 + " /is quit §fInsel verlassen", XColor.c2 + "Wenn du Member einer Insel bist, kannst du sie hiermit verlassen um ein eigene zu erstellen." + (p.isOp() ? XColor.c4 + "\nPermission: §f" + Perms.getPermission("is quit") : ""), "/is quit", false, false);
                 Chat.sendSuggestCommandMessage(p, XColor.c2 + " /is ban <Spielername> §fVon Insel bannen", XColor.c2 + "Verbanne einen Spieler von deiner Insel. Dieser kann deine Insel also nicht betreten." + (p.isOp() ? XColor.c4 + "\nPermission: §f" + Perms.getPermission("is ban") : ""), "/is ban", false, false);
+                Chat.sendSuggestCommandMessage(p, XColor.c2 + " /is info §fInsel Informationen", XColor.c2 + "Zeige Informationen über deine Insel an." + (p.isOp() ? XColor.c4 + "\nPermission: §f" + Perms.getPermission("is info") : ""), "/is info", false, false);
             }
         }
     }
@@ -255,7 +276,7 @@ public class ISCommand implements CommandExecutor, TabCompleter {
             if(cmd.getName().equalsIgnoreCase("is")) {
                 switch(args.length) {
                     case 1:
-                        return Arrays.asList("confirm", "deny", "create", "help", "delete", "member", "ban", "quit");
+                        return Arrays.asList("info", "confirm", "deny", "create", "help", "delete", "member",  "members", "ban", "quit");
                     case 2:
                         if(args[0].equalsIgnoreCase("ban")) {
                             return null;

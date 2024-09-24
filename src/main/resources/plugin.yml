@@ -1,6 +1,6 @@
 name: BDJSkyBlock
 author: BlazeDotJar
-version: 0.12.1_4
+version: 0.14.1_5
 api-version: 1.21
 depend:
   - 'BDJPlaceholder'
@@ -19,6 +19,7 @@ permissions:
     description: 'Give this permission only to developers'
     children:
       bdj.sb.admin: true
+      bdj.is.*: true
   #--Admin permissions-----------------------------------------------------
   bdj.sb.admin:
     description: 'Give this permission to all admins.'
@@ -52,6 +53,10 @@ permissions:
     description: 'Release an island to the market'
   bdj.sb.adminhelp:
     description: 'Show help for admins'
+  bdj.sb.addmember:
+    description: 'Help adding members'
+  bdj.sb.delmember:
+    description: 'Help removing members'
   #--Gameplay permissions-----------------------------------------------------
   bdj.is.*:
     description: 'Give this permission to all players'
@@ -61,9 +66,11 @@ permissions:
       bdj.is.help: true
       bdj.is.delete: true
       bdj.is.member: true
+      bdj.is.members: true
       bdj.is.quit: true
       bdj.is.ban: true
       bdj.is.confirm: true
+      bdj.is.info: true
   bdj.is:
     description: 'Teleport to your island'
   bdj.is.create:
@@ -74,9 +81,13 @@ permissions:
     description: 'Delete your island'
   bdj.is.member:
     description: 'Accept Member Invitation'
+  bdj.is.members:
+    description: 'List all members'
   bdj.is.quit:
     description: 'Quit an membered island'
   bdj.is.ban:
     description: 'Ban a player from your island'
   bdj.is.confirm:
     description: 'Confirm a critical task'
+  bdj.is.info:
+    description: 'Island Informations'

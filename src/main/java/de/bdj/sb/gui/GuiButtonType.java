@@ -21,6 +21,7 @@ public enum GuiButtonType {
     KILL_MONSTERS,
     SET_ISLAND_SPAWN,
     RELOAD_DATA,
+    MEMBERS_GUI,
     DEV_TOOL_BIOME_CHANGE,
     DEV_BUILD_COL,
     DEV_BUILD_COL_2;

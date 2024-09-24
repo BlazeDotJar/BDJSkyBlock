@@ -6,7 +6,9 @@ import de.bdj.sb.island.IslandDataWriter;
 import de.bdj.sb.island.IslandManager;
 import de.bdj.sb.island.IslandProfile;
 import de.bdj.sb.island.result.AddMemberToIslandResult;
+import de.bdj.sb.island.result.RemoveMemberFromIslandResult;
 import de.bdj.sb.island.result.SetIslandSpawnResult;
+import de.bdj.sb.lobby.Lobby;
 import de.bdj.sb.lobby.Waitlobby;
 import de.bdj.sb.profile.PlayerProfile;
 import de.bdj.sb.profile.ProfileManager;
@@ -82,6 +84,8 @@ public class SBCommand implements CommandExecutor, TabCompleter {
                             Chat.sendSuggestCommandMessage(p, XColor.c2 + " /sb setspawn <Insel-ID> §fFremden Inselspawn setzen", XColor.c2 + "Setzte den Insel Spawn einer anderen Insel, falls der Spieler dies nicht schaffe sollte." + (p.isOp() ? XColor.c4 + "\nPermission: §f" + Perms.getPermission("sb setspawn") : ""), "/sb setspawn", false, false);
                         } else if(args[0].equalsIgnoreCase("addmember") && Perms.hasPermission(p, Perms.getPermission("sb addmember"))) {
                             Chat.sendSuggestCommandMessage(p, XColor.c2 + " /sb addmember <Spielername> <Island-ID> <Force: true/false> §fEinen Freund hinzufügen", XColor.c2 + "Sollte ein Spieler es nicht schaffen, einen anderen Spieler als Freund zur Insel hinzuzufügen,\nkannst du es mit diesen Befehl versuchen und wenn nötig auch forcen." + (p.isOp() ? XColor.c4 + "\nPermission: §f" + Perms.getPermission("sb addmember") : ""), "/sb addmember", false, false);
+                        } else if(args[0].equalsIgnoreCase("delmember") && Perms.hasPermission(p, Perms.getPermission("sb delmember"))) {
+                            Chat.sendSuggestCommandMessage(p, XColor.c2 + " /sb delmember <Spielername> <Island-ID> §fEinen Freund löschen", XColor.c2 + "Sollte ein Spieler es nicht schaffen, einen anderen Spieler aus seiner Insel-Freundesliste zu löschen,\nkannst du es mit diesen Befehl forcen." + (p.isOp() ? XColor.c4 + "\nPermission: §f" + Perms.getPermission("sb delmember") : ""), "/sb delmember", false, false);
                         }
                             break;
                     case 2:
@@ -243,11 +247,48 @@ public class SBCommand implements CommandExecutor, TabCompleter {
                             }
                         } else if(args[0].equalsIgnoreCase("addmember") && Perms.hasPermission(p, Perms.getPermission("sb addmember"))) {
                             Chat.sendSuggestCommandMessage(p, XColor.c2 + " /sb addmember <Spielername> <Island-ID> <Force: true/false> §fEinen Freund hinzufügen", XColor.c2 + "Sollte ein Spieler es nicht schaffen, einen anderen Spieler als Freund zur Insel hinzuzufügen,\nkannst du es mit diesen Befehl versuchen und wenn nötig auch forcen." + (p.isOp() ? XColor.c4 + "\nPermission: §f" + Perms.getPermission("sb addmember") : ""), "/sb addmember", false, false);
+                        } else if(args[0].equalsIgnoreCase("delmember") && Perms.hasPermission(p, Perms.getPermission("sb delmember"))) {
+                            Chat.sendSuggestCommandMessage(p, XColor.c2 + " /sb delmember <Spielername> <Island-ID> §fEinen Freund löschen", XColor.c2 + "Sollte ein Spieler es nicht schaffen, einen anderen Spieler aus seiner Insel-Freundesliste zu löschen,\nkannst du es mit diesen Befehl forcen." + (p.isOp() ? XColor.c4 + "\nPermission: §f" + Perms.getPermission("sb delmember") : ""), "/sb delmember", false, false);
                         }
                         break;
                     case 3:
                         if(args[0].equalsIgnoreCase("addmember") && Perms.hasPermission(p, Perms.getPermission("sb addmember"))) {
                             Chat.sendSuggestCommandMessage(p, XColor.c2 + " /sb addmember <Spielername> <Island-ID> <Force: true/false> §fEinen Freund hinzufügen", XColor.c2 + "Sollte ein Spieler es nicht schaffen, einen anderen Spieler als Freund zur Insel hinzuzufügen,\nkannst du es mit diesen Befehl versuchen und wenn nötig auch forcen." + (p.isOp() ? XColor.c4 + "\nPermission: §f" + Perms.getPermission("sb addmember") : ""), "/sb addmember", false, false);
+                        } else if(args[0].equalsIgnoreCase("delmember") && Perms.hasPermission(p, Perms.getPermission("sb delmember"))) {
+                            String targetName = "";
+                            Player target = null;
+                            int islandId = 0;
+
+                            targetName = args[1];
+                            target = Bukkit.getPlayer(targetName);
+                            if(target == null) {
+                                Chat.error(p, "Der Spieler " + targetName + " ist nicht online oder ist falsch geschrieben");
+                                return false;
+                            }
+
+                            try {
+                                islandId = Integer.parseInt(args[2]);
+                                if(islandId < 1 || islandId > IslandManager.amountGenerated) throw new Exception();
+                            } catch(Exception ex) {
+                                Chat.error(p, "Die Island ID muss eine Ganzzahl zwischen 1 und " + (IslandManager.amountGenerated - 1) + " sein. Deine Angabe: §f" + args[2]);
+                                return false;
+                            }
+
+                            IslandProfile ip = IslandManager.getLoadedIslandProfile(islandId);
+                            Player remover = Bukkit.getPlayer(ip.getOwnerUuid());
+                            if(remover == null) {
+                                Chat.error(p, "Der Besitzer der Insel ist nicht online. Du kannst einen Spieler nur von einer Insel entfernen, wenn dessen Besitzer online ist!");
+                                return false;
+                            }
+
+                            RemoveMemberFromIslandResult rmfir = SkyBlockFunction.removeOnlineMember(remover, target);
+                            if (rmfir == RemoveMemberFromIslandResult.SUCCESS_MEMBER_REMOVE) {
+                                Chat.info(p, "Du hast den Spieler " + target.getName() + " von " + remover.getName() + "'s Insel entfernt.");
+                                if (ip.getArea().isIn(target.getLocation())) Lobby.teleport(target);
+                            } else if(rmfir == RemoveMemberFromIslandResult.CANCELLED_YOU_DO_NOT_HAVE_ISLAND) {
+                                Chat.error(p, "Die Insel " + islandId + " hat keinen Besitzer!");
+                                return false;
+                            }
                         }
                         break;
                     case 4:
@@ -311,10 +352,45 @@ public class SBCommand implements CommandExecutor, TabCompleter {
                             } else {
                                 Chat.info(p, "Du hast den Spieler " + target.getName() + " zur Insel " + islandId + " eingeladen.");
                             }
-                        } else if(args[0].equalsIgnoreCase("delmember") && Perms.hasPermission(p, Perms.getPermission("sb delmember"))) {
-                            //TODO
                         }
                         break;
+                }
+            }
+        } else {
+            if(args[0].equalsIgnoreCase("delmember")) {
+                String targetName = "";
+                Player target = null;
+                int islandId = 0;
+
+                targetName = args[1];
+                target = Bukkit.getPlayer(targetName);
+                if(target == null) {
+                    Chat.error(sender, "Der Spieler " + targetName + " ist nicht online oder ist falsch geschrieben");
+                    return false;
+                }
+
+                try {
+                    islandId = Integer.parseInt(args[2]);
+                    if(islandId < 1 || islandId > IslandManager.amountGenerated) throw new Exception();
+                } catch(Exception ex) {
+                    Chat.error(sender, "Die Island ID muss eine Ganzzahl zwischen 1 und " + (IslandManager.amountGenerated - 1) + " sein. Deine Angabe: §f" + args[2]);
+                    return false;
+                }
+
+                IslandProfile ip = IslandManager.getLoadedIslandProfile(islandId);
+                Player remover = Bukkit.getPlayer(ip.getOwnerUuid());
+                if(remover == null) {
+                    Chat.error(sender, "Der Besitzer der Insel ist nicht online. Du kannst einen Spieler nur von einer Insel entfernen, wenn dessen Besitzer online ist!");
+                    return false;
+                }
+
+                RemoveMemberFromIslandResult rmfir = SkyBlockFunction.removeOnlineMember(remover, target);
+                if (rmfir == RemoveMemberFromIslandResult.SUCCESS_MEMBER_REMOVE) {
+                    Chat.info(sender, "Du hast den Spieler " + target.getName() + " von " + remover.getName() + "'s Insel entfernt.");
+                    if (ip.getArea().isIn(target.getLocation())) Lobby.teleport(target);
+                } else if(rmfir == RemoveMemberFromIslandResult.CANCELLED_YOU_DO_NOT_HAVE_ISLAND) {
+                    Chat.error(sender, "Die Insel " + islandId + " hat keinen Besitzer!");
+                    return false;
                 }
             }
         }
@@ -369,6 +445,7 @@ public class SBCommand implements CommandExecutor, TabCompleter {
                         else if(args[0].equalsIgnoreCase("islands") && Perms.hasPermission(p, Perms.getPermission("sb islands"), false)) return Arrays.asList("1-10");
                         else if(args[0].equalsIgnoreCase("tp") && Perms.hasPermission(p, Perms.getPermission("sb tp"), false)) return Arrays.asList("1");
                         else if(args[0].equalsIgnoreCase("addmember") && Perms.hasPermission(p, Perms.getPermission("sb addmember"), false)) return null;
+                        else if(args[0].equalsIgnoreCase("delmember") && Perms.hasPermission(p, Perms.getPermission("sb delmember"), false)) return null;
                     case 4:
                         if(args[0].equalsIgnoreCase("addmember") && Perms.hasPermission(p, Perms.getPermission("sb addmember"), false)) return Arrays.asList("true", "false");
                 }

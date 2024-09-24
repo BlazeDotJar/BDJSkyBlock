@@ -1,5 +1,6 @@
 package de.bdj.sb.gui.function;
 
+import de.bdj.NameFetcher;
 import de.bdj.sb.SB;
 import de.bdj.sb.Settings;
 import de.bdj.sb.command.SkyBlockFunction;
@@ -11,6 +12,7 @@ import de.bdj.sb.island.result.SetIslandSpawnResult;
 import de.bdj.sb.island.weapi.WETools;
 import de.bdj.sb.profile.ProfileManager;
 import de.bdj.sb.utlility.Chat;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.Biome;
@@ -76,10 +78,68 @@ public class DashboardFunction {
                     Chat.sendOperatorMessage("Der Spieler " + e.getWhoClicked().getName() + " hat versucht seinen Insel Spawnpunkt zu setzen. Die Insel Datei existiert aber nicht.", "Eventuell ist der gesamte Fortschritt von dem Spieler weg!", "Kontaktiere bitte sofort einen Developer oder die letzte Person, die an den Server Dateien gespielt hat!");
                 }
             }
-        }  else if(meta.getPersistentDataContainer().has(new NamespacedKey(SB.getInstance(), "sb_navigation"))) {
+        } else if(meta.getPersistentDataContainer().has(new NamespacedKey(SB.getInstance(), "guibtn_members"))) {
+            // Open Members GUI
+            GuiManager.openIslandMembersGui((Player) e.getWhoClicked(), ProfileManager.getProfile(e.getWhoClicked().getUniqueId()).getIslandId());
+
+        } else if(meta.getPersistentDataContainer().has(new NamespacedKey(SB.getInstance(), "sb_member"))) {
+            // Open MemberProfile GUI
+            String value = meta.getPersistentDataContainer().get(new NamespacedKey(SB.getInstance(), "sb_member"), PersistentDataType.STRING);
+            String memberUuid = meta.getPersistentDataContainer().get(new NamespacedKey(SB.getInstance(), "sb_target_member"), PersistentDataType.STRING);
+            if(value.equalsIgnoreCase("refresh members")) {
+                GuiManager.openIslandMembersGui((Player)e.getWhoClicked(), ip.getIslandId());
+            } else if(value.equalsIgnoreCase("open member profile")) {
+
+                if (meta.getPersistentDataContainer().has(new NamespacedKey(SB.getInstance(), "sb_target_member"))) {
+                    GuiManager.openMemberProfile((Player) e.getWhoClicked(), ip.getIslandId(), memberUuid);
+                } else Chat.debug("Error while opening member profile. PersistentData \"sb_target_member\" is missing! DashboardFunction.java Section \"Open MemberProfile GUI\"");
+            } else if(value.equalsIgnoreCase("remove")) {
+                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "sb delmember " + NameFetcher.getName(memberUuid) + " " + ip.getIslandId());
+                //ip.removeMember(memberUuid);
+                GuiManager.openIslandMembersGui((Player) e.getWhoClicked(), ip.getIslandId());
+                Chat.info(e.getWhoClicked(), "Du hast " + NameFetcher.getName(memberUuid) + " die MemberRolle entzogen!");
+            } else if(value.equalsIgnoreCase("ban")) {
+                //TODO:
+                // ip.ban(memberUuid);
+                Chat.info(e.getWhoClicked(), "Du hast " + NameFetcher.getName(memberUuid) + " von deiner Insel gebannt!");
+            } else if(meta.getPersistentDataContainer().has(new NamespacedKey(SB.getInstance(), "sb_member_prop_mobkilling"))) {
+                // Member Property: Mobkilling
+                String propValue = meta.getPersistentDataContainer().get(new NamespacedKey(SB.getInstance(), "sb_member_prop_mobkilling"), PersistentDataType.STRING);
+
+                if(propValue.equalsIgnoreCase("deny")) {
+                    if(memberUuid != null) {
+                        ip.getMemberProfile(memberUuid).mobkilling(false);
+                        GuiManager.openMemberProfile((Player) e.getWhoClicked(), ip.getIslandId(), memberUuid);
+                    }
+                } else if(propValue.equalsIgnoreCase("allow")) {
+                    if(memberUuid != null) {
+                        ip.getMemberProfile(memberUuid).mobkilling(true);
+                        GuiManager.openMemberProfile((Player) e.getWhoClicked(), ip.getIslandId(), memberUuid);
+                    }
+                }
+
+            } else if(meta.getPersistentDataContainer().has(new NamespacedKey(SB.getInstance(), "sb_member_prop_modify"))) {
+                // Member Property: Modify
+                String propValue = meta.getPersistentDataContainer().get(new NamespacedKey(SB.getInstance(), "sb_member_prop_modify"), PersistentDataType.STRING);
+
+                if(propValue.equalsIgnoreCase("deny")) {
+                    if(memberUuid != null) {
+                        ip.getMemberProfile(memberUuid).modify(false);
+                        GuiManager.openMemberProfile((Player) e.getWhoClicked(), ip.getIslandId(), memberUuid);
+                    }
+                } else if(propValue.equalsIgnoreCase("allow")) {
+                    if(memberUuid != null) {
+                        ip.getMemberProfile(memberUuid).modify(true);
+                        GuiManager.openMemberProfile((Player) e.getWhoClicked(), ip.getIslandId(), memberUuid);
+                    }
+                }
+            }
+
+        } else if(meta.getPersistentDataContainer().has(new NamespacedKey(SB.getInstance(), "sb_navigation"))) {
             String value = meta.getPersistentDataContainer().get(new NamespacedKey(SB.getInstance(), "sb_navigation"), PersistentDataType.STRING);
             if(value.equalsIgnoreCase("dashboard")) GuiManager.openIslandDashboard((Player) e.getWhoClicked());
             else if(value.equalsIgnoreCase("close")) e.getWhoClicked().closeInventory();
+            else if(value.equalsIgnoreCase("members")) GuiManager.openIslandMembersGui((Player) e.getWhoClicked(), ip.getIslandId());
             else if(e.getWhoClicked().isOp()) Chat.error(e.getWhoClicked(), "Dieses Item hat keine Funktion. Melde das bitte BlazeDotJar!");
         } else if(meta.getPersistentDataContainer().has(new NamespacedKey(SB.getInstance(), "sb_prop"))) {
             String value = meta.getPersistentDataContainer().get(new NamespacedKey(SB.getInstance(), "sb_prop"), PersistentDataType.STRING);

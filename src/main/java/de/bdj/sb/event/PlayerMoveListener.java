@@ -4,6 +4,7 @@ import de.bdj.sb.Settings;
 import de.bdj.sb.island.IslandManager;
 import de.bdj.sb.island.IslandProfile;
 import de.bdj.sb.profile.ProfileManager;
+import de.bdj.sb.utlility.Chat;
 import de.bdj.sb.utlility.XColor;
 import org.bukkit.event.player.PlayerMoveEvent;
 
@@ -23,7 +24,13 @@ public class PlayerMoveListener {
 
             IslandProfile ip = IslandManager.getIslandLocationIsIn(e.getPlayer().getLocation());
             if(ip != null && ip.getIslandId() != ProfileManager.getProfile(e.getPlayer().getUniqueId()).getIslandIsCurrentIn()) {
-               e.getPlayer().sendTitle("", XColor.green + "Du hast die Insel " + ip.getIslandId() + " Betreten", 10, 20, 10);
+
+                if(ip.getBannedPlayers().contains(e.getPlayer().getUniqueId().toString())) {
+                    e.getPlayer().teleport(e.getFrom());
+                    e.getPlayer().sendTitle("§cDu bist gebannt", "§cauf dieser Insel! Nutze §f/is", 0, 20, 0);
+                    return;
+                }
+                e.getPlayer().sendTitle("", XColor.green + "Du hast die Insel " + ip.getIslandId() + " Betreten", 10, 20, 10);
                 ProfileManager.getProfile(e.getPlayer().getUniqueId()).setIslandIsCurrentIn(ip.getIslandId());
             }
         }

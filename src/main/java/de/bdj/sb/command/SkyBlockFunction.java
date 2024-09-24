@@ -13,6 +13,8 @@ import de.bdj.sb.utlility.Chat;
 import de.bdj.sb.utlility.XColor;
 import org.bukkit.entity.Player;
 
+import java.util.UUID;
+
 public class SkyBlockFunction {
 
     public static AddMemberToIslandResult addOnlineMember(Player owner, Player target) {
@@ -39,6 +41,20 @@ public class SkyBlockFunction {
             return RemoveMemberFromIslandResult.CANCELLED_YOU_DO_NOT_HAVE_ISLAND;
         } else if(targetIslandId == ownerIslandId) {
             if(IslandDataWriter.removeMemberFromIsland(ownerIslandId, target.getUniqueId())) {
+                return RemoveMemberFromIslandResult.SUCCESS_MEMBER_REMOVE;
+            } else return RemoveMemberFromIslandResult.CANCELLED_PLAYER_IS_NOT_MEMBER;
+        } else return RemoveMemberFromIslandResult.CANCELLED_PLAYER_IS_NOT_MEMBER;
+    }
+
+    public static RemoveMemberFromIslandResult removeOfflineMember(Player owner, UUID targetUuid) {
+        int ownerIslandId = ProfileManager.getProfile(owner.getUniqueId()).getIslandId();
+        IslandProfile ip = IslandManager.getLoadedIslandProfile(ownerIslandId);
+
+        if(ownerIslandId < 1) {
+            Chat.error(owner, "Du musst dir erst selbst eine Insel erstellen.");
+            return RemoveMemberFromIslandResult.CANCELLED_YOU_DO_NOT_HAVE_ISLAND;
+        } else if(!ip.getMembers().contains(targetUuid.toString())) {
+            if(IslandDataWriter.removeMemberFromIsland(ownerIslandId, targetUuid)) {
                 return RemoveMemberFromIslandResult.SUCCESS_MEMBER_REMOVE;
             } else return RemoveMemberFromIslandResult.CANCELLED_PLAYER_IS_NOT_MEMBER;
         } else return RemoveMemberFromIslandResult.CANCELLED_PLAYER_IS_NOT_MEMBER;
