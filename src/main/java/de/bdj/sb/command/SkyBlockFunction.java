@@ -25,6 +25,7 @@ public class SkyBlockFunction {
             return AddMemberToIslandResult.CANCELLED_YOU_DO_NOT_HAVE_ISLAND;
         } else if(targetIslandId < 1) {
             if(IslandDataWriter.addMemberToIsland(ownerIslandId, target.getUniqueId())) {
+                //IslandManager.getLoadedIslandProfile(ProfileManager.getProfile(owner.getUniqueId()).getIslandId()).loadData();
                 return AddMemberToIslandResult.SUCCESS_MEMBER_ADDED;
             } else return AddMemberToIslandResult.CANCELLED_PLAYER_IS_ALREADY_MEMBER;
         } else {

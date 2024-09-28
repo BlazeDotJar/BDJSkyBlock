@@ -342,6 +342,10 @@ public class SBCommand implements CommandExecutor, TabCompleter {
                                 return false;
                             }
 
+                            if(ip.getOwnerUuid() == null) {
+                                Chat.error(p, "Die Insel mit der Insel ID " + islandId + " hat keinen Besitzer.");
+                                return false;
+                            }
                             Player inviter = Bukkit.getPlayer(ip.getOwnerUuid());
 
                             SkyBlockFunction.startAddMemberConfirmation(target, inviter);

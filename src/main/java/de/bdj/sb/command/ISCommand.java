@@ -3,7 +3,7 @@ package de.bdj.sb.command;
 import de.bdj.NameFetcher;
 import de.bdj.sb.SB;
 import de.bdj.sb.Settings;
-import de.bdj.sb.gui.GuiManager;
+import de.bdj.sb.gui.DashboardGUI;
 import de.bdj.sb.island.IslandDataWriter;
 import de.bdj.sb.island.IslandManager;
 import de.bdj.sb.island.IslandProfile;
@@ -26,7 +26,6 @@ import org.bukkit.entity.Player;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.UUID;
 
 public class ISCommand implements CommandExecutor, TabCompleter {
 
@@ -50,7 +49,7 @@ public class ISCommand implements CommandExecutor, TabCompleter {
                 switch (args.length) {
                     case 0:
                         if(Settings.useGui) {
-                            GuiManager.openIslandDashboard(p);
+                            DashboardGUI.open(p);
                         } else {
                             if(pro.getIslandId() >= 1) {
                                 IslandManager.getLoadedIslandProfile(pro.getIslandId()).teleport(p);

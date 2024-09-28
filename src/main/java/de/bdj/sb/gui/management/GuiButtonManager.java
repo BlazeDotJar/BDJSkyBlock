@@ -1,8 +1,6 @@
-package de.bdj.sb.gui;
+package de.bdj.sb.gui.management;
 
 import de.bdj.sb.SB;
-import de.bdj.sb.island.IslandManager;
-import de.bdj.sb.utlility.XColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemFlag;
@@ -14,6 +12,9 @@ import java.util.ArrayList;
 
 public class GuiButtonManager {
 
+    /* BLOCK #1003 */
+    // "Register new property"
+    // Create a new itemstack corresponding to the new property
     private static ItemStack CREATE_CLASSIC_SKYBLOCK;
     private static ItemStack CREATE_ONE_BLOCK_SKYBLOCK;
     private static ItemStack ISLAND_TELEPORT;
@@ -34,11 +35,17 @@ public class GuiButtonManager {
     private static ItemStack PROP_STATE_OFF;
     private static ItemStack MEMBERS_GUI;
     private static ItemStack KILL_MONSTERS;
+    private static ItemStack PROP_MOB_KILLING;
     private static ItemStack DEV_TOOL_BIOME_CHANGE;
     private static ItemStack DEV_BUILD_COL;
     private static ItemStack DEV_BUILD_COL_2;
+    // BLOCK #1003 END
 
     public GuiButtonManager() {
+        /* BLOCK #1005 */
+        // "Register new property"
+        // Define the new itemstack
+        // BLOCK #1005 END
         CREATE_CLASSIC_SKYBLOCK = new ItemStack(Material.GRASS_BLOCK);
         ItemMeta meta = CREATE_CLASSIC_SKYBLOCK.getItemMeta();
         meta.setDisplayName("Classic SkyBlock erstellen");
@@ -280,6 +287,23 @@ public class GuiButtonManager {
         PROP_NATURAL_MONSTER_SPAWN.setItemMeta(meta);
         lore.clear();
 
+        PROP_MOB_KILLING = new ItemStack(Material.TOTEM_OF_UNDYING);
+        meta = PROP_MOB_KILLING.getItemMeta();
+        meta.setDisplayName("§6Mob Killing");
+
+        key = new NamespacedKey(SB.getInstance(), "guibtn_island_properties_mob_killing_skyblock");
+        meta.getPersistentDataContainer().set(key, PersistentDataType.STRING, "");
+        key = new NamespacedKey(SB.getInstance(), "sb_guibtn");
+        meta.getPersistentDataContainer().set(key, PersistentDataType.STRING, "");
+
+        lore = new ArrayList<>();
+        lore.add("§fToggleMob Killing auf deiner Insel");
+        meta.setLore(lore);
+        meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+        meta.addItemFlags(ItemFlag.HIDE_ADDITIONAL_TOOLTIP);
+        PROP_MOB_KILLING.setItemMeta(meta);
+        lore.clear();
+
         KILL_MONSTERS = new ItemStack(Material.TOTEM_OF_UNDYING);
         meta = KILL_MONSTERS.getItemMeta();
         meta.setDisplayName("§6Insel von Monstern befreien");
@@ -407,6 +431,9 @@ public class GuiButtonManager {
     }
 
     public static ItemStack getGuiBtn(GuiButtonType gbt) {
+        /* BLOCK #1004 */
+        // "Register new property"
+        // Add a new case corresponding to the new property itemstack you have created
         switch (gbt) {
             case DEV_TOOL_BIOME_CHANGE -> {
                 return DEV_TOOL_BIOME_CHANGE.clone();
@@ -465,6 +492,9 @@ public class GuiButtonManager {
             case PROP_NATURAL_MONSTER_SPAWN -> {
                 return PROP_NATURAL_MONSTER_SPAWN.clone();
             }
+            case PROP_MOB_KILLING -> {
+                return PROP_MOB_KILLING;
+            }
             case KILL_MONSTERS -> {
                 return KILL_MONSTERS.clone();
             }
@@ -481,6 +511,7 @@ public class GuiButtonManager {
                 return null;
             }
         }
+        // BLOCK #1004 END
     }
 
 }

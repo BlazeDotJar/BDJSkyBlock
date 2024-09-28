@@ -2,7 +2,7 @@ package de.bdj.sb.command;
 
 import de.bdj.sb.SB;
 import de.bdj.sb.Settings;
-import de.bdj.sb.gui.GuiManager;
+import de.bdj.sb.gui.DeveloperGUI;
 import de.bdj.sb.island.IslandManager;
 import de.bdj.sb.island.IslandProfile;
 import de.bdj.sb.lobby.Lobby;
@@ -18,8 +18,6 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -72,7 +70,7 @@ public class SBDEVCommand implements CommandExecutor, TabCompleter {
                             Settings.pluginDeveloperHelpMode = !Settings.pluginDeveloperHelpMode;
                             Chat.info(p, "Plugin Developer Mode: §f" + Settings.pluginDeveloperHelpMode);
                         } else if(args[0].equalsIgnoreCase("tools")) {
-                            GuiManager.openDeveloperGui(p);
+                            DeveloperGUI.open(p);
                         }
                         break;
                     case 2:

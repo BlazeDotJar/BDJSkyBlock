@@ -48,6 +48,10 @@ public class EventListener implements Listener {
         BlockListener.onBlockPlace(e);
     }
     @EventHandler
+    public void onInteract(PlayerInteractEvent e) {
+        BlockListener.onBlockClick(e);
+    }
+    @EventHandler
     public void onDamage(EntityDamageByEntityEvent e) {
         EntityDamageEntityListener.onDamage(e);
     }

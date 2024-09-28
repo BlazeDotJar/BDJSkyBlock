@@ -1,6 +1,6 @@
 package de.bdj.sb.event.gui;
 
-import de.bdj.sb.gui.GuiManager;
+import de.bdj.sb.gui.management.GuiManager;
 import de.bdj.sb.island.IslandManager;
 import de.bdj.sb.profile.ProfileManager;
 import org.bukkit.event.inventory.InventoryCloseEvent;

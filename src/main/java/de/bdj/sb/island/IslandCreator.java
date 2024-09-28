@@ -17,6 +17,7 @@ import org.bukkit.entity.Player;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
 public class IslandCreator {
@@ -24,6 +25,7 @@ public class IslandCreator {
     private UUID uuid;
     private Player p;
     private int preferredIslandId = 0;
+    private List<String> availableProperties;
 
     public IslandCreator(Player p) {
         this.p = p;
@@ -124,6 +126,18 @@ public class IslandCreator {
                     Chat.warn(p, "Deine persönliche Inseldatei konnte nicht angelegt werden, da du bereits eine besitzt!", "Sprich mit einem Admin darüber.", "Dieser kann deine existierende Inseldatei löschen und du kannst den vorgang wiederholen.");
                     return IslandCreatorReserveResult.CANCELLED_OLD_PLAYER_ISLAND_FILE_STILL_EXISTS;
                 } else {
+                    /* BLOCK #1001 */
+                    // "Register new property"
+                    // Add a new property to the list, if you want to create a new one
+                    availableProperties = Arrays.asList(
+                            "pvp: false",
+                            "mob griefing: false",
+                            "explosion damage: false",
+                            "tnt damage: false",
+                            "spread fire: false",
+                            "natural monster spawn: true",
+                            "mob killing: true");
+                    // BLOCK #101   END
                     FileConfiguration c = YamlConfiguration.loadConfiguration(f);
                     c.set("Owner UUID", uuid.toString());
                     c.set("Owner Deleted This Island", false);
@@ -131,7 +145,7 @@ public class IslandCreator {
                     c.set("Time When Created", SB.timeStamp.getCurrentTime());
                     c.set("Island ID", chosenIslandId);
                     c.set("Island Level", 0);
-                    c.set("Properties", Arrays.asList("pvp: false", "mob griefing: false", "explosion damage: false", "tnt damage: false", "spread fire: false", "natural monster spawn: true"));
+                    c.set("Properties", availableProperties);
                     c.set("Banned Players", Arrays.asList());
                     c.set("Members", Arrays.asList());
 

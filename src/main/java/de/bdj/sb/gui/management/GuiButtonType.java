@@ -1,4 +1,4 @@
-package de.bdj.sb.gui;
+package de.bdj.sb.gui.management;
 
 public enum GuiButtonType {
 
@@ -18,6 +18,7 @@ public enum GuiButtonType {
     PROP_TNT_DAMAGE,
     PROP_SPREAD_FIRE,
     PROP_NATURAL_MONSTER_SPAWN,
+    PROP_MOB_KILLING,
     KILL_MONSTERS,
     SET_ISLAND_SPAWN,
     RELOAD_DATA,

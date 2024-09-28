@@ -6,6 +6,7 @@ import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
@@ -42,11 +43,23 @@ public class ItemEditor {
         Player p = Bukkit.getPlayer(UUID.fromString(ownerUuid));
         if (p == null || !p.isOnline()) {
             OfflinePlayer off = Bukkit.getOfflinePlayer(UUID.fromString(ownerUuid));
-            Chat.debug("Profile == null " + (off.getPlayerProfile() == null ? "true" : "false"));
             meta.setOwnerProfile(Bukkit.getOfflinePlayer(UUID.fromString(ownerUuid)).getPlayerProfile());
             meta.setOwningPlayer(off);
         } else meta.setOwnerProfile(p.getPlayerProfile());
 
+        item.setItemMeta(meta);
+        return item;
+    }
+
+    public static ItemStack addAllHideItemFlags(ItemStack item) {
+        ItemMeta meta = item.getItemMeta();
+        meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+        meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        meta.addItemFlags(ItemFlag.HIDE_ADDITIONAL_TOOLTIP);
+        meta.addItemFlags(ItemFlag.HIDE_DESTROYS);
+        meta.addItemFlags(ItemFlag.HIDE_PLACED_ON);
+        meta.addItemFlags(ItemFlag.HIDE_ARMOR_TRIM);
+        meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
         item.setItemMeta(meta);
         return item;
     }

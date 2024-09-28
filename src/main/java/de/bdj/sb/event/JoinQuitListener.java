@@ -2,6 +2,7 @@ package de.bdj.sb.event;
 
 import de.bdj.sb.SB;
 import de.bdj.sb.profile.ProfileManager;
+import de.bdj.sb.utlility.PlayerAtlas;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
@@ -13,6 +14,7 @@ public class JoinQuitListener {
         String lastJoin = date + " / " + time;
         ProfileManager.registerProfile(e.getPlayer().getUniqueId());
         ProfileManager.getProfile(e.getPlayer().getUniqueId()).setLastJoin(lastJoin);
+        PlayerAtlas.register(e.getPlayer());
     }
 
     public static void onQuit(PlayerQuitEvent e) {

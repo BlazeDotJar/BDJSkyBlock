@@ -1,8 +1,11 @@
 package de.bdj.sb.event.gui;
 
 import de.bdj.sb.SB;
-import de.bdj.sb.gui.GuiManager;
+import de.bdj.sb.gui.management.GuiManager;
 import de.bdj.sb.gui.function.DashboardFunction;
+import de.bdj.sb.gui.function.IslandPropertyGuiFunction;
+import de.bdj.sb.gui.function.MemberGuiFunction;
+import de.bdj.sb.gui.function.NavigationFunction;
 import org.bukkit.NamespacedKey;
 import org.bukkit.event.inventory.InventoryClickEvent;
 
@@ -15,6 +18,7 @@ public class GuiClickListener {
                 e.getView().getTitle().equalsIgnoreCase(GuiManager.ISLAND_PROPERTIES_TITLE) ||
                 e.getView().getTitle().equalsIgnoreCase(GuiManager.DEV_TOOLS_TITLE) ||
                 e.getView().getTitle().equalsIgnoreCase(GuiManager.MEMBERS_GUI_TITLE) ||
+                e.getView().getTitle().equalsIgnoreCase(GuiManager.MEMBER_FINDER_GUI_TITLE) ||
                 e.getView().getTitle().equalsIgnoreCase(GuiManager.MEMBER_ADMINISTRATION_GUI_TITLE)) {
             e.setCancelled(true);
         }
@@ -22,7 +26,11 @@ public class GuiClickListener {
         if(e.getCurrentItem() == null) return;
         if(e.getCurrentItem().getItemMeta() == null) return;
         if(e.getCurrentItem().getItemMeta().getPersistentDataContainer().has(key)) {
-            DashboardFunction.clickedDashboard(e);
+            boolean found = NavigationFunction.clicked(e);
+            if(!found) found = DashboardFunction.clicked(e);
+            if(!found) found = IslandPropertyGuiFunction.clicked(e);
+            if(!found) found = MemberGuiFunction.clicked(e);
+            //if(!found) found = IslandPropertyGuiFunction.clickedPropertyGUI(e);
         }
     }
 

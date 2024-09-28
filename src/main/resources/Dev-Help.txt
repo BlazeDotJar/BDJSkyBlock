@@ -1,0 +1,15 @@
+Create a new Island Property:
+    1xxx: "Register new property"
+        -> Block Selection: #1xxx
+        1. Add the property to the available property list in:
+            IslandCreator @ BLOCK #1001
+        2. Add a new if block corresponding to the new property you have created
+            GuiManager @ BLOCK #1002
+        3. Create a new itemstack corresponding to the new property
+            GuiButtonManager @ BLOCK #1003
+        4. Add a new case corresponding to the new property itemstack you have created
+            GuiButtonManager @ BLOCK #1004
+        5. Define the new itemstack
+            GuiButtonManager @ BLOCK #1005
+        6. Add a new if block corresponding to the new property you have created
+            DashboardFunction @ BLOCk #1006

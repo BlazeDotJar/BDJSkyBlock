@@ -15,6 +15,24 @@
           -> Bug description: "DESCRIPTION"
           -> FIX: Description of the fix
 ------------------------------------------------------------------------
+  28.09.2024 - 02:30
+  Version: 0.15.2_5
+  Changes:
+    - Added Member Permission
+        -> Give your island members specific permissions
+            -> Allow Modify : allow the member to place and break blocks
+            -> Allow Container Opening : allow the member to open container blocks like chest, furnace, etc.
+            -> Allow Mobkilling : allow the member to damage/kill mobs
+            -> Allow Member Invitation : allow the member to invite new members
+            -> Allow Interact Redstone Blocks : allow the member to interact with redstone blocks
+------------------------------------------------------------------------
+  26.09.2024 - 20:30
+  Version: 0.15.1_5
+  Changes:
+    - Added Player finder for the member gui
+        -> Open the member gui and click the finder btn to open the member finder gui
+    - Optimized code for dramatically less performance impacts
+------------------------------------------------------------------------
   24.09.2024 - 20:50
   Version: 0.14.1_5
   Changes:

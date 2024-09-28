@@ -4,13 +4,18 @@ import de.bdj.sb.command.ISCommand;
 import de.bdj.sb.command.SBCommand;
 import de.bdj.sb.command.SBDEVCommand;
 import de.bdj.sb.event.EventListener;
-import de.bdj.sb.gui.GuiButtonManager;
+import de.bdj.sb.gui.management.GuiButtonManager;
 import de.bdj.sb.island.IslandManager;
 import de.bdj.sb.lobby.Waitlobby;
 import de.bdj.sb.profile.ProfileManager;
+import de.bdj.sb.utlility.PlayerAtlas;
 import de.bdj.sb.utlility.TimeStamp;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.util.LinkedList;
+import java.util.List;
 
 public class SB extends JavaPlugin {
 
@@ -34,6 +39,11 @@ public class SB extends JavaPlugin {
         preInit();
         init();
         postInit();
+
+        PlayerAtlas.loadAtlas();
+        List<Player> onPlayers = new LinkedList<>();
+        for(Player p : Bukkit.getOnlinePlayers()) onPlayers.add(p);
+        PlayerAtlas.register(onPlayers);
     }
 
     @Override
