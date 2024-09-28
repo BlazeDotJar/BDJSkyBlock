@@ -14,10 +14,7 @@ import de.bdj.sb.profile.PlayerProfile;
 import de.bdj.sb.profile.ProfileManager;
 import de.bdj.sb.session.ConfirmSession;
 import de.bdj.sb.session.TempSession;
-import de.bdj.sb.utlility.Chat;
-import de.bdj.sb.utlility.Code;
-import de.bdj.sb.utlility.Perms;
-import de.bdj.sb.utlility.XColor;
+import de.bdj.sb.utlility.*;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -260,11 +257,6 @@ public class SBCommand implements CommandExecutor, TabCompleter {
                             int islandId = 0;
 
                             targetName = args[1];
-                            target = Bukkit.getPlayer(targetName);
-                            if(target == null) {
-                                Chat.error(p, "Der Spieler " + targetName + " ist nicht online oder ist falsch geschrieben");
-                                return false;
-                            }
 
                             try {
                                 islandId = Integer.parseInt(args[2]);
@@ -281,14 +273,27 @@ public class SBCommand implements CommandExecutor, TabCompleter {
                                 return false;
                             }
 
-                            RemoveMemberFromIslandResult rmfir = SkyBlockFunction.removeOnlineMember(remover, target);
-                            if (rmfir == RemoveMemberFromIslandResult.SUCCESS_MEMBER_REMOVE) {
-                                Chat.info(p, "Du hast den Spieler " + target.getName() + " von " + remover.getName() + "'s Insel entfernt.");
-                                if (ip.getArea().isIn(target.getLocation())) Lobby.teleport(target);
-                            } else if(rmfir == RemoveMemberFromIslandResult.CANCELLED_YOU_DO_NOT_HAVE_ISLAND) {
-                                Chat.error(p, "Die Insel " + islandId + " hat keinen Besitzer!");
+                            target = Bukkit.getPlayer(targetName);
+                            if(target == null) {
+                                RemoveMemberFromIslandResult rmfir = SkyBlockFunction.removeOfflineMember(remover, UUID.fromString(PlayerAtlas.getUUID(targetName)));
+                                if (rmfir == RemoveMemberFromIslandResult.SUCCESS_MEMBER_REMOVE) {
+                                    Chat.info(p, "Du hast den Spieler " + targetName + " von " + remover.getName() + "'s Insel entfernt.");
+                                } else if(rmfir == RemoveMemberFromIslandResult.CANCELLED_YOU_DO_NOT_HAVE_ISLAND) {
+                                    Chat.error(p, "Die Insel " + islandId + " hat keinen Besitzer!");
+                                    return false;
+                                }
                                 return false;
+                            } else {
+                                RemoveMemberFromIslandResult rmfir = SkyBlockFunction.removeOnlineMember(remover, target);
+                                if (rmfir == RemoveMemberFromIslandResult.SUCCESS_MEMBER_REMOVE) {
+                                    Chat.info(p, "Du hast den Spieler " + target.getName() + " von " + remover.getName() + "'s Insel entfernt.");
+                                    if (ip.getArea().isIn(target.getLocation())) Lobby.teleport(target);
+                                } else if(rmfir == RemoveMemberFromIslandResult.CANCELLED_YOU_DO_NOT_HAVE_ISLAND) {
+                                    Chat.error(p, "Die Insel " + islandId + " hat keinen Besitzer!");
+                                    return false;
+                                }
                             }
+
                         }
                         break;
                     case 4:

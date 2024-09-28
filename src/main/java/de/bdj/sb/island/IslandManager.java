@@ -203,7 +203,7 @@ public class IslandManager {
 
         private BukkitRunnable loader;
         private int lastLoadedId = 0;
-        private int loadPerSecond = 500;
+        private int loadPerSecond = 1300;
 
         public SlowIslandProfileLoader() {
             long started = System.currentTimeMillis();

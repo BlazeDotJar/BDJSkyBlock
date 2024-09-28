@@ -15,6 +15,12 @@
           -> Bug description: "DESCRIPTION"
           -> FIX: Description of the fix
 ------------------------------------------------------------------------
+  28.09.2024 - 04:55
+  Version: 0.15.2_6
+  New Bug:
+    - BUG: _6
+        -> Removing a member who is not online does not work
+------------------------------------------------------------------------
   28.09.2024 - 02:30
   Version: 0.15.2_5
   Changes:

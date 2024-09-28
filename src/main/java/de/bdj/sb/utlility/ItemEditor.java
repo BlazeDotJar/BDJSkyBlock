@@ -53,13 +53,7 @@ public class ItemEditor {
 
     public static ItemStack addAllHideItemFlags(ItemStack item) {
         ItemMeta meta = item.getItemMeta();
-        meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
-        meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-        meta.addItemFlags(ItemFlag.HIDE_ADDITIONAL_TOOLTIP);
-        meta.addItemFlags(ItemFlag.HIDE_DESTROYS);
-        meta.addItemFlags(ItemFlag.HIDE_PLACED_ON);
-        meta.addItemFlags(ItemFlag.HIDE_ARMOR_TRIM);
-        meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
+        for(ItemFlag f : ItemFlag.values()) meta.addItemFlags(f);
         item.setItemMeta(meta);
         return item;
     }

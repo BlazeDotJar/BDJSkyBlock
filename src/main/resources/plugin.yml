@@ -1,6 +1,6 @@
 name: BDJSkyBlock
 author: BlazeDotJar
-version: 0.15.2_5
+version: 0.15.2_6
 api-version: 1.21
 depend:
   - 'BDJPlaceholder'
