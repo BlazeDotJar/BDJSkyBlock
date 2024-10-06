@@ -14,7 +14,6 @@ import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
@@ -292,6 +291,54 @@ public class MemberProfileGUI {
             item = ItemEditor.addPersistentData(item, "sb_member_prop_interact_redstone_blocks", "allow");
             item = ItemEditor.addAllHideItemFlags(item);
             inv.setItem(22, item);
+        }
+
+        // Permission: Allow block interaction
+        if(mp.isAllowedInteractBlocks()) {
+            item = new ItemStack(Material.ENCHANTED_BOOK);
+            meta = item.getItemMeta();
+            meta.setDisplayName("§eMit Blöcken interagieren");
+            meta.addEnchant(Enchantment.EFFICIENCY, 1, true);
+            lore.add("§7Verbiete dem Member das " + XColor.green + "Interagieren mit Blöcken§7.");
+            lore.add("§7Aktuell " + XColor.green + "erlaubt§7.");
+            lore.add("");
+            lore.add(XColor.orange + "Nicht geschützte Blöcke:");
+            lore.add("§7Beacon, Anvil, Damaged Anvil, Chipped Anvil,");
+            lore.add("§7Signs, Beds, End Portal Frame,");
+            lore.add("§7Dragon Egg und Respawn Anchor");
+            lore.add("");
+            lore.add("§3Klicke, um zu togglen");
+            meta.setLore(lore);
+            lore.clear();
+            item.setItemMeta(meta);
+            item = ItemEditor.addPersistentData(item, "sb_guibtn", "");
+            item = ItemEditor.addPersistentData(item, "sb_member", "");
+            item = ItemEditor.addPersistentData(item, "sb_target_member", memberUuid);
+            item = ItemEditor.addPersistentData(item, "sb_member_prop_interact_blocks", "deny");
+            item = ItemEditor.addAllHideItemFlags(item);
+            inv.setItem(23, item);
+        } else {
+            item = new ItemStack(Material.BOOK);
+            meta = item.getItemMeta();
+            meta.setDisplayName("§eMit Blöcken interagieren");
+            lore.add("§7Erlaube dem Member das " + XColor.green + "Interagieren mit Blöcken§7.");
+            lore.add("§7Aktuell " + XColor.orange + "verboten§7.");
+            lore.add("");
+            lore.add(XColor.green + "Geschützte Blöcke:");
+            lore.add("§7Beacon, Anvil, Damaged Anvil, Chipped Anvil,");
+            lore.add("§7Signs, Beds, End Portal Frame,");
+            lore.add("§7Dragon Egg und Respawn Anchor");
+            lore.add("");
+            lore.add("§3Klicke, um zu togglen");
+            meta.setLore(lore);
+            lore.clear();
+            item.setItemMeta(meta);
+            item = ItemEditor.addPersistentData(item, "sb_guibtn", "");
+            item = ItemEditor.addPersistentData(item, "sb_member", "");
+            item = ItemEditor.addPersistentData(item, "sb_target_member", memberUuid);
+            item = ItemEditor.addPersistentData(item, "sb_member_prop_interact_blocks", "allow");
+            item = ItemEditor.addAllHideItemFlags(item);
+            inv.setItem(23, item);
         }
 
 

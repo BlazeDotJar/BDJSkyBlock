@@ -15,6 +15,13 @@
           -> Bug description: "DESCRIPTION"
           -> FIX: Description of the fix
 ------------------------------------------------------------------------
+  06.10.2024 - 06:25
+  Version: 0.16.2_6
+  Changes:
+    - Added Member Permission
+        -> Give your island members specific permissions
+            -> Allow Interaction : allow the member to interact with blocks
+------------------------------------------------------------------------
   28.09.2024 - 04:55
   Version: 0.15.2_6
   New Bug:

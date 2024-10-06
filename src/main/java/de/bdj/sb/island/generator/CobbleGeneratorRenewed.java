@@ -1,6 +1,8 @@
 package de.bdj.sb.island.generator;
 
 import de.bdj.sb.SB;
+import de.bdj.sb.Settings;
+import de.bdj.sb.island.IslandManager;
 import de.bdj.sb.utlility.Chat;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -15,6 +17,8 @@ import org.bukkit.event.block.BlockFromToEvent;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Random;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
@@ -22,8 +26,9 @@ public class CobbleGeneratorRenewed implements Listener {
 
     private static Random r = new Random();
     public static ConcurrentLinkedQueue<GeneratorResultData> results = new ConcurrentLinkedQueue<GeneratorResultData>();
+    private static List<String> enabledWorlds = new LinkedList<>();
 
-    public CobbleGeneratorRenewed() {
+    public CobbleGeneratorRenewed(List<String> enabledWorlds) {
         SB.getInstance().getServer().getPluginManager().registerEvents(this, SB.getInstance());
         ArrayList<GeneratorResultData> datas = CobblestoneGeneratorFileReader.getCobbleResultData();
 
@@ -44,18 +49,22 @@ public class CobbleGeneratorRenewed implements Listener {
 
     @EventHandler
     public void onCobble(BlockFromToEvent e) {
-        Material type = e.getBlock().getType();
-        if(type == Material.WATER || type == Material.LAVA){
-            Block b = e.getToBlock();
-            if(b.getType() == Material.AIR){
-                if (generatesCobble(type, b)){
-                    e.setCancelled(true);
-                    //e.getToBlock().getWorld().playSound(e.getToBlock().getLocation(), Sound.BLOCK_LAVA_EXTINGUISH, 1f, 6f);
-                    Material mat = pickRandomResult(2, e.getToBlock().getLocation());
-                    if(!mat.toString().contains("CHEST")) {
-                        e.getToBlock().getWorld().playSound(e.getToBlock().getLocation(), Sound.BLOCK_BASALT_BREAK, 1f, 0f);
-                        e.getToBlock().getLocation().getBlock().setType(mat);
-                    }else e.getToBlock().getWorld().playSound(e.getToBlock().getLocation(), Sound.BLOCK_WOOD_PLACE, 1f, 1f);
+        if(enabledWorlds.contains(e.getBlock().getWorld().getName())) {
+            Material type = e.getBlock().getType();
+            if(type == Material.WATER || type == Material.LAVA){
+                Block b = e.getToBlock();
+                if(b.getType() == Material.AIR){
+                    if (generatesCobble(type, b)){
+                        e.setCancelled(true);
+                        //e.getToBlock().getWorld().playSound(e.getToBlock().getLocation(), Sound.BLOCK_LAVA_EXTINGUISH, 1f, 6f);
+                        Material mat = pickRandomResult(2, e.getToBlock().getLocation());
+                        if(!mat.toString().contains("CHEST")) {
+                            e.getToBlock().getWorld().playSound(e.getToBlock().getLocation(), Sound.BLOCK_BASALT_BREAK, 1f, 0f);
+                            e.getToBlock().getLocation().getBlock().setType(mat);
+                        }else e.getToBlock().getWorld().playSound(e.getToBlock().getLocation(), Sound.BLOCK_WOOD_PLACE, 1f, 1f);
+
+                        IslandManager.getIslandLocationIsIn(e.getBlock().getLocation());
+                    }
                 }
             }
         }

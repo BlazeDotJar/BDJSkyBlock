@@ -1,6 +1,7 @@
 package de.bdj.sb.event;
 
 import de.bdj.sb.SB;
+import de.bdj.sb.Settings;
 import de.bdj.sb.event.gui.GuiClickListener;
 import de.bdj.sb.event.gui.InventoryCloseListener;
 import de.bdj.sb.island.generator.CobbleGeneratorRenewed;
@@ -12,11 +13,13 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.*;
 
+import java.util.List;
+
 public class EventListener implements Listener {
 
     public EventListener() {
         SB.getInstance().getServer().getPluginManager().registerEvents(this, SB.getInstance());
-        new CobbleGeneratorRenewed();
+        new CobbleGeneratorRenewed(List.of(Settings.sbOverworldName, Settings.sbNetherName, Settings.sbEndName));
     }
 
     @EventHandler

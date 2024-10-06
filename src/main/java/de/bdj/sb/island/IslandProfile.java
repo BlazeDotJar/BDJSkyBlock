@@ -3,14 +3,13 @@ package de.bdj.sb.island;
 import de.bdj.sb.SB;
 import de.bdj.sb.Settings;
 import de.bdj.sb.utlility.Chat;
+import de.bdj.sb.utlility.EntityChecker;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Monster;
+import org.bukkit.entity.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -239,7 +238,9 @@ public class IslandProfile {
     public int killHostileMobs() {
         int amount = 0;
         for(Entity ent : area.getEntities()) {
-            if(ent instanceof Monster) {
+            if(EntityChecker.isMonster(ent) || ent instanceof Phantom || ent instanceof  WitherSkull || ent instanceof ShulkerBullet ||
+            ent instanceof DragonFireball || ent instanceof  EvokerFangs || ent instanceof Slime || ent instanceof Ghast || ent instanceof MagmaCube ||
+            ent instanceof EnderDragon || ent instanceof Shulker || ent instanceof Zoglin || ent instanceof BreezeWindCharge || ent instanceof WindCharge) {
                 if(ent.getCustomName() == null) {
                     ent.remove();
                     amount ++;

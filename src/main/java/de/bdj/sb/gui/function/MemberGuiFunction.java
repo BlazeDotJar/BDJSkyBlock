@@ -119,7 +119,7 @@ public class MemberGuiFunction {
                     }
                 }
             } else if(meta.getPersistentDataContainer().has(new NamespacedKey(SB.getInstance(), "sb_member_prop_interact_redstone_blocks"))) {
-                // Member Property: containerOpening
+                // Member Property: redstone block interacting
                 String propValue = meta.getPersistentDataContainer().get(new NamespacedKey(SB.getInstance(), "sb_member_prop_interact_redstone_blocks"), PersistentDataType.STRING);
 
                 if(propValue.equalsIgnoreCase("deny")) {
@@ -130,6 +130,21 @@ public class MemberGuiFunction {
                 } else if(propValue.equalsIgnoreCase("allow")) {
                     if(memberUuid != null) {
                         ip.getMemberProfile(memberUuid).interactRedstoneBlocks(true);
+                        MemberProfileGUI.open((Player) e.getWhoClicked(), ip.getIslandId(), memberUuid);
+                    }
+                }
+            } else if(meta.getPersistentDataContainer().has(new NamespacedKey(SB.getInstance(), "sb_member_prop_interact_blocks"))) {
+                // Member Property: block interacting
+                String propValue = meta.getPersistentDataContainer().get(new NamespacedKey(SB.getInstance(), "sb_member_prop_interact_blocks"), PersistentDataType.STRING);
+
+                if(propValue.equalsIgnoreCase("deny")) {
+                    if(memberUuid != null) {
+                        ip.getMemberProfile(memberUuid).interactBlocks(false);
+                        MemberProfileGUI.open((Player) e.getWhoClicked(), ip.getIslandId(), memberUuid);
+                    }
+                } else if(propValue.equalsIgnoreCase("allow")) {
+                    if(memberUuid != null) {
+                        ip.getMemberProfile(memberUuid).interactBlocks(true);
                         MemberProfileGUI.open((Player) e.getWhoClicked(), ip.getIslandId(), memberUuid);
                     }
                 }

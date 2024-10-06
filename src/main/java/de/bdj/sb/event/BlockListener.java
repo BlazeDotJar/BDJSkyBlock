@@ -128,6 +128,21 @@ public class BlockListener {
                     e.setCancelled(true);
                     Chat.error(p, "Du hast kein Recht auf dieser Insel mit " + e.getClickedBlock().getType().name() + " zu interagieren!");
                 }
+            } else if(e.getClickedBlock().getType() == Material.BEACON ||
+                    e.getClickedBlock().getType() == Material.ANVIL ||
+                    e.getClickedBlock().getType() == Material.CHIPPED_ANVIL ||
+                    e.getClickedBlock().getType() == Material.DAMAGED_ANVIL ||
+                    e.getClickedBlock().getType().name().toLowerCase().contains("sign") ||
+                    e.getClickedBlock().getType().name().toLowerCase().contains("_bed") ||
+                    e.getClickedBlock().getType() == Material.END_PORTAL_FRAME ||
+                    e.getClickedBlock().getType() == Material.DRAGON_EGG ||
+                    e.getClickedBlock().getType() == Material.RESPAWN_ANCHOR) {
+                if(!p.isOp() &&
+                        (!ip.isMember(p.getUniqueId()) ||
+                                !ip.getMemberProfile(p.getUniqueId().toString()).isAllowedInteractBlocks())) {
+                    e.setCancelled(true);
+                    Chat.error(p, "Du hast kein Recht auf dieser Insel mit " + e.getClickedBlock().getType().name() + " zu interagieren!");
+                }
             }
         }
     }

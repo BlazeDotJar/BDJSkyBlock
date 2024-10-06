@@ -18,6 +18,7 @@ public class MemberProfile {
     private boolean allowMemberInvitation = false;
     private boolean allowContainerOpening = false;
     private boolean allowedInteractRedstoneBlocks = false;
+    private boolean allowedInteractBlocks = false;
 
 
     public MemberProfile(String uuid, int islandId) {
@@ -40,6 +41,7 @@ public class MemberProfile {
         allowMemberInvitation = cfg.getBoolean("Permissions.Allow Member Invitation");
         allowContainerOpening = cfg.getBoolean("Permissions.Allow Container Opening");
         allowedInteractRedstoneBlocks = cfg.getBoolean("Permissions.Allow Interaction With Redstone Blocks");
+        allowedInteractBlocks = cfg.getBoolean("Permissions.Allow Interaction With Blocks");
     }
 
     public void saveData() {
@@ -52,6 +54,7 @@ public class MemberProfile {
         cfg.set("Permissions.Allow Member Invitation", allowMemberInvitation);
         cfg.set("Permissions.Allow Container Opening", allowContainerOpening);
         cfg.set("Permissions.Allow Interaction With Redstone Blocks", allowedInteractRedstoneBlocks);
+        cfg.set("Permissions.Allow Interaction With Blocks", allowedInteractBlocks);
 
         try { cfg.save(file); } catch (IOException e) { throw new RuntimeException(e); }
     }
@@ -73,6 +76,9 @@ public class MemberProfile {
     public void interactRedstoneBlocks(boolean value) {
         this.allowedInteractRedstoneBlocks = value;
     }
+    public void interactBlocks(boolean value) {
+        this.allowedInteractBlocks = value;
+    }
 
     // =============================================
     // Getters
@@ -91,5 +97,8 @@ public class MemberProfile {
     }
     public boolean isAllowedInteractRedstoneBlocks() {
         return allowedInteractRedstoneBlocks;
+    }
+    public boolean isAllowedInteractBlocks() {
+        return allowedInteractBlocks;
     }
 }

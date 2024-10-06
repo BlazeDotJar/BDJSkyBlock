@@ -4,7 +4,6 @@ import de.bdj.sb.island.IslandManager;
 import de.bdj.sb.island.IslandProfile;
 import de.bdj.sb.profile.PlayerProfile;
 import de.bdj.sb.profile.ProfileManager;
-import de.bdj.sb.utlility.Chat;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
@@ -13,9 +12,11 @@ public class EntityDamageEntityListener {
     public static void onDamage(EntityDamageByEntityEvent e) {
         if(e.getDamager() instanceof Player damager) {
             IslandProfile ipIsIn = IslandManager.getLoadedIslandProfile(ProfileManager.getProfile(damager.getUniqueId()).getIslandIsCurrentIn());
-            if(!(ipIsIn.isMember(damager.getUniqueId()) && ipIsIn.getMemberProfile(damager.getUniqueId().toString()).isAllowedMobkilling()) && ipIsIn.getProperties().get("mob damage").equalsIgnoreCase("true")) {
+            /*
+                        if(!(ipIsIn.isMember(damager.getUniqueId()) && ipIsIn.getMemberProfile(damager.getUniqueId().toString()).isAllowedMobkilling()) && ipIsIn.getProperties().get("mob damage").equalsIgnoreCase("true")) {
 
             }
+             */
             if(e.getEntity() instanceof Player victim) {
                 PlayerProfile pro = ProfileManager.getProfile(damager.getUniqueId());
                 if(pro.getIslandIsCurrentIn() == 0) {
