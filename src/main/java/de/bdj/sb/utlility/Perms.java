@@ -16,6 +16,7 @@ public class Perms {
 
     public static String getPermission(String command) {
         if(command.equalsIgnoreCase("sb")) return "bdj.sb";
+        else if(command.equalsIgnoreCase("sb version")) return "bdj.sb.version";
         else if(command.equalsIgnoreCase("sb rl")) return "bdj.sb.rl";
         else if(command.equalsIgnoreCase("sb swl")) return "bdj.sb.swl";
         else if(command.equalsIgnoreCase("sb twl")) return "bdj.sb.twl";
@@ -28,6 +29,7 @@ public class Perms {
         else if(command.equalsIgnoreCase("sb addmember")) return "bdj.sb.addmember";
         else if(command.equalsIgnoreCase("sb delmember")) return "bdj.sb.delmember";
         else if(command.equalsIgnoreCase("is")) return "bdj.is";
+        else if(command.equalsIgnoreCase("is tp")) return "bdj.is.tp";
         else if(command.equalsIgnoreCase("is create")) return "bdj.is.create";
         else if(command.equalsIgnoreCase("is help")) return "bdj.is.help";
         else if(command.equalsIgnoreCase("is delete")) return "bdj.is.delete";

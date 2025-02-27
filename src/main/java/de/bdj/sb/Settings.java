@@ -1,6 +1,6 @@
 package de.bdj.sb;
 
-import de.bdj.BDJ;
+import de.bdj.BDJPlaceholder;
 import de.bdj.sb.lobby.Lobby;
 import de.bdj.sb.utlility.XColor;
 import org.bukkit.Bukkit;
@@ -32,6 +32,7 @@ public class Settings {
 
     public static boolean useBDJPlaceholderAPI = false;
     public static boolean useGui = true;
+
 
     public Settings() {
         reload();
@@ -65,12 +66,13 @@ public class Settings {
         new Lobby(new Location(Bukkit.getWorld(lobbySpawnWorld), x, y, z, yaw, pitch));
 
         // Implement BDJPlaceholder Support
+
         if(useBDJPlaceholderAPI) {
-            Set<String> placeholders = BDJ.getPlaceholders();
+            Set<String> placeholders = BDJPlaceholder.getPlaceholders();
             if(placeholders.isEmpty())return;
             for(String ph : placeholders) {
-                if(ph.equalsIgnoreCase("server-prefix")) pluginPrefix = BDJ.getValue(ph);
-                else if(ph.equalsIgnoreCase("no-permission-message")) noPermMessage = BDJ.getValue(ph);
+                if(ph.equalsIgnoreCase("server-prefix")) pluginPrefix = BDJPlaceholder.getValue(ph);
+                else if(ph.equalsIgnoreCase("no-permission-message")) noPermMessage = BDJPlaceholder.getValue(ph);
 
                 SB.log("loaded data from BDJPlaceholder '" + ph + "'");
             }

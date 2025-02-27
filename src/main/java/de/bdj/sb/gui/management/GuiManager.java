@@ -10,6 +10,9 @@ public class GuiManager {
     public static String MEMBERS_GUI_TITLE = "Members";
     public static String MEMBER_FINDER_GUI_TITLE = "Spielersuche";
     public static String MEMBER_ADMINISTRATION_GUI_TITLE = "Member Verwaltung";
+    public static String ISLAND_QUEST_GUI_TITLE = "Quests";
     // --------------------------------------------------------------------------------------------------------------
+
+
 
 }

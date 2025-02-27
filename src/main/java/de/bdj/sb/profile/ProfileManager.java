@@ -1,5 +1,7 @@
 package de.bdj.sb.profile;
 
+import de.bdj.sb.island.IslandManager;
+import de.bdj.sb.quest.core.QuestManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -13,12 +15,18 @@ public class ProfileManager {
     public static void registerProfile(UUID uuid) {
         if(profiles.containsKey(uuid)) return;
         profiles.put(uuid, new PlayerProfile(uuid));
+
+        // The progress of the players quests gets loaded from the IslandProfile constructor
     }
 
     public static void unregisterProfile(UUID uuid) {
         if(!profiles.containsKey(uuid)) return;
+        PlayerProfile pp = profiles.get(uuid);
 
-        profiles.get(uuid).save();
+        // Save the profile of the quitting players profile
+        pp.save();
+        // Save the progress of the quitting players quests
+        IslandManager.getLoadedIslandProfile(pp.getIslandId()).getQuestManager().saveData(QuestManager.SaveReason.PLAYER_QUIT, uuid);
 
         profiles.remove(uuid);
     }

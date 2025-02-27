@@ -4,6 +4,10 @@ import de.bdj.sb.Settings;
 import de.bdj.sb.island.IslandManager;
 import de.bdj.sb.island.IslandProfile;
 import de.bdj.sb.profile.ProfileManager;
+import de.bdj.sb.quest.FarmCobblestoneQuest;
+import de.bdj.sb.quest.FarmLogQuest;
+import de.bdj.sb.quest.core.QuestManager;
+import de.bdj.sb.quest.core.QuestType;
 import de.bdj.sb.utlility.Chat;
 import org.bukkit.Material;
 import org.bukkit.block.*;
@@ -38,6 +42,8 @@ public class BlockListener {
             e.setCancelled(true);
             Chat.error(p, "Du hast kein Recht auf dieser Insel zu bauen!");
         }
+        ((FarmCobblestoneQuest)ip.getQuestManager().getQuest(QuestType.FARM_COBBLESTONE)).cobbleFarmed(e);
+        ((FarmLogQuest)ip.getQuestManager().getQuest(QuestType.FARM_LOG)).logFarmed(e);
     }
 
     public static void onBlockPlace(BlockPlaceEvent e) {

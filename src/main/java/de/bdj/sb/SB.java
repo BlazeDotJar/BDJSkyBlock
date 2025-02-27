@@ -22,6 +22,10 @@ public class SB extends JavaPlugin {
     public static SB getInstance() { return getPlugin(SB.class); }
     public static String name() { return getInstance().getDescription().getName(); }
     public static String version() { return getInstance().getDescription().getVersion(); }
+    public static List<String> authors() { return getInstance().getDescription().getAuthors(); }
+    public static String apiVersion() { return getInstance().getDescription().getAPIVersion(); }
+    public static List<String> depend() { return getInstance().getDescription().getDepend(); }
+    public static List<String> softDepend() { return getInstance().getDescription().getSoftDepend(); }
 
     public static TimeStamp timeStamp;
     public static boolean isReady = false;

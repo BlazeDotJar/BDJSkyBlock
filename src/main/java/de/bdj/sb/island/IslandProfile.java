@@ -2,7 +2,7 @@ package de.bdj.sb.island;
 
 import de.bdj.sb.SB;
 import de.bdj.sb.Settings;
-import de.bdj.sb.utlility.Chat;
+import de.bdj.sb.quest.core.QuestManager;
 import de.bdj.sb.utlility.EntityChecker;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -32,6 +32,7 @@ public class IslandProfile {
     private final HashMap<String, MemberProfile> memberProfiles = new HashMap<>(); //String = UUID as String
     private final ArrayList<String> bannedPlayers = new ArrayList<>(); //String = UUID as String
     private HashMap<String, String> properties = new HashMap<>(); //String = UUID as String
+    private QuestManager questManager;
 
     public IslandProfile(int islandId, UUID ownerUuid, int x, int z, boolean isClaimed) {
         this.islandId = islandId;
@@ -49,7 +50,11 @@ public class IslandProfile {
             spawnPoint = new Location(p1.getWorld(), x + (IslandManager.islandDiameter / 2), IslandManager.islandY, z + (IslandManager.islandDiameter / 2));
         } else spawnPoint = IslandDataReader.getSpawnPoint(ownerUuid.toString());
 
+        questManager = new QuestManager(this);
+
         loadData();
+        // Loads the progress of the players quests
+        questManager.readData(ownerUuid);
     }
     public void loadData() {
         if(ownerUuid == null) {
@@ -214,13 +219,10 @@ public class IslandProfile {
         cfg.set("Properties", props);
         try {
             cfg.save(file);
-            Chat.debug("Properties von Insel " + islandId + " gespeichert!");
         } catch (IOException e) {
             SB.log("Konnte Properties von Insel " + islandId + " nicht speichern!");
-            Chat.debug("Konnte Properties von Insel " + islandId + " nicht speichern!");
             throw new RuntimeException(e);
         }
-
     }
 
     public void setProperty(String key, String value) {
@@ -252,5 +254,9 @@ public class IslandProfile {
 
     public Location getCenter() {
         return area.getCenter();
+    }
+
+    public QuestManager getQuestManager() {
+        return questManager;
     }
 }

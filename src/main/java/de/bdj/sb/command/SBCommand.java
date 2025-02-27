@@ -47,7 +47,15 @@ public class SBCommand implements CommandExecutor, TabCompleter {
                         sendCommandHelp(sender, "sb");
                         break;
                     case 1:
-                        if(args[0].equalsIgnoreCase("rl") && Perms.hasPermission(p, Perms.getPermission("sb rl"))) {
+                        if(args[0].equalsIgnoreCase("version") && Perms.hasPermission(p, Perms.getPermission("sb version"))) {
+                            Chat.info(p, "Allgemeine Informationen:");
+                            Chat.info(p, "Name: " + XColor.c3 + SB.name());
+                            Chat.info(p, "Version: " + XColor.c3 + SB.version());
+                            Chat.info(p, "Author: " + XColor.c3 + SB.authors().toString().replace("[", "").replace("]", ""));
+                            Chat.info(p, "API-Version: " + XColor.c3 + SB.apiVersion());
+                            Chat.info(p, "Depend: " + XColor.c3 + (SB.depend().isEmpty() ? "none" : SB.depend().toString().substring(1, SB.depend().toString().length() -1)));
+                            Chat.info(p, "Soft Depend: " + XColor.c3 + (SB.softDepend().isEmpty() ? "none" : SB.softDepend().toString().substring(1,SB.softDepend().toString().length() -1)));
+                        } else if(args[0].equalsIgnoreCase("rl") && Perms.hasPermission(p, Perms.getPermission("sb rl"))) {
                             Settings.reload();
                             ProfileManager.reloadAll();
                             Waitlobby.reloadLocation();
@@ -412,6 +420,7 @@ public class SBCommand implements CommandExecutor, TabCompleter {
             if(sender instanceof Player p) {
                 Chat.info(sender, "Alle verfügbaren BDJSkyBlock Befehle:");
                 Chat.sendSuggestCommandMessage(p, XColor.c2 + " /sb §fHilfe erhalten", XColor.c2 + "Erhalte eine klickbare Liste mit allen SkyBlock Befehlen." + (p.isOp() ? XColor.c4 + "\nPermission: §f" + Perms.getPermission("sb") : ""), "/sb", false, false);
+                Chat.sendClickableMessage(p, XColor.c2 + " /sb version §fPlugin Infos", XColor.c2 + "Allgemeine Informationen über dieses Plugin." + (p.isOp() ? XColor.c4 + "\nPermission: §f" + Perms.getPermission("sb version") : ""), "/sb version", false, false);
                 Chat.sendSuggestCommandMessage(p, XColor.c2 + " /sb rl §fSettings laden", XColor.c2 + "Lade die Einstellungen aus allen Config-Dateien von BDJSkyBlock neu." + (p.isOp() ? XColor.c4 + "\nPermission: §f" + Perms.getPermission("sb rl") : ""), "/sb rl", false, false);
                 Chat.sendClickableMessage(p, XColor.c2 + " /sb twl §fZur Wartelobby", XColor.c2 + "Teleportiere dich zur Wartelobby." + (p.isOp() ? XColor.c4 + "\nPermission: §f" + Perms.getPermission("sb twl") : ""), "/sb twl", false, false);
                 Chat.sendSuggestCommandMessage(p, XColor.c2 + " /sb swl §fWartelobby setzen", XColor.c2 + "Setze die Location für die Wartelobby. Die Wartelobby wird von Spielern betreten,\ndie darauf warten dass ihre Insel fertig generiert wurde." + (p.isOp() ? XColor.c4 + "\nPermission: §f" + Perms.getPermission("sb swl") : ""), "/sb swl", false, false);
@@ -439,6 +448,7 @@ public class SBCommand implements CommandExecutor, TabCompleter {
             if(cmd.getName().equalsIgnoreCase("sb")) {
                 switch(args.length) {
                     case 1:
+                        if(Perms.hasPermission(p, Perms.getPermission("sb version"), false)) l.add("version");
                         if(Perms.hasPermission(p, Perms.getPermission("sb rl"), false)) l.add("rl");
                         if(Perms.hasPermission(p, Perms.getPermission("sb twl"), false)) l.add("twl");
                         if(Perms.hasPermission(p, Perms.getPermission("sb swl"), false)) l.add("swl");

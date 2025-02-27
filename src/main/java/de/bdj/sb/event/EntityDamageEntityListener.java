@@ -12,11 +12,10 @@ public class EntityDamageEntityListener {
     public static void onDamage(EntityDamageByEntityEvent e) {
         if(e.getDamager() instanceof Player damager) {
             IslandProfile ipIsIn = IslandManager.getLoadedIslandProfile(ProfileManager.getProfile(damager.getUniqueId()).getIslandIsCurrentIn());
-            /*
-                        if(!(ipIsIn.isMember(damager.getUniqueId()) && ipIsIn.getMemberProfile(damager.getUniqueId().toString()).isAllowedMobkilling()) && ipIsIn.getProperties().get("mob damage").equalsIgnoreCase("true")) {
-
+            if(ipIsIn != null && ipIsIn.getIslandId() != -1 &&
+                    (!ipIsIn.isMember(damager.getUniqueId()) || !ipIsIn.getMemberProfile(damager.getUniqueId().toString()).isAllowedMobkilling() || ipIsIn.getProperties().get("mob killing").equalsIgnoreCase("false"))) {
+                e.setCancelled(true);
             }
-             */
             if(e.getEntity() instanceof Player victim) {
                 PlayerProfile pro = ProfileManager.getProfile(damager.getUniqueId());
                 if(pro.getIslandIsCurrentIn() == 0) {

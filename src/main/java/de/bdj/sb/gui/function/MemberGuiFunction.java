@@ -1,6 +1,5 @@
 package de.bdj.sb.gui.function;
 
-import de.bdj.NameFetcher;
 import de.bdj.sb.SB;
 import de.bdj.sb.gui.MemberFinderGUI;
 import de.bdj.sb.gui.MemberProfileGUI;
@@ -9,6 +8,7 @@ import de.bdj.sb.island.IslandManager;
 import de.bdj.sb.island.IslandProfile;
 import de.bdj.sb.profile.ProfileManager;
 import de.bdj.sb.utlility.Chat;
+import de.bdj.sb.utlility.NameFetcher;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;

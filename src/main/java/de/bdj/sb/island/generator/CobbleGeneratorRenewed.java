@@ -1,8 +1,10 @@
 package de.bdj.sb.island.generator;
 
 import de.bdj.sb.SB;
-import de.bdj.sb.Settings;
 import de.bdj.sb.island.IslandManager;
+import de.bdj.sb.island.IslandProfile;
+import de.bdj.sb.quest.BuildCobbleGeneratorQuest;
+import de.bdj.sb.quest.core.QuestType;
 import de.bdj.sb.utlility.Chat;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -29,6 +31,7 @@ public class CobbleGeneratorRenewed implements Listener {
     private static List<String> enabledWorlds = new LinkedList<>();
 
     public CobbleGeneratorRenewed(List<String> enabledWorlds) {
+        this.enabledWorlds.addAll(enabledWorlds);
         SB.getInstance().getServer().getPluginManager().registerEvents(this, SB.getInstance());
         ArrayList<GeneratorResultData> datas = CobblestoneGeneratorFileReader.getCobbleResultData();
 
@@ -63,7 +66,8 @@ public class CobbleGeneratorRenewed implements Listener {
                             e.getToBlock().getLocation().getBlock().setType(mat);
                         }else e.getToBlock().getWorld().playSound(e.getToBlock().getLocation(), Sound.BLOCK_WOOD_PLACE, 1f, 1f);
 
-                        IslandManager.getIslandLocationIsIn(e.getBlock().getLocation());
+                        IslandProfile ip = IslandManager.getIslandLocationIsIn(e.getBlock().getLocation());
+                        ((BuildCobbleGeneratorQuest)ip.getQuestManager().getQuest(QuestType.BUILD_COBBLE_GENERATOR)).cobbleGeneration(e);
                     }
                 }
             }

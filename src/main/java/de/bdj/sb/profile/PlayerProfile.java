@@ -2,6 +2,7 @@ package de.bdj.sb.profile;
 
 import de.bdj.sb.SB;
 import de.bdj.sb.Settings;
+import de.bdj.sb.island.IslandManager;
 import de.bdj.sb.session.ConfirmSession;
 import de.bdj.sb.session.PlayerCreateIslandSession;
 import de.bdj.sb.session.TempSession;

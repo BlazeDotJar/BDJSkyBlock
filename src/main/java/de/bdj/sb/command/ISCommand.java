@@ -1,6 +1,5 @@
 package de.bdj.sb.command;
 
-import de.bdj.NameFetcher;
 import de.bdj.sb.SB;
 import de.bdj.sb.Settings;
 import de.bdj.sb.gui.DashboardGUI;
@@ -14,6 +13,7 @@ import de.bdj.sb.profile.PlayerProfile;
 import de.bdj.sb.profile.ProfileManager;
 import de.bdj.sb.session.ConfirmSession;
 import de.bdj.sb.utlility.Chat;
+import de.bdj.sb.utlility.NameFetcher;
 import de.bdj.sb.utlility.Perms;
 import de.bdj.sb.utlility.XColor;
 import org.bukkit.Bukkit;
@@ -57,11 +57,13 @@ public class ISCommand implements CommandExecutor, TabCompleter {
                         }
                         break;
                     case 1:
-                        if(args[0].equalsIgnoreCase("info") && Perms.hasPermission(p, Perms.getPermission("is info"))) {
+                        if(args[0].equalsIgnoreCase("tp") && Perms.hasPermission(p, Perms.getPermission("is tp"))) {
+                            IslandManager.getLoadedIslandProfile(pro.getIslandId()).teleport(p);
+                        } else if(args[0].equalsIgnoreCase("info") && Perms.hasPermission(p, Perms.getPermission("is info"))) {
                             Chat.info(p, "Nützliche Informationen:");
                             Chat.info(p, false, " - Dein Standort: Insel " + XColor.green + pro.getIslandIsCurrentIn());
                             Chat.info(p, false, " - Deine Insel: " + XColor.green + pro.getIslandId());
-                        }else if(args[0].equalsIgnoreCase("create") && Perms.hasPermission(p, Perms.getPermission("is create"))) {
+                        } else if(args[0].equalsIgnoreCase("create") && Perms.hasPermission(p, Perms.getPermission("is create"))) {
                             SkyBlockFunction.createIsland(p);
                         } else if(args[0].equalsIgnoreCase("ban") && Perms.hasPermission(p, Perms.getPermission("is ban"))) {
                             Chat.sendSuggestCommandMessage(p, XColor.c2 + " /is ban <Spielername> §fVon Insel bannen", XColor.c3 + "Verbanne einen Spieler von deiner Insel. Dieser kann deine Insel also nicht betreten." + (p.isOp() ? XColor.c4 + "\nPermission: §f" + Perms.getPermission("is ban") : ""), "/is ban", false, false);
@@ -255,6 +257,7 @@ public class ISCommand implements CommandExecutor, TabCompleter {
             if(sender instanceof Player p) {
                 Chat.info(sender, "Alle verfügbaren BDJSkyBlock Befehle:");
                 Chat.sendClickableMessage(p, XColor.c2 + " /is §fInsel Menü", XColor.c2 + "Öffne das Insel Menü." + (p.isOp() ? XColor.c4 + "\nPermission: §f" + Perms.getPermission("is") : ""), "/is", false, false);
+                Chat.sendClickableMessage(p, XColor.c2 + " /is tp §fInsel tp", XColor.c2 + "Teleportiere dich zu deiner Insel." + (p.isOp() ? XColor.c4 + "\nPermission: §f" + Perms.getPermission("is tp") : ""), "/is tp", false, false);
                 Chat.sendClickableMessage(p, XColor.c2 + " /is create §fInsel erstellen", XColor.c2 + "Erstelle eine Insel." + (p.isOp() ? XColor.c4 + "\nPermission: §f" + Perms.getPermission("is create") : ""), "/is create", false, false);
                 Chat.sendClickableMessage(p, XColor.c2 + " /is help §fCommand Hilfe", XColor.c2 + "Liste alle /is Befehle auf um dir einen Überblick zu beschaffen." + (p.isOp() ? XColor.c4 + "\nPermission: §f" + Perms.getPermission("is help") : ""), "/is help", false, false);
                 Chat.sendSuggestCommandMessage(p, XColor.c2 + " /is delete §fInsel löschen", XColor.c2 + "Lösche deine Insel. Dies kann nicht rückgängig gemacht werden!" + (p.isOp() ? XColor.c4 + "\nPermission: §f" + Perms.getPermission("is delete") : ""), "/is delete", false, false);
@@ -275,7 +278,7 @@ public class ISCommand implements CommandExecutor, TabCompleter {
             if(cmd.getName().equalsIgnoreCase("is")) {
                 switch(args.length) {
                     case 1:
-                        return Arrays.asList("info", "confirm", "deny", "create", "help", "delete", "member",  "members", "ban", "quit");
+                        return Arrays.asList("tp", "info", "confirm", "deny", "create", "help", "delete", "member",  "members", "ban", "quit");
                     case 2:
                         if(args[0].equalsIgnoreCase("ban")) {
                             return null;

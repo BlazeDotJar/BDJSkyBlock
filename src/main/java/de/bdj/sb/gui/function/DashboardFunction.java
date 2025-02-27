@@ -3,8 +3,10 @@ package de.bdj.sb.gui.function;
 import de.bdj.sb.SB;
 import de.bdj.sb.Settings;
 import de.bdj.sb.command.SkyBlockFunction;
+import de.bdj.sb.gui.quest.FarmCobblestoneQuestGUI;
 import de.bdj.sb.gui.MembersGUI;
 import de.bdj.sb.gui.PropertiesGUI;
+import de.bdj.sb.gui.quest.QuestGUI;
 import de.bdj.sb.island.IslandDataWriter;
 import de.bdj.sb.island.IslandManager;
 import de.bdj.sb.island.IslandProfile;
@@ -45,8 +47,10 @@ public class DashboardFunction {
             ip.teleport(e.getWhoClicked());
             e.getWhoClicked().sendMessage("Du wirst teleportiert..");
             return true;
-        } else if(meta.getPersistentDataContainer().has(new NamespacedKey(SB.getInstance(), "guibtn_island_achievements_skyblock"))) {
-            Chat.info(e.getWhoClicked(), "In den Achievements gibt es noch nichts zu sehen.");
+        } else if(meta.getPersistentDataContainer().has(new NamespacedKey(SB.getInstance(), "guibtn_island_quests_skyblock"))) {
+            //Chat.info(e.getWhoClicked(), "In den Achievements gibt es noch nichts zu sehen.");
+            //FarmCobblestoneQuestGUI.open((Player)e.getWhoClicked());
+            QuestGUI.open((Player)e.getWhoClicked());
             return true;
         } else if(meta.getPersistentDataContainer().has(new NamespacedKey(SB.getInstance(), "guibtn_island_properties_skyblock"))) {
             PropertiesGUI.open((Player) e.getWhoClicked());

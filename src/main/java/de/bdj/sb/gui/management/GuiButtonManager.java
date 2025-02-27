@@ -18,9 +18,10 @@ public class GuiButtonManager {
     private static ItemStack CREATE_CLASSIC_SKYBLOCK;
     private static ItemStack CREATE_ONE_BLOCK_SKYBLOCK;
     private static ItemStack ISLAND_TELEPORT;
-    private static ItemStack ISLAND_ACHIEVEMENTS;
+    private static ItemStack ISLAND_QUESTS;
     private static ItemStack ISLAND_PROPERTIES;
     private static ItemStack BACK_TO_DASHBOARD;
+    private static ItemStack BACK_TO_QUESTS;
     private static ItemStack PROP_BTN_ALLON;
     private static ItemStack PROP_BTN_ALLOFF;
     private static ItemStack SET_ISLAND_SPAWN;
@@ -39,6 +40,9 @@ public class GuiButtonManager {
     private static ItemStack DEV_TOOL_BIOME_CHANGE;
     private static ItemStack DEV_BUILD_COL;
     private static ItemStack DEV_BUILD_COL_2;
+    private static ItemStack QUEST_FARM_COBBLE_BTN;
+    private static ItemStack QUEST_FARM_LOG_BTN;
+    private static ItemStack QUEST_BUILD_COBBLE_GENERATOR_BTN;
     // BLOCK #1003 END
 
     public GuiButtonManager() {
@@ -92,19 +96,16 @@ public class GuiButtonManager {
         ISLAND_TELEPORT.setItemMeta(meta);
         lore.clear();
 
-        ISLAND_ACHIEVEMENTS = new ItemStack(Material.BOOK);
-        meta = ISLAND_ACHIEVEMENTS.getItemMeta();
-        meta.setDisplayName("§6Insel Achievements");
+        ISLAND_QUESTS = new ItemStack(Material.BOOK);
+        meta = ISLAND_QUESTS.getItemMeta();
+        meta.setDisplayName("§6Insel Quests");
 
-        key = new NamespacedKey(SB.getInstance(), "guibtn_island_achievements_skyblock");
+        key = new NamespacedKey(SB.getInstance(), "guibtn_island_quests_skyblock");
         meta.getPersistentDataContainer().set(key, PersistentDataType.STRING, "");
         key = new NamespacedKey(SB.getInstance(), "sb_guibtn");
         meta.getPersistentDataContainer().set(key, PersistentDataType.STRING, "");
 
-        lore = new ArrayList<>();
-        lore.add("§8§oBisher noch keine");
-        meta.setLore(lore);
-        ISLAND_ACHIEVEMENTS.setItemMeta(meta);
+        ISLAND_QUESTS.setItemMeta(meta);
         lore.clear();
 
         ISLAND_PROPERTIES = new ItemStack(Material.PAPER);
@@ -304,7 +305,7 @@ public class GuiButtonManager {
         PROP_MOB_KILLING.setItemMeta(meta);
         lore.clear();
 
-        KILL_MONSTERS = new ItemStack(Material.TOTEM_OF_UNDYING);
+        KILL_MONSTERS = new ItemStack(Material.DIAMOND_HOE); //Default: TOTEM_OF_UNDYING
         meta = KILL_MONSTERS.getItemMeta();
         meta.setDisplayName("§6Insel von Monstern befreien");
 
@@ -315,13 +316,15 @@ public class GuiButtonManager {
 
         lore = new ArrayList<>();
         lore.add("§fLösche alle Monster von deiner Insel, die kein NameTag tragen");
+        lore.add("§fdie kein NameTag tragen");
         meta.setLore(lore);
         meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
         meta.addItemFlags(ItemFlag.HIDE_ADDITIONAL_TOOLTIP);
+        meta.setCustomModelData(21);
         KILL_MONSTERS.setItemMeta(meta);
         lore.clear();
 
-        SET_ISLAND_SPAWN = new ItemStack(Material.LIME_BED);
+        SET_ISLAND_SPAWN = new ItemStack(Material.DIAMOND_HOE); //Default: Bed
         meta = SET_ISLAND_SPAWN.getItemMeta();
         meta.setDisplayName("§6Insel Spawnpunkt setzen");
 
@@ -336,10 +339,11 @@ public class GuiButtonManager {
         meta.setLore(lore);
         meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
         meta.addItemFlags(ItemFlag.HIDE_ADDITIONAL_TOOLTIP);
+        meta.setCustomModelData(21);
         SET_ISLAND_SPAWN.setItemMeta(meta);
         lore.clear();
 
-        RELOAD_DATA = new ItemStack(Material.CHEST);
+        RELOAD_DATA = new ItemStack(Material.DIAMOND_HOE); //Default: Chest
         meta = RELOAD_DATA.getItemMeta();
         meta.setDisplayName("§6Inseldaten neuladen");
 
@@ -354,10 +358,11 @@ public class GuiButtonManager {
         meta.setLore(lore);
         meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
         meta.addItemFlags(ItemFlag.HIDE_ADDITIONAL_TOOLTIP);
+        meta.setCustomModelData(21);
         RELOAD_DATA.setItemMeta(meta);
         lore.clear();
 
-        MEMBERS_GUI = new ItemStack(Material.PLAYER_HEAD);
+        MEMBERS_GUI = new ItemStack(Material.PLAYER_HEAD); //Default: PLAYER_HEAD
         meta = MEMBERS_GUI.getItemMeta();
         meta.setDisplayName("§6Insel Member anzeigen");
 
@@ -371,10 +376,88 @@ public class GuiButtonManager {
         meta.setLore(lore);
         meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
         meta.addItemFlags(ItemFlag.HIDE_ADDITIONAL_TOOLTIP);
+        meta.setCustomModelData(21);
         MEMBERS_GUI.setItemMeta(meta);
         lore.clear();
 
-        // Dev Tool Buttons
+
+        QUEST_FARM_COBBLE_BTN = new ItemStack(Material.COBBLESTONE);
+        meta = QUEST_FARM_COBBLE_BTN.getItemMeta();
+        meta.setItemName("Farm Cobblestone");
+
+        key = new NamespacedKey(SB.getInstance(), "guibtn_quest_farm_cobble");
+        meta.getPersistentDataContainer().set(key, PersistentDataType.STRING, "");
+        key = new NamespacedKey(SB.getInstance(), "sb_guibtn");
+        meta.getPersistentDataContainer().set(key, PersistentDataType.STRING, "");
+
+        lore = new ArrayList<>();
+        lore.add("§7Baue Cobblestone oder Clean Stone ab,");
+        lore.add("§7um Meilensteine zu erreichen.");
+        lore.add("");
+        lore.add("§9§oStatus dieser Quest ansehen");
+        lore.add("§9§oQ-001");
+        meta.setLore(lore);
+        meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+        meta.addItemFlags(ItemFlag.HIDE_ADDITIONAL_TOOLTIP);
+        QUEST_FARM_COBBLE_BTN.setItemMeta(meta);
+        lore.clear();
+
+        QUEST_FARM_LOG_BTN = new ItemStack(Material.OAK_LOG);
+        meta = QUEST_FARM_LOG_BTN.getItemMeta();
+        meta.setItemName("Farm Log");
+
+        key = new NamespacedKey(SB.getInstance(), "guibtn_quest_farm_log");
+        meta.getPersistentDataContainer().set(key, PersistentDataType.STRING, "");
+        key = new NamespacedKey(SB.getInstance(), "sb_guibtn");
+        meta.getPersistentDataContainer().set(key, PersistentDataType.STRING, "");
+
+        lore = new ArrayList<>();
+        lore.add("§7Baue Holzstämme ab,");
+        lore.add("§7um Meilensteine zu erreichen.");
+        lore.add("");
+        lore.add("§9§oStatus dieser Quest ansehen");
+        lore.add("§9§oQ-002");
+        meta.setLore(lore);
+        meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+        meta.addItemFlags(ItemFlag.HIDE_ADDITIONAL_TOOLTIP);
+        QUEST_FARM_LOG_BTN.setItemMeta(meta);
+        lore.clear();
+
+        QUEST_BUILD_COBBLE_GENERATOR_BTN = new ItemStack(Material.LAVA_BUCKET);
+        meta = QUEST_BUILD_COBBLE_GENERATOR_BTN.getItemMeta();
+        meta.setItemName("Gen-Cobble");
+
+        key = new NamespacedKey(SB.getInstance(), "guibtn_quest_build_cobblestone_generator");
+        meta.getPersistentDataContainer().set(key, PersistentDataType.STRING, "");
+        key = new NamespacedKey(SB.getInstance(), "sb_guibtn");
+        meta.getPersistentDataContainer().set(key, PersistentDataType.STRING, "");
+
+        lore = new ArrayList<>();
+        lore.add("§7Baue einen Cobblestone Generator.");
+        lore.add("");
+        lore.add("§9§oStatus dieser Quest ansehen");
+        lore.add("§9§oQ-003");
+        meta.setLore(lore);
+        meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+        meta.addItemFlags(ItemFlag.HIDE_ADDITIONAL_TOOLTIP);
+        QUEST_BUILD_COBBLE_GENERATOR_BTN.setItemMeta(meta);
+        lore.clear();
+
+        BACK_TO_QUESTS = new ItemStack(Material.BARRIER);
+        meta = BACK_TO_QUESTS.getItemMeta();
+        meta.setItemName("§cZurück");
+
+        key = new NamespacedKey(SB.getInstance(), "guibtn_back_to_quests");
+        meta.getPersistentDataContainer().set(key, PersistentDataType.STRING, "");
+        key = new NamespacedKey(SB.getInstance(), "sb_guibtn");
+        meta.getPersistentDataContainer().set(key, PersistentDataType.STRING, "");
+
+        meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+        meta.addItemFlags(ItemFlag.HIDE_ADDITIONAL_TOOLTIP);
+        BACK_TO_QUESTS.setItemMeta(meta);
+        lore.clear();
+
+        // Dev Tools \/ \/ \/ \/ \/ \/ \/ \/ \/ \/ \/ \/ \/ \/ \/ \/ \/ \/ \/ \/ \/ \/ \/ \/ \/ \/ \/ \/ \/ \/
 
         DEV_TOOL_BIOME_CHANGE = new ItemStack(Material.OAK_SAPLING);
         meta = DEV_TOOL_BIOME_CHANGE.getItemMeta();
@@ -428,6 +511,7 @@ public class GuiButtonManager {
         meta.addItemFlags(ItemFlag.HIDE_ADDITIONAL_TOOLTIP);
         DEV_BUILD_COL_2.setItemMeta(meta);
         lore.clear();
+        // Dev Tools /\ /\ /\ /\ /\ /\ /\ /\ /\ /\ /\ /\ /\ /\ /\ /\ /\ /\ /\ /\ /\ /\ /\ /\ /\ /\ /\ /\ /\ /\
     }
 
     public static ItemStack getGuiBtn(GuiButtonType gbt) {
@@ -456,8 +540,8 @@ public class GuiButtonManager {
             case ISLAND_PROPERTIES -> {
                 return ISLAND_PROPERTIES.clone();
             }
-            case ISLAND_ACHIEVEMENTS -> {
-                return ISLAND_ACHIEVEMENTS.clone();
+            case ISLAND_QUESTS -> {
+                return ISLAND_QUESTS.clone();
             }
             case BACK_TO_DASHBOARD -> {
                 return BACK_TO_DASHBOARD.clone();
@@ -506,6 +590,18 @@ public class GuiButtonManager {
             }
             case MEMBERS_GUI -> {
                 return MEMBERS_GUI;
+            }
+            case BACK_TO_QUESTS -> {
+                return BACK_TO_QUESTS.clone();
+            }
+            case QUEST_FARM_COBBLE_BTN -> {
+                return QUEST_FARM_COBBLE_BTN.clone();
+            }
+            case QUEST_FARM_LOG_BTN -> {
+                return QUEST_FARM_LOG_BTN.clone();
+            }
+            case QUEST_BUILD_COBBLE_GENERATOR_BTN -> {
+                return QUEST_BUILD_COBBLE_GENERATOR_BTN.clone();
             }
             default -> {
                 return null;
